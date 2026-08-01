@@ -1,0 +1,192 @@
+/* =============================================================================
+   ANIMATIONS — Fade, Slide, Hover, Glow, Shake
+   ============================================================================= */
+
+/* ---------- Entrance Animations ---------- */
+
+/* Fade in from top */
+.fade-in-down {
+    animation: fadeInDown 0.7s var(--ease, cubic-bezier(.4,0,.2,1)) both;
+}
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade in from bottom */
+.fade-in-up {
+    animation: fadeInUp 0.7s var(--ease, cubic-bezier(.4,0,.2,1)) both;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered entrance for main elements */
+.floating-logo  { animation-delay: 0.0s; }
+.login-card     { animation-delay: 0.12s; }
+.help-bar       { animation-delay: 0.24s; }
+.return-home    { animation-delay: 0.30s; }
+.site-footer    { animation: fadeIn 0.6s 0.36s cubic-bezier(.4,0,.2,1) both; }
+.site-header    { animation: slideDown 0.5s cubic-bezier(.4,0,.2,1) both; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-100%); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Card Hover — Subtle Lift ---------- */
+.login-card {
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1);
+}
+.login-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 48px rgba(10,61,122,.14);
+}
+
+/* ---------- Input Focus Glow ---------- */
+.input-wrap input:focus {
+    animation: inputGlow 0.3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes inputGlow {
+    0%   { box-shadow: 0 0 0 0 rgba(15,76,129,.16); }
+    60%  { box-shadow: 0 0 0 6px rgba(15,76,129,.10); }
+    100% { box-shadow: 0 0 0 4px rgba(15,76,129,.08); }
+}
+
+/* ---------- Button Glow on Hover ---------- */
+.login-btn:hover {
+    animation: btnGlow 0.4s cubic-bezier(.4,0,.2,1);
+}
+@keyframes btnGlow {
+    0%   { box-shadow: 0 8px 24px rgba(15,76,129,.30); }
+    50%  { box-shadow: 0 12px 36px rgba(15,76,129,.40); }
+    100% { box-shadow: 0 12px 32px rgba(15,76,129,.36); }
+}
+
+/* ---------- Role Tab Hover Bounce ---------- */
+.role-pill {
+    transition: all 0.25s cubic-bezier(.4,0,.2,1);
+}
+.role-pill:hover {
+    animation: tabBounce 0.3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes tabBounce {
+    0%   { transform: translateY(0); }
+    40%  { transform: translateY(-4px); }
+    70%  { transform: translateY(-2px); }
+    100% { transform: translateY(-2px); }
+}
+
+/* Role tab active pulse */
+.role-pill.active {
+    animation: tabActive 0.35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes tabActive {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* ---------- Form Shake (Error) ---------- */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-8px); }
+    30% { transform: translateX(8px); }
+    45% { transform: translateX(-6px); }
+    60% { transform: translateX(6px); }
+    75% { transform: translateX(-4px); }
+    90% { transform: translateX(4px); }
+}
+
+/* ---------- Spinner ---------- */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- Floating Logo Subtle Pulse ---------- */
+.floating-logo-circle {
+    animation: logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse {
+    0%, 100% { box-shadow: 0 8px 28px rgba(15,76,129,.16); }
+    50%      { box-shadow: 0 10px 34px rgba(15,76,129,.22); }
+}
+
+/* ---------- Security Card Shimmer ---------- */
+.security-card {
+    position: relative;
+    overflow: hidden;
+}
+.security-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+    pointer-events: none;
+}
+@keyframes shimmer {
+    0%   { left: -60%; }
+    100% { left: 160%; }
+}
+
+/* ---------- Help Bar Entrance ---------- */
+.help-bar {
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s cubic-bezier(.4,0,.2,1);
+}
+.help-bar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15,76,129,.10);
+}
+
+/* ---------- Footer Links Hover ---------- */
+.footer-links a {
+    transition: color 0.2s cubic-bezier(.4,0,.2,1), transform 0.2s cubic-bezier(.4,0,.2,1);
+}
+.footer-links a:hover {
+    transform: translateY(-1px);
+}
+
+/* ---------- Tricolor Strip Entrance ---------- */
+.tricolor-strip {
+    animation: tricolorReveal 0.6s 0.3s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes tricolorReveal {
+    from { opacity: 0; transform: scaleX(0); }
+    to   { opacity: 1; transform: scaleX(1); }
+}
+
+/* ---------- Checkbox Bounce ---------- */
+.remember-me-new input[type="checkbox"]:checked + .checkbox-custom-new {
+    animation: checkBounce 0.3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes checkBounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.15); }
+    70%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+/* ---------- Dark Toggle Spin ---------- */
+.dark-toggle:active svg {
+    animation: iconSpin 0.4s cubic-bezier(.4,0,.2,1);
+}
+@keyframes iconSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* ---------- Accessibility: Reduce Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

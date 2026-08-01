@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUC Testing Center Dashboard - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="layout">
+        <div id="welcomeBar"></div>
+
+        <section class="stats-grid">
+            <div class="stat-card police">
+                <div class="stat-header">
+                    <div class="stat-icon police">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">284</div>
+                <div class="stat-label">Vehicles Tested This Month</div>
+                <div class="stat-trend up">▲ 12.4% from last month</div>
+            </div>
+
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div class="stat-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">251</div>
+                <div class="stat-label">Certificates Issued</div>
+                <div class="stat-trend up">▲ 14.1% from last month</div>
+            </div>
+
+            <div class="stat-card warning">
+                <div class="stat-header">
+                    <div class="stat-icon warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">33</div>
+                <div class="stat-label">Tests Failed</div>
+                <div class="stat-trend down">▼ 2.8% from last month</div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="stat-header">
+                    <div class="stat-icon danger">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">18</div>
+                <div class="stat-label">Pending Renewals</div>
+                <div class="stat-trend up">▲ 3.5% from last week</div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel" style="margin-bottom: 20px;">
+                <div class="panel-header">
+                    <h3 class="panel-title">Emission Compliance Trends</h3>
+                    <div class="panel-actions">
+                        <span class="info-chip success">Pass Rate: 88.4%</span>
+                        <span class="info-chip navy">This Month</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="progress-list">
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Petrol Vehicles (CO)</span>
+                                <span class="progress-value">92.1%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill success" style="width: 92.1%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Diesel Vehicles (Smoke)</span>
+                                <span class="progress-value">84.6%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill navy" style="width: 84.6%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">CNG / LPG Vehicles</span>
+                                <span class="progress-value">96.3%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill gold" style="width: 96.3%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Two Wheelers (HC+NOx)</span>
+                                <span class="progress-value">78.4%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill warning" style="width: 78.4%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mini-stats-row">
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">8.4</div>
+                            <div class="mini-stat-label">Avg Test Mins</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">₹ 2.1L</div>
+                            <div class="mini-stat-label">Revenue MTD</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">94%</div>
+                            <div class="mini-stat-label">On-Time</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">3</div>
+                            <div class="mini-stat-label">Test Bays</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Recent PUC Tests</h3>
+                    <a href="new-puc-test.html" class="btn btn-primary">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        New Test
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle No.</th>
+                                <th>Type</th>
+                                <th>Pollution Level</th>
+                                <th>Result</th>
+                                <th>Valid Till</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MH-02 XY 8832</strong></td>
+                                <td>Petrol Car</td>
+                                <td>0.18% CO</td>
+                                <td><span class="status-badge valid">✓ Pass</span></td>
+                                <td>24 Jul 2027</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-03 ZA 1120</strong></td>
+                                <td>Diesel Truck</td>
+                                <td>2.8% Smoke</td>
+                                <td><span class="status-badge valid">✓ Pass</span></td>
+                                <td>15 Jan 2027</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-01 BC 4455</strong></td>
+                                <td>Petrol Bike</td>
+                                <td>4.2% HC (High)</td>
+                                <td><span class="status-badge expired">✗ Fail</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-04 DE 7788</strong></td>
+                                <td>CNG Auto</td>
+                                <td>0.05% CO</td>
+                                <td><span class="status-badge valid">✓ Pass</span></td>
+                                <td>11 Mar 2027</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-05 FG 9900</strong></td>
+                                <td>Diesel Bus</td>
+                                <td>1.2% Smoke</td>
+                                <td><span class="status-badge valid">✓ Pass</span></td>
+                                <td>02 May 2027</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid" style="margin-top: 20px;">
+            <div>
+                <div class="panel" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Center Operations</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="quick-links">
+                            <a href="new-puc-test.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+                                Start Test
+                            </a>
+                            <a href="puc-reports.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                Certificates
+                            </a>
+                            <a href="new-puc-test.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                Re-test Request
+                            </a>
+                            <a href="puc-reports.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+                                Analytics
+                            </a>
+                            <a href="send-reminders.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                RTO Messages
+                            </a>
+                            <a href="puc-dashboard.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Activity Log</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="activity-list">
+                            <li class="activity-item">
+                                <span class="activity-dot success"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">Certificate issued for <strong>MH-02 XY 8832</strong></div>
+                                    <div class="activity-time">12 minutes ago</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <span class="activity-dot danger"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">Test failed for <strong>MH-01 BC 4455</strong> — High HC emissions</div>
+                                    <div class="activity-time">45 minutes ago</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <span class="activity-dot warning"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">Renewal reminder sent — 18 vehicles expiring soon</div>
+                                    <div class="activity-time">2 hours ago</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <span class="activity-dot success"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">Daily report synced with <strong>Parivahan RTO</strong></div>
+                                    <div class="activity-time">6 hours ago</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Upcoming Renewals</h3>
+                    <a href="send-reminders.html" class="btn btn-outline">Send Reminders</a>
+                </div>
+                <div class="panel-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle No.</th>
+                                <th>Owner Phone</th>
+                                <th>Expires On</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MH-08 QR 4455</strong></td>
+                                <td>+91-98XXX-XX123</td>
+                                <td>28 Jul 2026</td>
+                                <td><span class="status-badge expired">4 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-12 ST 7788</strong></td>
+                                <td>+91-99XXX-XX456</td>
+                                <td>02 Aug 2026</td>
+                                <td><span class="status-badge pending">9 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-06 UV 1122</strong></td>
+                                <td>+91-97XXX-XX789</td>
+                                <td>05 Aug 2026</td>
+                                <td><span class="status-badge pending">12 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-04 WX 3344</strong></td>
+                                <td>+91-96XXX-XX012</td>
+                                <td>11 Aug 2026</td>
+                                <td><span class="status-badge pending">18 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>MH-03 YZ 5566</strong></td>
+                                <td>+91-95XXX-XX345</td>
+                                <td>18 Aug 2026</td>
+                                <td><span class="status-badge valid">25 days</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-bar">
+        <span class="copyright-text">© 2026 Government of India · Ministry of Road Transport &amp; Highways · All Rights Reserved</span>
+        <span class="version-info">System v2.1.0 · Parivahan PUC · Live</span>
+    </footer>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.init(['PUC_CENTER'], 'Authorized PUC Testing Center');
+        });
+    </script>
+</body>
+</html>

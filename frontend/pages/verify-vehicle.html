@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Verification - Police Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="funcPageMount"></div>
+    <main class="func-page-layout">
+        <div class="func-content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Vehicle Search</h3>
+                    <div class="panel-actions">
+                        <span class="info-chip gold">Live RTO</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form class="func-inline-form" onsubmit="return false;">
+                        <div class="func-form-group full">
+                            <label class="func-form-label">Vehicle Registration Number</label>
+                            <input type="text" class="func-form-input" placeholder="e.g. MH-04 AB 1234 or MH04AB1234" style="text-transform: uppercase;" />
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Search Method</label>
+                                <select class="func-form-select">
+                                    <option>Manual Entry</option>
+                                    <option>Scan QR / Barcode</option>
+                                    <option>RFID Scan</option>
+                                    <option>ANPR Camera</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Verification Type</label>
+                                <select class="func-form-select">
+                                    <option>Full Document Check</option>
+                                    <option>Quick Compliance Scan</option>
+                                    <option>Stolen Vehicle Check</option>
+                                    <option>Challan History</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Chassis Number (Optional)</label>
+                                <input type="text" class="func-form-input" placeholder="Last 5 digits" />
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Engine Number (Optional)</label>
+                                <input type="text" class="func-form-input" placeholder="Last 5 digits" />
+                            </div>
+                        </div>
+                        <div class="func-form-group full">
+                            <label class="func-form-label">Remarks / Notes</label>
+                            <textarea class="func-form-textarea" placeholder="Additional context for this verification..."></textarea>
+                        </div>
+                        <div class="panel-form-actions">
+                            <button type="button" class="btn btn-outline">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                                Scan QR
+                            </button>
+                            <button type="button" class="btn btn-outline">Clear</button>
+                            <button type="submit" class="btn btn-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                Verify Vehicle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Verification Result</h3>
+                    <div class="panel-actions">
+                        <span class="status-badge valid">✓ Clear</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.06), rgba(5, 150, 105, 0.02)); border: 1.5px solid rgba(5, 150, 105, 0.2); border-radius: 12px; padding: 16px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 14px;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(5, 150, 105, 0.15); color: var(--success); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 15px; font-weight: 700; color: var(--success);">All Documents Verified</div>
+                            <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Vehicle is fully compliant — No action required</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-list" style="gap: 12px;">
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">RC Registration</span>
+                                <span class="progress-value" style="color: var(--success);">✓ Valid</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill success" style="width: 100%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Insurance Policy</span>
+                                <span class="progress-value" style="color: var(--success);">✓ Valid till 15 Mar 2027</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill success" style="width: 100%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">PUC Certificate</span>
+                                <span class="progress-value" style="color: var(--success);">✓ Valid till 22 Jun 2026</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill success" style="width: 100%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Stolen / Blacklist DB</span>
+                                <span class="progress-value" style="color: var(--success);">✓ Not Found</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill success" style="width: 100%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Pending Challans</span>
+                                <span class="progress-value" style="color: var(--warning);">⚠ 2 Pending</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill warning" style="width: 60%;"></div></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                            <div>
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Vehicle No.</div>
+                                <div style="font-size: 14px; font-weight: 700; color: var(--navy-primary);">MH-04 AB 1234</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Owner Name</div>
+                                <div style="font-size: 14px; font-weight: 600; color: var(--text-dark);">Rajesh Sharma</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Vehicle Class</div>
+                                <div style="font-size: 14px; font-weight: 600; color: var(--text-dark);">LMV — Car</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Fuel Type</div>
+                                <div style="font-size: 14px; font-weight: 600; color: var(--text-dark);">Petrol</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-form-actions" style="margin-top: 18px;">
+                        <button class="btn btn-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            Print Report
+                        </button>
+                        <button class="btn btn-gold">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            Issue Challan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">
+                <h3 class="panel-title">Recent Verifications</h3>
+                <button class="btn btn-outline">View All</button>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Vehicle No.</th>
+                            <th>Owner</th>
+                            <th>PUC</th>
+                            <th>Insurance</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MH-04 AB 1234</strong></td>
+                            <td>Rajesh Sharma</td>
+                            <td><span class="status-badge valid">✓ Valid</span></td>
+                            <td><span class="status-badge valid">✓ Valid</span></td>
+                            <td><span class="info-chip success">Clear</span></td>
+                            <td>Just now</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DL-01 CD 5678</strong></td>
+                            <td>Priya Verma</td>
+                            <td><span class="status-badge expired">✗ Expired</span></td>
+                            <td><span class="status-badge valid">✓ Valid</span></td>
+                            <td><span class="info-chip warning">Challan</span></td>
+                            <td>12 min ago</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KA-05 EF 9012</strong></td>
+                            <td>Vikram Singh</td>
+                            <td><span class="status-badge valid">✓ Valid</span></td>
+                            <td><span class="status-badge expired">✗ Expired</span></td>
+                            <td><span class="info-chip warning">Challan</span></td>
+                            <td>38 min ago</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GJ-06 GH 3456</strong></td>
+                            <td>Anita Desai</td>
+                            <td><span class="status-badge valid">✓ Valid</span></td>
+                            <td><span class="status-badge valid">✓ Valid</span></td>
+                            <td><span class="info-chip navy">Suspicious</span></td>
+                            <td>1 hr ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.renderFunctionPage({
+                allowedRoles: ['POLICE'],
+                dashboardLabel: 'Police Dashboard',
+                pageTitle: 'Vehicle Verification',
+                pageDescription: 'Scan or enter vehicle number for full document & compliance check',
+                pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="M9 11h.01M13 11h.01M11 13v.01"/></svg>',
+                activeMenuKey: 'verifyVehicle'
+            });
+        });
+    </script>
+</body>
+</html>

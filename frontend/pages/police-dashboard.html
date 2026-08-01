@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Overview Dashboard - Traffic Enforcement Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ---------- Top 4 KPI cards with icon circle + sparkline ---------- */
+        .ov-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .ov-stat-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px 20px 14px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+            position: relative;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .ov-stat-card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,23,42,0.06); }
+        .ov-stat-top {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .ov-stat-ic {
+            width: 52px; height: 52px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ov-stat-ic svg { width: 24px; height: 24px; stroke-width: 2; fill: none; stroke: currentColor; }
+        .ov-stat-ic.ic-police    { background: #EFF6FF; color: #2563EB; }
+        .ov-stat-ic.ic-danger    { background: #FEE2E2; color: #DC2626; }
+        .ov-stat-ic.ic-warning   { background: #FEF3C7; color: #D97706; }
+        .ov-stat-ic.ic-success   { background: #DCFCE7; color: #16A34A; }
+        .ov-stat-value {
+            font-family: 'Playfair Display', 'Inter', serif;
+            font-size: 28px; font-weight: 800;
+            color: #0F172A; letter-spacing: -0.2px; line-height: 1.05;
+        }
+        .ov-stat-label {
+            font-size: 12.5px; font-weight: 500; color: #64748B;
+            margin-top: 3px;
+        }
+        .ov-stat-trend {
+            font-size: 12px; font-weight: 700; margin-top: 6px;
+        }
+        .ov-stat-trend.up { color: #16A34A; }
+        .ov-stat-trend.down { color: #DC2626; }
+        .ov-stat-trend .arr { margin-right: 3px; }
+        .ov-spark {
+            margin-top: 10px;
+            width: 100%;
+            height: 40px;
+            display: block;
+        }
+        .ov-spark path.area { opacity: 0.12; }
+        .ov-spark path.line { fill: none; stroke-width: 2.2; }
+        .ov-spark.sp-blue path.line { stroke: #2563EB; }
+        .ov-spark.sp-blue path.area { fill: #2563EB; }
+        .ov-spark.sp-red  path.line { stroke: #EF4444; }
+        .ov-spark.sp-red  path.area { fill: #EF4444; }
+        .ov-spark.sp-amber path.line { stroke: #F59E0B; }
+        .ov-spark.sp-amber path.area { fill: #F59E0B; }
+        .ov-spark.sp-green path.line { stroke: #10B981; }
+        .ov-spark.sp-green path.area { fill: #10B981; }
+
+        /* ---------- Middle row (Compliance + Trend) ---------- */
+        .ov-mid-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .ov-panel {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+            overflow: hidden;
+        }
+        .ov-panel-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px 10px;
+        }
+        .ov-panel-title {
+            font-family: 'Playfair Display', 'Inter', serif;
+            font-size: 17px; font-weight: 700; color: #0F172A; margin: 0;
+            letter-spacing: 0.1px;
+        }
+        .ov-tab-row {
+            display: inline-flex;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #F8FAFC;
+        }
+        .ov-tab {
+            padding: 5px 14px;
+            font-size: 12.5px; font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            border: none; background: transparent;
+            transition: all 0.15s ease;
+        }
+        .ov-tab.active {
+            background: #ffffff;
+            color: #0F4C81;
+            box-shadow: inset 0 0 0 1px #E2E8F0;
+        }
+        .ov-select {
+            padding: 6px 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #475569;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+        }
+        .ov-panel-body { padding: 6px 20px 20px; }
+
+        /* Compliance: donut + progress bars */
+        .ov-compliance-body {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 24px;
+            align-items: center;
+            padding-top: 8px;
+        }
+        .ov-donut-wrap {
+            position: relative;
+            width: 220px; height: 220px;
+        }
+        .ov-donut { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .ov-donut-center {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; pointer-events: none;
+        }
+        .ov-donut-center .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px; font-weight: 800; color: #0F172A;
+        }
+        .ov-donut-center .lbl {
+            font-size: 11.5px; font-weight: 600; color: #64748B;
+            letter-spacing: 0.2px; margin-top: 2px;
+        }
+        .ov-prog-list { display: flex; flex-direction: column; gap: 14px; }
+        .ov-prog-item { display: flex; flex-direction: column; gap: 6px; }
+        .ov-prog-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .ov-prog-name {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; font-weight: 600; color: #1E293B;
+        }
+        .ov-prog-dot {
+            width: 11px; height: 11px; border-radius: 3px; display: inline-block; flex: 0 0 auto;
+        }
+        .ov-prog-val { font-size: 13px; font-weight: 700; color: #0F172A; }
+        .ov-prog-track {
+            height: 7px; background: #F1F5F9; border-radius: 99px; overflow: hidden;
+        }
+        .ov-prog-fill { height: 100%; border-radius: 99px; }
+
+        /* Trend chart */
+        .ov-trend-wrap {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            padding-top: 6px;
+        }
+        .ov-trend-svg { width: 100%; height: 100%; }
+        .ov-trend-area { fill: url(#trendGrad); opacity: 0.55; }
+        .ov-trend-line { fill: none; stroke: #2563EB; stroke-width: 2.4; }
+        .ov-trend-dot { fill: #ffffff; stroke: #2563EB; stroke-width: 2.2; }
+        .ov-trend-dot.peak { fill: #2563EB; stroke: #ffffff; stroke-width: 3; r: 5; }
+        .ov-axis-x { font-size: 11.5px; fill: #64748B; font-weight: 600; }
+        .ov-axis-y { font-size: 10.5px; fill: #94A3B8; font-weight: 600; }
+        .ov-grid-line { stroke: #F1F5F9; stroke-width: 1; }
+        .ov-tooltip {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 6px 10px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.10);
+            pointer-events: none;
+            font-size: 11.5px;
+            display: none;
+            transform: translate(-50%, -120%);
+            z-index: 3;
+        }
+        .ov-tooltip .day { font-weight: 800; color: #334155; }
+        .ov-tooltip .val { font-weight: 800; color: #2563EB; }
+        .ov-tooltip .lbl { color: #64748B; font-weight: 600; }
+
+        /* ---------- Bottom row 3 panels ---------- */
+        .ov-bot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 4px;
+        }
+
+        /* Challan summary: 4 mini stat boxes */
+        .ov-challan-body { padding: 14px 20px 20px; }
+        .ov-challan-head {
+            display: flex; align-items: baseline; justify-content: space-between;
+            padding: 16px 20px 2px;
+        }
+        .ov-challan-head h3 { margin: 0; font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #0F172A; }
+        .ov-challan-head .sub { font-size: 11.5px; font-weight: 600; color: #64748B; }
+        .ov-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .ov-mini-card {
+            background: #ffffff;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 12px 12px 10px;
+        }
+        .ov-mini-ic {
+            width: 38px; height: 38px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 10px;
+        }
+        .ov-mini-ic svg { width: 18px; height: 18px; stroke-width: 2; fill: none; stroke: currentColor; }
+        .ov-mini-ic.mi-green  { background: #ECFDF5; color: #059669; }
+        .ov-mini-ic.mi-amber  { background: #FFF7ED; color: #D97706; }
+        .ov-mini-ic.mi-purple { background: #F5F3FF; color: #7C3AED; }
+        .ov-mini-ic.mi-blue   { background: #EFF6FF; color: #2563EB; }
+        .ov-mini-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px; font-weight: 800; color: #0F172A; line-height: 1.05;
+        }
+        .ov-mini-lbl { font-size: 11.5px; font-weight: 600; color: #64748B; margin-top: 4px; }
+        .ov-mini-trend { margin-top: 8px; font-size: 11.5px; font-weight: 800; }
+        .ov-mini-trend.up { color: #16A34A; }
+        .ov-mini-trend.down { color: #DC2626; }
+
+        /* Top offences */
+        .ov-offence-list { display: flex; flex-direction: column; gap: 0; padding: 4px 20px 14px; }
+        .ov-offence-row {
+            display: grid;
+            grid-template-columns: 32px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 10px 4px;
+            border-bottom: 1px dashed #F1F5F9;
+        }
+        .ov-offence-row:last-child { border-bottom: none; }
+        .ov-offence-ic {
+            width: 28px; height: 28px; border-radius: 8px;
+            background: #F8FAFC; color: #475569;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ov-offence-ic svg { width: 15px; height: 15px; stroke-width: 2; fill: none; stroke: currentColor; }
+        .ov-offence-name { font-size: 13px; font-weight: 600; color: #1E293B; }
+        .ov-offence-count { font-size: 13px; font-weight: 800; color: #0F172A; }
+
+        /* Recent activity */
+        .ov-view-all {
+            padding: 5px 12px;
+            border-radius: 6px;
+            background: #EFF6FF;
+            color: #0F4C81;
+            border: 1px solid #DBEAFE;
+            font-size: 12px; font-weight: 700;
+            cursor: pointer;
+        }
+        .ov-activity-list {
+            list-style: none; margin: 0; padding: 2px 20px 16px;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .ov-activity-item {
+            display: grid;
+            grid-template-columns: 36px 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 8px 4px;
+        }
+        .ov-act-ic {
+            width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ov-act-ic svg { width: 16px; height: 16px; stroke-width: 2; fill: none; stroke: currentColor; }
+        .ov-act-ic.ai-green  { background: #DCFCE7; color: #15803D; }
+        .ov-act-ic.ai-red    { background: #FEE2E2; color: #B91C1C; }
+        .ov-act-ic.ai-amber  { background: #FEF3C7; color: #B45309; }
+        .ov-act-ic.ai-blue   { background: #DBEAFE; color: #1D4ED8; }
+        .ov-act-text { font-size: 12.5px; font-weight: 600; color: #1E293B; line-height: 1.35; }
+        .ov-act-sub  { font-size: 11.5px; font-weight: 500; color: #64748B; margin-top: 2px; }
+        .ov-act-time { font-size: 11.5px; font-weight: 600; color: #64748B; white-space: nowrap; }
+
+        /* ---------- Responsive (matches existing dashboard.css tokens) ---------- */
+        @media (max-width: 1180px) {
+            .ov-stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .ov-mid-grid { grid-template-columns: 1fr; }
+            .ov-bot-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 720px) {
+            .ov-stats-grid { grid-template-columns: 1fr; }
+            .ov-compliance-body { grid-template-columns: 1fr; justify-items: center; }
+            .ov-mini-grid { grid-template-columns: repeat(2, 1fr); }
+            .ov-bot-grid { grid-template-columns: 1fr; }
+            .ov-trend-wrap { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="layout">
+        <div id="welcomeBar"></div>
+
+        <!-- ============ TOP: 4 KPI cards ============= -->
+        <section class="ov-stats-grid">
+            <div class="ov-stat-card">
+                <div class="ov-stat-top">
+                    <div class="ov-stat-ic ic-police">
+                        <svg viewBox="0 0 24 24"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+                    </div>
+                    <div>
+                        <div class="ov-stat-value">12,847</div>
+                        <div class="ov-stat-label">Total Vehicles Checked</div>
+                        <div class="ov-stat-trend up"><span class="arr">▲</span> 8.2% from last month</div>
+                    </div>
+                </div>
+                <svg class="ov-spark sp-blue" viewBox="0 0 200 40" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="sparkFillBlue" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#2563EB" stop-opacity="0.25"/>
+                            <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <path class="area" fill="url(#sparkFillBlue)" d="M0,28 L28,24 L56,26 L84,18 L112,20 L140,14 L168,22 L200,10 L200,40 L0,40 Z"/>
+                    <path class="line" d="M0,28 L28,24 L56,26 L84,18 L112,20 L140,14 L168,22 L200,10"/>
+                </svg>
+            </div>
+
+            <div class="ov-stat-card">
+                <div class="ov-stat-top">
+                    <div class="ov-stat-ic ic-danger">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                    <div>
+                        <div class="ov-stat-value">342</div>
+                        <div class="ov-stat-label">Challans Issued</div>
+                        <div class="ov-stat-trend down"><span class="arr">▼</span> 3.1% from last month</div>
+                    </div>
+                </div>
+                <svg class="ov-spark sp-red" viewBox="0 0 200 40" preserveAspectRatio="none">
+                    <path class="area" d="M0,22 L28,18 L56,20 L84,16 L112,18 L140,14 L168,22 L200,12 L200,40 L0,40 Z" fill="#EF4444" opacity="0.12"/>
+                    <path class="line" d="M0,22 L28,18 L56,20 L84,16 L112,18 L140,14 L168,22 L200,12"/>
+                </svg>
+            </div>
+
+            <div class="ov-stat-card">
+                <div class="ov-stat-top">
+                    <div class="ov-stat-ic ic-warning">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="16" y1="2" x2="16" y2="5"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <div>
+                        <div class="ov-stat-value">156</div>
+                        <div class="ov-stat-label">Vehicles with Expired PUC</div>
+                        <div class="ov-stat-trend up"><span class="arr">▲</span> 5.4% from last month</div>
+                    </div>
+                </div>
+                <svg class="ov-spark sp-amber" viewBox="0 0 200 40" preserveAspectRatio="none">
+                    <path class="area" d="M0,26 L28,20 L56,24 L84,18 L112,12 L140,14 L168,24 L200,14 L200,40 L0,40 Z" fill="#F59E0B" opacity="0.14"/>
+                    <path class="line" d="M0,26 L28,20 L56,24 L84,18 L112,12 L140,14 L168,24 L200,14"/>
+                </svg>
+            </div>
+
+            <div class="ov-stat-card">
+                <div class="ov-stat-top">
+                    <div class="ov-stat-ic ic-success">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    </div>
+                    <div>
+                        <div class="ov-stat-value">98.7%</div>
+                        <div class="ov-stat-label">Valid Insurance</div>
+                        <div class="ov-stat-trend up"><span class="arr">▲</span> 1.2% from last month</div>
+                    </div>
+                </div>
+                <svg class="ov-spark sp-green" viewBox="0 0 200 40" preserveAspectRatio="none">
+                    <path class="area" d="M0,30 L28,22 L56,26 L84,16 L112,12 L140,18 L168,14 L200,16 L200,40 L0,40 Z" fill="#10B981" opacity="0.14"/>
+                    <path class="line" d="M0,30 L28,22 L56,26 L84,16 L112,12 L140,18 L168,14 L200,16"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- ============ MIDDLE: Compliance + Verification Trend ============= -->
+        <section class="ov-mid-grid">
+            <!-- Compliance Overview -->
+            <div class="ov-panel">
+                <div class="ov-panel-head">
+                    <h3 class="ov-panel-title">Compliance Overview</h3>
+                    <div class="ov-tab-row" role="tablist" aria-label="Compliance Period">
+                        <button class="ov-tab active" data-comp-tab="today">Today</button>
+                        <button class="ov-tab" data-comp-tab="month">This Month</button>
+                    </div>
+                </div>
+                <div class="ov-panel-body ov-compliance-body">
+                    <!-- Donut -->
+                    <div class="ov-donut-wrap">
+                        <svg class="ov-donut" viewBox="0 0 42 42">
+                            <circle cx="21" cy="21" r="15.9155" fill="transparent" stroke="#F1F5F9" stroke-width="5"/>
+                            <circle cx="21" cy="21" r="15.9155" fill="transparent" stroke="#10B981" stroke-width="5"
+                                    stroke-dasharray="35.6 64.4" stroke-dashoffset="25"/>
+                            <circle cx="21" cy="21" r="15.9155" fill="transparent" stroke="#2563EB" stroke-width="5"
+                                    stroke-dasharray="33 67" stroke-dashoffset="60.6"/>
+                            <circle cx="21" cy="21" r="15.9155" fill="transparent" stroke="#F59E0B" stroke-width="5"
+                                    stroke-dasharray="27.4 72.6" stroke-dashoffset="93.6"/>
+                            <circle cx="21" cy="21" r="15.9155" fill="transparent" stroke="#EF4444" stroke-width="5"
+                                    stroke-dasharray="15.4 84.6" stroke-dashoffset="121"/>
+                        </svg>
+                        <div class="ov-donut-center">
+                            <div class="num">12,847</div>
+                            <div class="lbl">TOTAL CHECKED</div>
+                        </div>
+                    </div>
+                    <!-- Progress bars -->
+                    <div class="ov-prog-list">
+                        <div class="ov-prog-item">
+                            <div class="ov-prog-head">
+                                <span class="ov-prog-name"><span class="ov-prog-dot" style="background:#10B981;"></span> Valid Insurance</span>
+                                <span class="ov-prog-val">98.7%</span>
+                            </div>
+                            <div class="ov-prog-track"><div class="ov-prog-fill" style="width:98.7%;background:#10B981;"></div></div>
+                        </div>
+                        <div class="ov-prog-item">
+                            <div class="ov-prog-head">
+                                <span class="ov-prog-name"><span class="ov-prog-dot" style="background:#0F4C81;"></span> Valid PUC Certificates</span>
+                                <span class="ov-prog-val">91.4%</span>
+                            </div>
+                            <div class="ov-prog-track"><div class="ov-prog-fill" style="width:91.4%;background:#0F4C81;"></div></div>
+                        </div>
+                        <div class="ov-prog-item">
+                            <div class="ov-prog-head">
+                                <span class="ov-prog-name"><span class="ov-prog-dot" style="background:#F59E0B;"></span> Challans Cleared</span>
+                                <span class="ov-prog-val">76.2%</span>
+                            </div>
+                            <div class="ov-prog-track"><div class="ov-prog-fill" style="width:76.2%;background:#F59E0B;"></div></div>
+                        </div>
+                        <div class="ov-prog-item">
+                            <div class="ov-prog-head">
+                                <span class="ov-prog-name"><span class="ov-prog-dot" style="background:#EF4444;"></span> Suspicious Vehicles</span>
+                                <span class="ov-prog-val">42.8%</span>
+                            </div>
+                            <div class="ov-prog-track"><div class="ov-prog-fill" style="width:42.8%;background:#EF4444;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Trend -->
+            <div class="ov-panel">
+                <div class="ov-panel-head">
+                    <h3 class="ov-panel-title">Verification Trend</h3>
+                    <select class="ov-select" aria-label="Trend period">
+                        <option>This Week</option>
+                        <option>This Month</option>
+                        <option>Last Month</option>
+                    </select>
+                </div>
+                <div class="ov-panel-body">
+                    <div class="ov-trend-wrap" id="trendWrap">
+                        <svg class="ov-trend-svg" viewBox="0 0 600 260" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.45"/>
+                                    <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.02"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Grid + Y axis labels -->
+                            <line class="ov-grid-line" x1="50" y1="30"  x2="590" y2="30"/>
+                            <text class="ov-axis-y" x="44" y="33" text-anchor="end">3K</text>
+                            <line class="ov-grid-line" x1="50" y1="80"  x2="590" y2="80"/>
+                            <text class="ov-axis-y" x="44" y="83" text-anchor="end">2.4K</text>
+                            <line class="ov-grid-line" x1="50" y1="130" x2="590" y2="130"/>
+                            <text class="ov-axis-y" x="44" y="133" text-anchor="end">1.8K</text>
+                            <line class="ov-grid-line" x1="50" y1="180" x2="590" y2="180"/>
+                            <text class="ov-axis-y" x="44" y="183" text-anchor="end">1.2K</text>
+                            <line class="ov-grid-line" x1="50" y1="230" x2="590" y2="230"/>
+                            <text class="ov-axis-y" x="44" y="233" text-anchor="end">600</text>
+                            <text class="ov-axis-y" x="44" y="244" text-anchor="end">0</text>
+
+                            <!-- Area -->
+                            <path class="ov-trend-area" d="M50,200 L120,160 L190,180 L260,130 L330,150 L400,150 L470,100 L540,85 L590,170 L590,230 L50,230 Z"/>
+                            <!-- Line -->
+                            <path class="ov-trend-line" d="M50,200 L120,160 L190,180 L260,130 L330,150 L400,150 L470,100 L540,85 L590,170"/>
+                            <!-- Dots -->
+                            <circle class="ov-trend-dot" cx="50"  cy="200" r="3.6"/>
+                            <circle class="ov-trend-dot" cx="120" cy="160" r="3.6"/>
+                            <circle class="ov-trend-dot" cx="190" cy="180" r="3.6"/>
+                            <circle class="ov-trend-dot" cx="260" cy="130" r="3.6"/>
+                            <circle class="ov-trend-dot" cx="330" cy="150" r="3.6"/>
+                            <circle class="ov-trend-dot" cx="400" cy="150" r="3.6"/>
+                            <circle class="ov-trend-dot peak" data-peak="1" cx="470" cy="100" r="4.5"/>
+                            <circle class="ov-trend-dot" cx="540" cy="85"  r="3.6"/>
+                            <circle class="ov-trend-dot" cx="590" cy="170" r="3.6"/>
+                            <!-- X axis labels -->
+                            <text class="ov-axis-x" x="50"  y="254" text-anchor="middle">Mon</text>
+                            <text class="ov-axis-x" x="120" y="254" text-anchor="middle">Tue</text>
+                            <text class="ov-axis-x" x="190" y="254" text-anchor="middle">Wed</text>
+                            <text class="ov-axis-x" x="260" y="254" text-anchor="middle">Thu</text>
+                            <text class="ov-axis-x" x="330" y="254" text-anchor="middle">Fri</text>
+                            <text class="ov-axis-x" x="400" y="254" text-anchor="middle">Sat</text>
+                            <text class="ov-axis-x" x="470" y="254" text-anchor="middle"></text>
+                            <text class="ov-axis-x" x="540" y="254" text-anchor="middle"></text>
+                            <text class="ov-axis-x" x="590" y="254" text-anchor="middle">Sun</text>
+                        </svg>
+                        <div class="ov-tooltip" id="trendTip" style="left: 78.3%; top: 38%; display: block;">
+                            <div class="day">Saturday</div>
+                            <div><span class="val">2,105</span> <span class="lbl">Vehicles</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ BOTTOM: 3 columns ============= -->
+        <section class="ov-bot-grid">
+            <!-- 1) Challan Summary (This Month) -->
+            <div class="ov-panel">
+                <div class="ov-challan-head">
+                    <h3>Challan Summary <span style="font-size:12.5px;font-weight:600;color:#64748B;">(This Month)</span></h3>
+                </div>
+                <div class="ov-challan-body">
+                    <div class="ov-mini-grid">
+                        <div class="ov-mini-card">
+                            <div class="ov-mini-ic mi-green">
+                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <div class="ov-mini-num">342</div>
+                            <div class="ov-mini-lbl">Total Challans</div>
+                            <div class="ov-mini-trend down">▼ 3.1%</div>
+                        </div>
+                        <div class="ov-mini-card">
+                            <div class="ov-mini-ic mi-amber">
+                                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="15" cy="8" r="2.5"/></svg>
+                            </div>
+                            <div class="ov-mini-num">128</div>
+                            <div class="ov-mini-lbl">Pending</div>
+                            <div class="ov-mini-trend down">▼ 5.6%</div>
+                        </div>
+                        <div class="ov-mini-card">
+                            <div class="ov-mini-ic mi-purple">
+                                <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                            </div>
+                            <div class="ov-mini-num">196</div>
+                            <div class="ov-mini-lbl">Paid</div>
+                            <div class="ov-mini-trend up">▲ 6.8%</div>
+                        </div>
+                        <div class="ov-mini-card">
+                            <div class="ov-mini-ic mi-blue">
+                                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="5"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+                            </div>
+                            <div class="ov-mini-num">₹ 8.4L</div>
+                            <div class="ov-mini-lbl">Amount Collected</div>
+                            <div class="ov-mini-trend up">▲ 4.3%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2) Top Offences (This Month) -->
+            <div class="ov-panel">
+                <div class="ov-panel-head">
+                    <h3 class="ov-panel-title">Top Offences <span style="font-size:12.5px;font-weight:600;color:#64748B;">(This Month)</span></h3>
+                </div>
+                <div class="ov-offence-list">
+                    <div class="ov-offence-row">
+                        <div class="ov-offence-ic">
+                            <svg viewBox="0 0 24 24" style="color:#7C3AED;"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                        </div>
+                        <div class="ov-offence-name">No Insurance</div>
+                        <div class="ov-offence-count">128</div>
+                    </div>
+                    <div class="ov-offence-row">
+                        <div class="ov-offence-ic">
+                            <svg viewBox="0 0 24 24" style="color:#D97706;"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="16" y1="2" x2="16" y2="5"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <div class="ov-offence-name">Expired PUC</div>
+                        <div class="ov-offence-count">96</div>
+                    </div>
+                    <div class="ov-offence-row">
+                        <div class="ov-offence-ic">
+                            <svg viewBox="0 0 24 24" style="color:#0F4C81;"><path d="M5.5 18a3.5 3.5 0 1 1 0-7h.5a6 6 0 0 1 12 0h.5a3.5 3.5 0 1 1 0 7"/><path d="M16 13l-4-3-4 3"/></svg>
+                        </div>
+                        <div class="ov-offence-name">No Helmet</div>
+                        <div class="ov-offence-count">74</div>
+                    </div>
+                    <div class="ov-offence-row">
+                        <div class="ov-offence-ic">
+                            <svg viewBox="0 0 24 24" style="color:#DC2626;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div class="ov-offence-name">Over Speeding</div>
+                        <div class="ov-offence-count">44</div>
+                    </div>
+                    <div class="ov-offence-row">
+                        <div class="ov-offence-ic">
+                            <svg viewBox="0 0 24 24" style="color:#334155;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 14h4"/></svg>
+                        </div>
+                        <div class="ov-offence-name">Wrong Parking</div>
+                        <div class="ov-offence-count">32</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3) Recent Activity -->
+            <div class="ov-panel">
+                <div class="ov-panel-head">
+                    <h3 class="ov-panel-title">Recent Activity</h3>
+                    <button class="ov-view-all" type="button">View All</button>
+                </div>
+                <ul class="ov-activity-list">
+                    <li class="ov-activity-item">
+                        <div class="ov-act-ic ai-green">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                        </div>
+                        <div>
+                            <div class="ov-act-text">Vehicle MH-04 AB 1234 verified</div>
+                            <div class="ov-act-sub">Valid Insurance</div>
+                        </div>
+                        <div class="ov-act-time">2 min ago</div>
+                    </li>
+                    <li class="ov-activity-item">
+                        <div class="ov-act-ic ai-red">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v5M12 16v.01"/></svg>
+                        </div>
+                        <div>
+                            <div class="ov-act-text">Challan issued to DL-01 CD 5678</div>
+                            <div class="ov-act-sub">No Insurance</div>
+                        </div>
+                        <div class="ov-act-time">15 min ago</div>
+                    </li>
+                    <li class="ov-activity-item">
+                        <div class="ov-act-ic ai-amber">
+                            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <div>
+                            <div class="ov-act-text">Vehicle KA-03 EF 9876 added to suspicious list</div>
+                            <div class="ov-act-sub">Multiple violations</div>
+                        </div>
+                        <div class="ov-act-time">30 min ago</div>
+                    </li>
+                    <li class="ov-activity-item">
+                        <div class="ov-act-ic ai-blue">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div>
+                            <div class="ov-act-text">PUC expired for PB-10 GH 2468</div>
+                            <div class="ov-act-sub">Notification sent</div>
+                        </div>
+                        <div class="ov-act-time">1 hour ago</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-bar">
+        <span class="copyright-text">© 2026 Government of India · Ministry of Road Transport &amp; Highways · All Rights Reserved</span>
+        <span class="version-info">System v2.1.0 · Parivahan Enforcement · Live</span>
+    </footer>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            DashboardApp.init(['POLICE'], 'Traffic Police Department', 'overview');
+
+            // Compliance tabs (Today / This Month) — lightweight toggle
+            document.querySelectorAll('.ov-tab[data-comp-tab]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.ov-tab[data-comp-tab]').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+
+            // Trend tooltip: show peak tooltip only; nothing to navigate.
+            const tip = document.getElementById('trendTip');
+            const wrap = document.getElementById('trendWrap');
+            if (tip && wrap) {
+                wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+                wrap.addEventListener('mouseenter', () => { tip.style.display = 'block'; });
+            }
+        });
+    </script>
+</body>
+</html>

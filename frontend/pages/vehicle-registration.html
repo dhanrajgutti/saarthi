@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Registration - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="func-page-layout">
+        <div id="funcPageMount"></div>
+
+        <section class="func-content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">New Vehicle Registration</h3>
+                    <div class="panel-actions">
+                        <span class="info-chip gold">RTO Live</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form class="func-inline-form">
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Vehicle Type</label>
+                                <select class="func-form-select">
+                                    <option>Two Wheeler</option>
+                                    <option>Four Wheeler (Private)</option>
+                                    <option>Commercial Vehicle</option>
+                                    <option>Three Wheeler</option>
+                                    <option>Heavy Goods Vehicle</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Manufacturer</label>
+                                <input type="text" class="func-form-input" placeholder="e.g. Maruti Suzuki">
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Model</label>
+                                <input type="text" class="func-form-input" placeholder="e.g. Swift Dzire VXI">
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Chassis Number</label>
+                                <input type="text" class="func-form-input" placeholder="17-character VIN">
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Engine Number</label>
+                                <input type="text" class="func-form-input" placeholder="Engine serial no.">
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Fuel Type</label>
+                                <select class="func-form-select">
+                                    <option>Petrol</option>
+                                    <option>Diesel</option>
+                                    <option>CNG</option>
+                                    <option>Electric</option>
+                                    <option>Hybrid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Owner Name</label>
+                                <input type="text" class="func-form-input" placeholder="Full name of owner">
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Aadhaar Number</label>
+                                <input type="text" class="func-form-input" placeholder="12-digit Aadhaar">
+                            </div>
+                        </div>
+                        <div class="func-form-group full">
+                            <label class="func-form-label">Owner Address</label>
+                            <textarea class="func-form-textarea" placeholder="Complete residential / business address"></textarea>
+                        </div>
+                        <div class="panel-form-actions">
+                            <button type="reset" class="btn btn-outline">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                Reset
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                Submit Registration
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Recent Registrations</h3>
+                    <button class="btn btn-outline">View All</button>
+                </div>
+                <div class="panel-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Reg No.</th>
+                                <th>Vehicle / Owner</th>
+                                <th>RTO</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MH-02 CY 8847</strong></td>
+                                <td>Tata Nexon EV / A. Mehta</td>
+                                <td>Mumbai Central</td>
+                                <td>23 Jul 2026</td>
+                                <td><span class="status-badge valid">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DL-05 CQ 2219</strong></td>
+                                <td>Honda City / S. Verma</td>
+                                <td>Delhi North</td>
+                                <td>23 Jul 2026</td>
+                                <td><span class="status-badge valid">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>KA-05 MG 7733</strong></td>
+                                <td>Hyundai Creta / K. Iyer</td>
+                                <td>Bangalore South</td>
+                                <td>22 Jul 2026</td>
+                                <td><span class="status-badge pending">Pending Docs</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>TN-09 AK 4455</strong></td>
+                                <td>Royal Enfield / M. Rajan</td>
+                                <td>Chennai RTO</td>
+                                <td>22 Jul 2026</td>
+                                <td><span class="status-badge valid">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>GJ-06 BR 9981</strong></td>
+                                <td>Mahindra Bolero / P. Shah</td>
+                                <td>Ahmedabad RTO</td>
+                                <td>21 Jul 2026</td>
+                                <td><span class="status-badge expired">Rejected</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><line x1="12" y1="3" x2="12" y2="8"/><line x1="9.5" y1="5.5" x2="14.5" y2="5.5"/></svg>';
+            DashboardApp.renderPublicServicePage({
+                pageTitle: 'Vehicle Registration',
+                pageIcon: carIcon,
+                pageDescription: 'Register new vehicles, transfer ownership, and manage RC documents'
+            });
+        });
+    </script>
+</body>
+</html>

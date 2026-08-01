@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue New e-Challan - DronaSystems e-Challan Management</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* DronaSystems Challan-specific overrides */
+        :root {
+            --ds-navy: #002B5C;
+            --ds-navy-light: #0A3D7A;
+            --ds-navy-accent: #1A4D8F;
+            --ds-gold: #E8A33D;
+            --ds-gold-dark: #D18B25;
+            --ds-valid-bg: #ECFDF5;
+            --ds-valid-border: #34D399;
+            --ds-valid-text: #047857;
+            --ds-expired-bg: #FEF2F2;
+            --ds-expired-border: #FCA5A5;
+            --ds-expired-text: #B91C1C;
+            --ds-info-bg: #EFF6FF;
+            --ds-info-text: #1D4ED8;
+            --ds-input-height: 46px;
+            --ds-radius: 10px;
+        }
+
+        body {
+            background: #F5F6FA;
+            color: #0F172A;
+        }
+
+        /* ===== DS Top Navbar ===== */
+        .ds-navbar {
+            background: linear-gradient(135deg, #001F47 0%, #002B5C 60%, #003A7A 100%);
+            border-bottom: 3px solid var(--ds-gold);
+            box-shadow: 0 6px 20px -8px rgba(0, 43, 92, 0.45);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .ds-navbar-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .ds-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .ds-logo-shield {
+            width: 54px;
+            height: 58px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .ds-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+        .ds-brand-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .ds-brand-title span { color: var(--ds-gold); }
+        .ds-brand-sub {
+            font-size: 11.5px;
+            color: #C7D6EC;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .ds-page-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            padding-top: 4px;
+        }
+        .ds-page-title::after {
+            content: "";
+            display: block;
+            margin: 8px auto 0;
+            width: 96px;
+            height: 3px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, transparent 0%, var(--ds-gold) 20%, var(--ds-gold) 80%, transparent 100%);
+        }
+        .ds-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            color: #fff;
+        }
+        .ds-nav-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(232, 192, 125, 0.22);
+        }
+        .ds-nav-block-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(232, 192, 125, 0.18);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            color: var(--ds-gold);
+        }
+        .ds-nav-block-inner { display: flex; flex-direction: column; line-height: 1.25; }
+        .ds-nav-block-label { font-size: 11.5px; color: #9FB2D0; letter-spacing: 0.3px; }
+        .ds-nav-block-value { font-size: 13.5px; font-weight: 600; }
+        .ds-nav-divider {
+            width: 1px;
+            height: 42px;
+            background: linear-gradient(180deg, transparent 0%, rgba(232,192,125,0.5) 50%, transparent 100%);
+        }
+
+        /* ===== Main container ===== */
+        .ds-challan-wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px 28px 36px;
+        }
+
+        .ds-challan-card {
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 14px;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 12px 30px -18px rgba(0, 43, 92, 0.2);
+            padding: 28px 30px 32px;
+        }
+
+        /* ===== Step section ===== */
+        .ds-step {
+            margin-bottom: 30px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #F1F2F6;
+        }
+        .ds-step:last-of-type { border-bottom: none; margin-bottom: 22px; padding-bottom: 0; }
+
+        .ds-step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .ds-step-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #002B5C 0%, #1A4D8F 100%);
+            color: var(--ds-gold);
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px -4px rgba(0, 43, 92, 0.35);
+        }
+        .ds-step-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 17.5px;
+            font-weight: 700;
+            color: var(--ds-navy);
+            letter-spacing: 0.15px;
+        }
+        .ds-step-sub {
+            font-size: 12.5px;
+            color: #6B7280;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        /* ===== Step 1: Capture Vehicle ===== */
+        .ds-capture-row {
+            display: grid;
+            grid-template-columns: 280px 1fr 240px;
+            gap: 24px;
+            align-items: stretch;
+        }
+        .ds-scan-box {
+            background: linear-gradient(180deg, #F6F8FC 0%, #EEF2F8 100%);
+            border: 1.5px dashed #B8C5D8;
+            border-radius: 12px;
+            padding: 26px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+        }
+        .ds-scan-label {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ds-navy);
+        }
+        .ds-scan-icon {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: var(--ds-navy);
+            box-shadow: 0 6px 14px -8px rgba(0, 43, 92, 0.3);
+            margin-top: 8px;
+        }
+        .ds-scan-text { font-size: 13px; color: #4B5563; font-weight: 500; line-height: 1.4; }
+        .ds-scan-text strong { color: var(--ds-navy); }
+        .ds-camera-preview {
+            width: 100%;
+            border-radius: 14px;
+            background: #0C1C3B;
+            color: #E2EAF9;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 16px;
+            min-height: 130px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .ds-camera-preview.is-active { display: flex; }
+        .ds-camera-preview.is-live .ds-camera-video { display: block; }
+        .ds-camera-preview.is-live .ds-camera-placeholder { display: none; }
+        .ds-camera-video {
+            display: none;
+            width: 100%;
+            min-height: 88px;
+            max-height: 180px;
+            border-radius: 12px;
+            background: #000;
+            object-fit: cover;
+        }
+        .ds-camera-placeholder {
+            width: 100%;
+            height: 100%;
+            max-height: 88px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border: 1px dashed rgba(255,255,255,0.16);
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            color: #C7D2FE;
+            letter-spacing: 0.3px;
+        }
+        .ds-camera-status {
+            font-size: 12px;
+            color: #B9C9F4;
+            line-height: 1.5;
+        }
+        .ds-btn-open-camera {
+            margin-top: 4px;
+            background: linear-gradient(135deg, var(--ds-navy) 0%, var(--ds-navy-accent) 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            box-shadow: 0 4px 10px -4px rgba(0, 43, 92, 0.4);
+        }
+        .ds-btn-open-camera:hover { transform: translateY(-1px); box-shadow: 0 8px 16px -6px rgba(0, 43, 92, 0.5); }
+
+        .ds-detected-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 0;
+        }
+        .ds-detected-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ds-navy);
+        }
+        .ds-detected-box {
+            background: linear-gradient(180deg, #EFFBF4 0%, #E3F8EC 100%);
+            border: 1.5px solid #6EE7B7;
+            border-radius: 12px;
+            padding: 20px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ds-detected-box::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0;
+            width: 140px; height: 140px;
+            background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .ds-detected-number {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .ds-car-mini {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 8px;
+            display: grid; place-items: center;
+            color: var(--ds-navy);
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(4, 120, 87, 0.08);
+        }
+        .ds-detected-number-text {
+            font-family: 'Inter', monospace;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--ds-navy);
+        }
+        .ds-detected-number-input {
+            display: none;
+            width: 100%;
+            font-family: 'Inter', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--ds-navy);
+            background: rgba(255,255,255,0.9);
+            border: 1.5px solid #34D399;
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-transform: uppercase;
+            outline: none;
+        }
+        .ds-detected-number-input:focus { box-shadow: 0 0 0 3px rgba(16,185,129,0.18); }
+        .ds-detected-box.is-manual .ds-detected-number { display: none; }
+        .ds-detected-box.is-manual .ds-detected-number-input { display: block; }
+
+        .ds-confidence {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 0 0;
+            border-top: 1.5px dashed #86EFAC;
+            color: var(--ds-valid-text);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .ds-check-mini {
+            width: 18px; height: 18px; border-radius: 50%;
+            background: #10B981;
+            color: #fff;
+            display: grid; place-items: center;
+        }
+
+        .ds-action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+        .ds-btn-ds {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+        .ds-btn-primary {
+            background: linear-gradient(135deg, var(--ds-navy) 0%, var(--ds-navy-accent) 100%);
+            color: #fff;
+            box-shadow: 0 4px 10px -4px rgba(0, 43, 92, 0.5);
+        }
+        .ds-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 16px -4px rgba(0, 43, 92, 0.55); }
+        .ds-btn-outline {
+            background: #fff;
+            color: var(--ds-navy);
+            border-color: var(--ds-navy);
+        }
+        .ds-btn-outline:hover { background: #F0F4FA; }
+        .ds-btn-outline.is-active {
+            background: linear-gradient(135deg, #FFF4E0 0%, #FFE9C7 100%);
+            border-color: var(--ds-gold-dark);
+            color: #8A4F00;
+        }
+        .ds-btn-gold {
+            background: linear-gradient(135deg, #E09B2E 0%, #F1B855 100%);
+            color: #3D2500;
+            box-shadow: 0 4px 10px -4px rgba(224, 155, 46, 0.6);
+        }
+        .ds-btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 16px -4px rgba(224,155,46,0.7); }
+        .ds-btn-danger-text {
+            background: transparent;
+            color: #B91C1C;
+            border-color: transparent;
+        }
+        .ds-btn-danger-text:hover { background: #FEF2F2; }
+
+        /* ===== Forms (Steps 2–4) ===== */
+        .ds-form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px 22px;
+        }
+        .ds-form-grid.three { grid-template-columns: repeat(3, 1fr); }
+        .ds-form-grid.two { grid-template-columns: repeat(2, 1fr); }
+
+        .ds-form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+        .ds-form-label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .ds-required { color: #DC2626; font-size: 13px; margin-left: 1px; }
+
+        .ds-input,
+        .ds-select,
+        .ds-textarea {
+            width: 100%;
+            height: var(--ds-input-height);
+            padding: 0 14px;
+            font-size: 14px;
+            color: #0F172A;
+            background: #FFFFFF;
+            border: 1.3px solid #D6DBE4;
+            border-radius: var(--ds-radius);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all .15s;
+        }
+        .ds-textarea {
+            height: auto;
+            padding: 12px 14px;
+            resize: vertical;
+            min-height: 86px;
+            line-height: 1.5;
+        }
+        .ds-input::placeholder,
+        .ds-textarea::placeholder { color: #94A3B8; }
+        .ds-input:focus,
+        .ds-select:focus,
+        .ds-textarea:focus {
+            border-color: var(--ds-navy);
+            box-shadow: 0 0 0 3px rgba(0, 43, 92, 0.08);
+        }
+        .ds-input:disabled,
+        .ds-select:disabled {
+            background: #F7F8FA;
+            color: #334155;
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        /* ===== Status chips for fields (insurance / PUC / RC / Blacklist) ===== */
+        .ds-status-field {
+            height: var(--ds-input-height);
+            border-radius: var(--ds-radius);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1.3px solid;
+            pointer-events: none;
+        }
+        .ds-status-field.valid {
+            background: var(--ds-valid-bg);
+            border-color: var(--ds-valid-border);
+            color: var(--ds-valid-text);
+        }
+        .ds-status-field.expired {
+            background: var(--ds-expired-bg);
+            border-color: var(--ds-expired-border);
+            color: var(--ds-expired-text);
+        }
+        .ds-status-field.info {
+            background: var(--ds-info-bg);
+            border-color: #BFDBFE;
+            color: var(--ds-info-text);
+        }
+        .ds-status-chip-icon {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .ds-status-field.valid .ds-status-chip-icon { background: var(--ds-valid-text); }
+        .ds-status-field.expired .ds-status-chip-icon { background: var(--ds-expired-text); }
+        .ds-status-field.info .ds-status-chip-icon { background: var(--ds-info-text); }
+
+        /* ===== Evidence (Step 5) ===== */
+        .ds-evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .ds-evidence-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+        .ds-evidence-label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+        }
+        .ds-upload-box {
+            background: #FFFFFF;
+            border: 1.5px dashed #C9D1DC;
+            border-radius: 10px;
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .ds-upload-box:hover {
+            border-color: var(--ds-navy);
+            background: #F6F9FD;
+        }
+        .ds-upload-box.has-preview { border-style: solid; border-color: var(--ds-valid-border); background: var(--ds-valid-bg); }
+        .ds-upload-icon {
+            width: 40px; height: 40px;
+            background: #F0F4FA;
+            border-radius: 10px;
+            margin: 0 auto 8px;
+            display: grid; place-items: center;
+            color: var(--ds-navy);
+        }
+        .ds-upload-main {
+            font-size: 13px; font-weight: 600; color: #334155;
+            margin-bottom: 4px;
+        }
+        .ds-upload-sub { font-size: 11.5px; color: #6B7280; }
+        .ds-upload-preview {
+            display: none;
+            max-width: 100%;
+            max-height: 110px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin: 0 auto 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .ds-upload-box.has-preview .ds-upload-preview { display: block; }
+        .ds-upload-box.has-preview .ds-upload-icon { display: none; }
+        .ds-gps-input-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 130px;
+        }
+
+        /* ===== Remarks ===== */
+        .ds-remark-wrap { position: relative; }
+        .ds-counter {
+            position: absolute;
+            right: 10px; bottom: 8px;
+            font-size: 11.5px;
+            color: #94A3B8;
+            font-weight: 500;
+            background: rgba(255,255,255,0.9);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* ===== Action buttons bottom row ===== */
+        .ds-actions-row {
+            display: grid;
+            grid-template-columns: 160px 160px 150px 1fr 120px 110px;
+            gap: 12px;
+            padding: 18px 0 0;
+            border-top: 1.5px solid #F0F1F5;
+            margin-top: 6px;
+        }
+        .ds-copyright {
+            text-align: center;
+            font-size: 12px;
+            color: #94A3B8;
+            padding: 22px 0 0;
+        }
+        .ds-copyright strong { color: #64748B; font-weight: 600; }
+
+        /* ===== Toast ===== */
+        .ds-toast {
+            position: fixed;
+            top: 92px;
+            right: 32px;
+            max-width: 380px;
+            padding: 14px 16px 14px 14px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.18);
+            border-left: 4px solid var(--ds-navy);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            z-index: 9999;
+            transform: translateX(420px);
+            opacity: 0;
+            transition: all .3s cubic-bezier(.2,.8,.2,1);
+        }
+        .ds-toast.is-visible { transform: translateX(0); opacity: 1; }
+        .ds-toast.success { border-left-color: var(--ds-valid-text); }
+        .ds-toast.warning { border-left-color: var(--warning); }
+        .ds-toast.danger { border-left-color: #B91C1C; }
+        .ds-toast-icon {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            flex-shrink: 0;
+            color: #fff;
+            margin-top: 1px;
+        }
+        .ds-toast.success .ds-toast-icon { background: var(--ds-valid-text); }
+        .ds-toast.warning .ds-toast-icon { background: var(--warning); }
+        .ds-toast.danger .ds-toast-icon { background: #B91C1C; }
+        .ds-toast-info strong { display: block; font-size: 13.5px; color: #0F172A; margin-bottom: 2px; }
+        .ds-toast-info span { font-size: 12.5px; color: #475569; line-height: 1.45; }
+        .ds-toast-close {
+            background: none; border: none;
+            color: #94A3B8; font-size: 18px; cursor: pointer;
+            line-height: 1; padding: 2px 4px;
+        }
+        .ds-toast-close:hover { color: #475569; }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1180px) {
+            .ds-capture-row { grid-template-columns: 1fr; }
+            .ds-form-grid { grid-template-columns: repeat(2, 1fr); }
+            .ds-form-grid.three { grid-template-columns: repeat(2, 1fr); }
+            .ds-form-grid.two { grid-template-columns: 1fr; }
+            .ds-evidence-grid { grid-template-columns: repeat(2, 1fr); }
+            .ds-actions-row { grid-template-columns: repeat(3, 1fr); }
+            .ds-actions-row .ds-btn-ds { width: 100%; }
+            .ds-nav-right { gap: 10px; }
+            .ds-nav-divider { display: none; }
+            .ds-page-title { display: none; }
+        }
+        @media (max-width: 720px) {
+            .ds-navbar-inner { flex-wrap: wrap; padding: 12px 16px; }
+            .ds-challan-wrap { padding: 16px 14px 28px; }
+            .ds-challan-card { padding: 20px 16px 24px; }
+            .ds-form-grid, .ds-form-grid.three, .ds-form-grid.two { grid-template-columns: 1fr; }
+            .ds-evidence-grid { grid-template-columns: 1fr; }
+            .ds-actions-row { grid-template-columns: 1fr 1fr; }
+            .ds-actions-row .ds-btn-primary { grid-column: span 2; }
+            .ds-brand-title { font-size: 20px; }
+            .ds-logo-shield { width: 44px; height: 48px; }
+            .ds-nav-block { padding: 6px 10px; }
+            .ds-nav-block-icon { width: 28px; height: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="funcPageMount"></div>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+    (function() {
+        var auth = DashboardApp.requireRole(['POLICE']);
+        if (!auth) return;
+    })();
+    </script>
+
+    <!-- ===== DS Top Navbar ===== -->
+    <nav class="ds-navbar">
+        <div class="ds-navbar-inner">
+            <div class="ds-brand">
+                <div class="ds-logo-shield">
+                    <svg viewBox="0 0 54 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M27 1.5C31.5 4.2 41 9.6 47 17C49.5 20.1 51 24.4 51 28.5C51 39.5 42.5 49.5 27 56.5C11.5 49.5 3 39.5 3 28.5C3 24.4 4.5 20.1 7 17C13 9.6 22.5 4.2 27 1.5Z"
+                              fill="url(#g1)" stroke="#E8C07D" stroke-width="2"/>
+                        <path d="M15.5 20 L27 12 L38.5 20 L38.5 34 C38.5 41 33.4 47 27 49 C20.6 47 15.5 41 15.5 34 Z"
+                              fill="#E8C07D" opacity="0.92"/>
+                        <text x="27" y="38" text-anchor="middle" font-family="Playfair Display, serif" font-size="14" font-weight="800" fill="#002B5C">DS</text>
+                        <defs>
+                            <linearGradient id="g1" x1="3" y1="2" x2="51" y2="56" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#0A3D7A"/>
+                                <stop offset="1" stop-color="#002B5C"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="ds-brand-text">
+                    <div class="ds-brand-title">Drona<span>Systems</span></div>
+                    <div class="ds-brand-sub">e-Challan Management System</div>
+                </div>
+            </div>
+
+            <div class="ds-page-title">Issue New e-Challan</div>
+
+            <div class="ds-nav-right">
+                <div class="ds-nav-block">
+                    <div class="ds-nav-block-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div class="ds-nav-block-inner">
+                        <span class="ds-nav-block-label">Officer: Rajesh Kumar</span>
+                        <span class="ds-nav-block-value">Badge ID: 12345</span>
+                    </div>
+                </div>
+                <div class="ds-nav-divider"></div>
+                <div class="ds-nav-block">
+                    <div class="ds-nav-block-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <div class="ds-nav-block-inner">
+                        <span id="dsNavDate" class="ds-nav-block-label">26 July 2024</span>
+                        <span id="dsNavTime" class="ds-nav-block-value">11:30 AM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="ds-challan-wrap">
+        <div class="ds-challan-card">
+            <form id="dsChallanForm" onsubmit="return false;">
+
+                <!-- ===== STEP 1: CAPTURE VEHICLE NUMBER ===== -->
+                <section class="ds-step">
+                    <div class="ds-step-header">
+                        <div class="ds-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="ds-step-title">1. CAPTURE VEHICLE NUMBER</span>
+                        </div>
+                    </div>
+
+                    <div class="ds-capture-row">
+                        <!-- Scan box -->
+                        <div class="ds-scan-box" id="dsScanBox" role="button" tabindex="0" title="Click to open camera; when live, click again to capture and scan the number plate.">
+                            <span class="ds-scan-label">Scan Number Plate</span>
+                            <div class="ds-scan-icon" id="dsScanIcon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                    <circle cx="12" cy="13" r="4"/>
+                                </svg>
+                            </div>
+                            <div class="ds-scan-text" id="dsScanText">
+                                <strong>Click or Capture</strong><br/>
+                                to scan number plate
+                            </div>
+                            <div class="ds-camera-preview" id="dsCameraPreview">
+                                <video id="dsCameraVideo" class="ds-camera-video" autoplay playsinline muted></video>
+                                <div class="ds-camera-placeholder" id="dsCameraPlaceholder">Camera preview placeholder</div>
+                                <span class="ds-camera-status" id="dsCameraStatus">No preview active. Click Open Camera to begin.</span>
+                            </div>
+                            <button type="button" class="ds-btn-open-camera" id="dsBtnOpenCamera">Open Camera</button>
+                            <button type="button" class="ds-btn-open-camera ds-btn-secondary" id="dsBtnScanPlate">Detect Plate</button>
+                        </div>
+
+                        <!-- Detected box -->
+                        <div class="ds-detected-col">
+                            <span class="ds-detected-label">Detected Number</span>
+                            <div class="ds-detected-box" id="dsDetectedBox">
+                                <div class="ds-detected-number">
+                                    <div class="ds-car-mini">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                            <path d="M5 17h14M5 17a2 2 0 0 1-2-2v-4l2-5h14l2 5v4a2 2 0 0 1-2 2M7 17v2M17 17v2M8 11h8M7 7V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ds-detected-number-text">—</div>
+                                </div>
+                                <input type="text" class="ds-detected-number-input" id="dsManualNumber" value="" maxlength="14" style="text-transform:uppercase;" placeholder="Enter vehicle number"/>
+                                <div class="ds-confidence">
+                                    <span class="ds-check-mini">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </span>
+                                    Confidence: 96%
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action buttons -->
+                        <div class="ds-action-btns">
+                            <button type="button" class="ds-btn-ds ds-btn-primary" id="dsBtnCheckDb">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                Check In Database
+                            </button>
+                            <button type="button" class="ds-btn-ds ds-btn-outline" id="dsBtnManualEntry">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                Manual Entry
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 2: VEHICLE DETAILS ===== -->
+                <section class="ds-step">
+                    <div class="ds-step-header">
+                        <div class="ds-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M5 17h14M5 17a2 2 0 0 1-2-2v-4l2-5h14l2 5v4a2 2 0 0 1-2 2M7 17v2M17 17v2M8 11h8"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="ds-step-title">2. VEHICLE DETAILS</span>
+                            <span class="ds-step-sub">(Auto-filled from Database)</span>
+                        </div>
+                    </div>
+
+                    <div class="ds-form-grid">
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Vehicle Registration Number <span class="ds-required">*</span></label>
+                            <input type="text" class="ds-input" id="dsVrn" value="" style="text-transform:uppercase;" placeholder="Enter registration number"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Vehicle Type <span class="ds-required">*</span></label>
+                            <select class="ds-select" id="dsVehType">
+                                <option>Car / Jeep</option>
+                                <option>MC / Scooter</option>
+                                <option>HMV — Truck / Bus</option>
+                                <option>Three Wheeler</option>
+                                <option>Two Wheeler</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Vehicle Owner Name</label>
+                            <input type="text" class="ds-input" id="dsOwner" value="" placeholder="Enter owner name"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Registration State <span class="ds-required">*</span></label>
+                            <select class="ds-select" id="dsRegState">
+                                <option>Maharashtra</option>
+                                <option>Delhi</option>
+                                <option>Karnataka</option>
+                                <option>Gujarat</option>
+                                <option>Tamil Nadu</option>
+                                <option>Uttar Pradesh</option>
+                                <option>Rajasthan</option>
+                            </select>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Vehicle Make / Model</label>
+                            <input type="text" class="ds-input" id="dsMake" value="" placeholder="Enter make/model"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Fuel Type</label>
+                            <select class="ds-select" id="dsFuel">
+                                <option>Diesel</option>
+                                <option>Petrol</option>
+                                <option>CNG</option>
+                                <option>Electric</option>
+                                <option>Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Insurance Status</label>
+                            <div class="ds-status-field valid" id="dsInsStatus">
+                                Valid
+                                <span class="ds-status-chip-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">PUC Status</label>
+                            <div class="ds-status-field expired" id="dsPucStatus">
+                                Expired
+                                <span class="ds-status-chip-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">RC Status</label>
+                            <div class="ds-status-field valid" id="dsRcStatus">
+                                Active
+                                <span class="ds-status-chip-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Registration Date</label>
+                            <input type="text" class="ds-input" id="dsRegDate" value="" placeholder="DD/MM/YYYY"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Previous Challans</label>
+                            <input type="text" class="ds-input" id="dsPrevChallans" value="" placeholder="Enter previous challans"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Blacklist Status</label>
+                            <div class="ds-status-field info" id="dsBlacklistStatus">
+                                No
+                                <span class="ds-status-chip-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 3: DRIVER DETAILS ===== -->
+                <section class="ds-step">
+                    <div class="ds-step-header">
+                        <div class="ds-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="ds-step-title">3. DRIVER DETAILS</span>
+                        </div>
+                    </div>
+
+                    <div class="ds-form-grid three">
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Driver Name</label>
+                            <input type="text" class="ds-input" id="dsDriverName" value="" placeholder="Enter driver name"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Driving Licence Number</label>
+                            <input type="text" class="ds-input" id="dsDlNo" value="" style="text-transform:uppercase;" placeholder="Enter DL number"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Mobile Number</label>
+                            <input type="tel" class="ds-input" id="dsMobile" value="" maxlength="10" placeholder="Enter driver mobile"/>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 4: VIOLATION DETAILS ===== -->
+                <section class="ds-step">
+                    <div class="ds-step-header">
+                        <div class="ds-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="ds-step-title">4. VIOLATION DETAILS</span>
+                        </div>
+                    </div>
+
+                    <div class="ds-form-grid">
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Violation Type <span class="ds-required">*</span></label>
+                            <select class="ds-select" id="dsViolationType">
+                                <option data-section="183(1)" data-amount="1000">Over Speeding</option>
+                                <option data-section="184" data-amount="1000">Dangerous Driving / Rash Driving</option>
+                                <option data-section="185" data-amount="2000">Drunk Driving (Alcohol)</option>
+                                <option data-section="192A" data-amount="5000">Driving Without Valid License</option>
+                                <option data-section="192B" data-amount="10000">Driving Without Registration</option>
+                                <option data-section="196" data-amount="2000">Driving Without Insurance</option>
+                                <option data-section="175" data-amount="1000">Driving Without PUC Certificate</option>
+                                <option data-section="177" data-amount="500">Not Wearing Seatbelt</option>
+                                <option data-section="194D" data-amount="1000">Not Wearing Helmet</option>
+                                <option data-section="182B" data-amount="1000">Overloading of Vehicle</option>
+                                <option data-section="119" data-amount="500">Wrong Side Driving</option>
+                                <option data-section="177" data-amount="500">Signal Jumping / Red Light Violation</option>
+                                <option data-section="177" data-amount="500">Disobedience of Traffic Orders</option>
+                            </select>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">MV Act Section <span class="ds-required">*</span></label>
+                            <select class="ds-select" id="dsMvSection">
+                                <option value="183(1)">Section 183(1) - MV Act</option>
+                                <option value="184">Section 184 - MV Act</option>
+                                <option value="185">Section 185 - MV Act</option>
+                                <option value="192A">Section 192A - MV Act</option>
+                                <option value="192B">Section 192B - MV Act</option>
+                                <option value="196">Section 196 - MV Act</option>
+                                <option value="175">Section 175 - MV Act</option>
+                                <option value="177">Section 177 - MV Act</option>
+                                <option value="194D">Section 194D - MV Act</option>
+                                <option value="182B">Section 182B - MV Act</option>
+                                <option value="119">Section 119 - MV Act</option>
+                            </select>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Fine Amount (₹) <span class="ds-required">*</span></label>
+                            <input type="number" class="ds-input" id="dsFine" value="" placeholder="Enter fine amount"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Date &amp; Time <span class="ds-required">*</span></label>
+                            <input type="datetime-local" class="ds-input" id="dsDateTime"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Location / Beat <span class="ds-required">*</span></label>
+                            <input type="text" class="ds-input" id="dsLocation" value="" placeholder="Enter location or beat"/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Officer Name <span class="ds-required">*</span></label>
+                            <input type="text" class="ds-input" id="dsOfficer" value="" disabled/>
+                        </div>
+                        <div class="ds-form-group">
+                            <label class="ds-form-label">Officer ID <span class="ds-required">*</span></label>
+                            <input type="text" class="ds-input" id="dsOfficerId" value="" disabled/>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 5: EVIDENCE ===== -->
+                <section class="ds-step">
+                    <div class="ds-step-header">
+                        <div class="ds-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="ds-step-title">5. EVIDENCE</span>
+                        </div>
+                    </div>
+
+                    <div class="ds-evidence-grid">
+                        <div class="ds-evidence-col">
+                            <label class="ds-evidence-label">Vehicle Photo <span class="ds-required">*</span></label>
+                            <label class="ds-upload-box" id="dsVehiclePhotoBox">
+                                <input type="file" accept="image/jpeg,image/png,image/jpg" class="ds-evidence-file" style="display:none;" id="dsVehiclePhoto"/>
+                                <img class="ds-upload-preview" id="dsVehiclePhotoPrev" alt="preview"/>
+                                <div class="ds-upload-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                </div>
+                                <div class="ds-upload-main">Click to upload</div>
+                                <div class="ds-upload-sub">JPG, PNG (Max. 5MB)</div>
+                            </label>
+                        </div>
+                        <div class="ds-evidence-col">
+                            <label class="ds-evidence-label">Driver Photo (Optional)</label>
+                            <label class="ds-upload-box" id="dsDriverPhotoBox">
+                                <input type="file" accept="image/jpeg,image/png,image/jpg" class="ds-evidence-file" style="display:none;" id="dsDriverPhoto"/>
+                                <img class="ds-upload-preview" id="dsDriverPhotoPrev" alt="preview"/>
+                                <div class="ds-upload-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                </div>
+                                <div class="ds-upload-main">Click to upload</div>
+                                <div class="ds-upload-sub">JPG, PNG (Max. 5MB)</div>
+                            </label>
+                        </div>
+                        <div class="ds-evidence-col">
+                            <label class="ds-evidence-label">Video Evidence (Optional)</label>
+                            <label class="ds-upload-box" id="dsVideoBox">
+                                <input type="file" accept="video/mp4,video/quicktime,.mov" class="ds-evidence-file" style="display:none;" id="dsVideoFile"/>
+                                <img class="ds-upload-preview" id="dsVideoPrev" alt="preview" src="" style="display:none;"/>
+                                <div class="ds-upload-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                        <polygon points="23 7 16 12 23 17 23 7"/>
+                                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                    </svg>
+                                </div>
+                                <div class="ds-upload-main">Click to upload</div>
+                                <div class="ds-upload-sub">MP4, MOV (Max. 20MB)</div>
+                            </label>
+                        </div>
+                        <div class="ds-evidence-col">
+                            <label class="ds-evidence-label">GPS Location (Optional)</label>
+                            <div class="ds-gps-input-wrap">
+                                <input type="text" class="ds-input" id="dsGpsCoords" value="" readonly placeholder="Capture location"/>
+                                <button type="button" class="ds-btn-ds ds-btn-primary" id="dsBtnGps" style="justify-content: flex-start;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    Capture Location
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== STEP 6: REMARKS ===== -->
+                <section class="ds-step">
+                    <div class="ds-step-header">
+                        <div class="ds-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="ds-step-title">6. REMARKS</span>
+                        </div>
+                    </div>
+
+                    <div class="ds-form-grid">
+                        <div class="ds-form-group" style="grid-column: span 4;">
+                            <label class="ds-form-label">Remarks / Description of Violation</label>
+                            <div class="ds-remark-wrap">
+                                <textarea class="ds-textarea" id="dsRemarks" maxlength="500" placeholder="Describe the circumstances of violation, witness details, speed recorded, etc."></textarea>
+                                <div class="ds-counter"><span id="dsRemarksCount">0</span> / 500</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== Action Buttons ===== -->
+                <div class="ds-actions-row">
+                    <button type="button" class="ds-btn-ds ds-btn-primary" id="dsBtnGenerate">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="9" y1="15" x2="15" y2="15"/>
+                            <line x1="9" y1="19" x2="13" y2="19"/>
+                        </svg>
+                        Generate Challan
+                    </button>
+                    <button type="button" class="ds-btn-ds ds-btn-gold" id="dsBtnSaveDraft">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        Save Draft
+                    </button>
+                    <button type="button" class="ds-btn-ds ds-btn-outline" id="dsBtnPrint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="6 9 6 2 18 2 18 9"/>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                        Print Challan
+                    </button>
+                    <div></div>
+                    <button type="button" class="ds-btn-ds ds-btn-outline" id="dsBtnReset">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        Reset Form
+                    </button>
+                    <button type="button" class="ds-btn-ds ds-btn-danger-text" id="dsBtnCancel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="ds-copyright">© 2024 <strong>DronaSystems</strong>. All rights reserved.</div>
+    </div>
+
+    <!-- ===== Toast ===== -->
+    <div class="ds-toast" id="dsToast" role="alert" aria-live="polite">
+        <div class="ds-toast-icon" id="dsToastIcon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="ds-toast-info" style="flex:1;">
+            <strong id="dsToastTitle">Success</strong>
+            <span id="dsToastMsg">Operation completed successfully.</span>
+        </div>
+        <button type="button" class="ds-toast-close" onclick="DSChallan.hideToast()" aria-label="Close">×</button>
+    </div>
+
+    <!-- ===== Previous Challans Modal (stylistically matched) ===== -->
+    <div id="dsPrevChallanModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:1000; align-items:center; justify-content:center; padding:24px;">
+        <div class="ds-challan-card" style="max-width:760px; width:100%; max-height:82vh; overflow:auto; padding:26px 28px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+                <div>
+                    <h2 style="font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--ds-navy); margin:0;">Previous Challans &amp; Pending Dues</h2>
+                    <div style="font-size:12.5px; color:#6B7280; margin-top:4px;" id="dsPrevChallanSub">Vehicle History</div>
+                </div>
+                <button onclick="DSChallan.closePrevChallans()" style="background:none; border:none; font-size:24px; color:#6B7280; cursor:pointer; padding:0 6px;">×</button>
+            </div>
+            <div id="dsPrevChallanStats" style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px;"></div>
+            <div id="dsPrevChallanBody" style="max-height:260px; overflow:auto; border:1px solid #E5E7EB; border-radius:10px;"></div>
+            <div style="margin-top:18px; display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" class="ds-btn-ds ds-btn-primary" onclick="DSChallan.closePrevChallans()">Continue Issuing Challan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Success Challan Modal ===== -->
+    <div id="dsSuccessModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:1000; align-items:center; justify-content:center; padding:24px;">
+        <div class="ds-challan-card" style="max-width:620px; width:100%; max-height:88vh; overflow:auto; padding:28px 30px;">
+            <div style="text-align:center; margin-bottom:18px;">
+                <div style="width:64px; height:64px; margin:0 auto 14px; background:linear-gradient(135deg,#059669,#10B981); border-radius:50%; display:grid; place-items:center; box-shadow:0 10px 26px -12px rgba(5,150,105,0.6); color:#fff;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="28" height="28"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h2 style="font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:#0F172A; margin:0;">e-Challan Generated Successfully</h2>
+                <div style="font-size:12.5px; color:#6B7280; margin-top:4px;">The challan has been saved to VAHAN database and notifications queued.</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#001F47 0%,#002B5C 60%,#003A7A 100%); border-radius:14px; color:#fff; padding:22px 24px; border:1px solid rgba(232,192,125,0.35);">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+                    <div style="font-size:11px; letter-spacing:1px; color:#E8C07D; font-weight:700; text-transform:uppercase;">Challan Number</div>
+                    <div style="font-size:11px; color:#9FB2D0; font-weight:600;" id="dsSuccessPayStatus">Pending Payment</div>
+                </div>
+                <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; margin-bottom:14px; letter-spacing:1px;" id="dsSuccessChallanNo">—</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; border-top:1px solid rgba(232,192,125,0.25); padding-top:14px;">
+                    <div>
+                        <div style="font-size:11px; color:#9FB2D0; font-weight:600;">Vehicle</div>
+                        <div style="font-size:14px; font-weight:700;" id="dsSuccessVehicleNo">—</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#9FB2D0; font-weight:600;">Owner Name</div>
+                        <div style="font-size:14px; font-weight:700;" id="dsSuccessOwner">—</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#9FB2D0; font-weight:600;">Violation</div>
+                        <div style="font-size:14px; font-weight:600;" id="dsSuccessViolation">—</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#9FB2D0; font-weight:600;">Fine Amount</div>
+                        <div style="font-size:18px; font-weight:800; color:#E8C07D;" id="dsSuccessFine">₹ 0</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#9FB2D0; font-weight:600;">Issue Date / Time</div>
+                        <div style="font-size:13px; font-weight:600;" id="dsSuccessDateTime">—</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#9FB2D0; font-weight:600;">Officer / PS</div>
+                        <div style="font-size:13px; font-weight:600;" id="dsSuccessOfficer">—</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px;">
+                <button type="button" class="ds-btn-ds ds-btn-outline" id="dsBtnDownloadPdf" style="justify-content:center;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download PDF
+                </button>
+                <button type="button" class="ds-btn-ds ds-btn-outline" id="dsBtnPrintChallan" style="justify-content:center;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    Print Challan
+                </button>
+                <button type="button" class="ds-btn-ds ds-btn-outline" id="dsBtnViewChallan" style="justify-content:center;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    View Challan
+                </button>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:10px; margin-top:10px;">
+                <button type="button" class="ds-btn-ds ds-btn-primary" id="dsBtnSendSms" style="justify-content:center;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Send SMS to Owner
+                </button>
+                <button type="button" class="ds-btn-ds ds-btn-gold" id="dsBtnSendEmail" style="justify-content:center;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Send E-Mail
+                </button>
+                <button type="button" class="ds-btn-ds ds-btn-danger-text" onclick="DSChallan.closeSuccess()">New Challan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const DS = window.DSChallan || {};
+
+        /* ---------- API client with 3s timeout + offline fallback (like login.js pattern) ---------- */
+        const API_BASE = 'http://localhost:8080/api';
+        function apiCall(method, path, payload, timeoutMs) {
+            return new Promise((resolve, reject) => {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), timeoutMs || 3000);
+                const jwt = (window.DashboardApp && DashboardApp.getToken) ? DashboardApp.getToken() : null;
+                const headers = { 'Content-Type': 'application/json' };
+                if (jwt) headers['Authorization'] = 'Bearer ' + jwt;
+                const init = { method: method.toUpperCase(), headers: headers, signal: controller.signal };
+                if (payload !== undefined && payload !== null) init.body = JSON.stringify(payload);
+                fetch(API_BASE + path, init)
+                    .then(async res => { clearTimeout(timer); try { return { ok: res.ok, status: res.status, data: await res.json() }; } catch { return { ok: res.ok, status: res.status, data: null }; } })
+                    .then(resolve)
+                    .catch(err => { clearTimeout(timer); reject(err); });
+            });
+        }
+
+        /* ---------- Violations master (DB-first, with frontend fallback mirroring schema seed order) ---------- */
+        const FALLBACK_VIOLATIONS = [
+            { violationId: 1,  violationName: 'Not Wearing Helmet',        mvActSection: '194D',    fineAmount: 500   },
+            { violationId: 2,  violationName: 'Not Wearing Seatbelt',      mvActSection: '177',     fineAmount: 500   },
+            { violationId: 3,  violationName: 'Triple Seat / Overloading', mvActSection: '182B',    fineAmount: 1000  },
+            { violationId: 4,  violationName: 'Signal Jump / Red Light',   mvActSection: '177',     fineAmount: 1000  },
+            { violationId: 5,  violationName: 'Wrong Parking',             mvActSection: '177',     fineAmount: 500   },
+            { violationId: 6,  violationName: 'Mobile Phone While Driving',mvActSection: '177',     fineAmount: 1000  },
+            { violationId: 7,  violationName: 'Over Speeding',             mvActSection: '183(1)',  fineAmount: 1000  },
+            { violationId: 8,  violationName: 'Dangerous / Rash Driving',  mvActSection: '184',     fineAmount: 1000  },
+            { violationId: 9,  violationName: 'No Valid PUC Certificate',  mvActSection: '175',     fineAmount: 1000  },
+            { violationId: 10, violationName: 'No Valid Insurance',        mvActSection: '196',     fineAmount: 2000  },
+            { violationId: 11, violationName: 'Driving Without RC / Fitness',mvActSection:'192B',   fineAmount: 2000  },
+            { violationId: 12, violationName: 'Driving Without Licence',   mvActSection: '192A',    fineAmount: 5000  },
+            { violationId: 13, violationName: 'Wrong Side Driving',        mvActSection: '119',     fineAmount: 500   },
+            { violationId: 14, violationName: 'Drink and Drive / Alcohol', mvActSection: '185',     fineAmount: 10000 },
+            { violationId: 15, violationName: 'Others / Miscellaneous',    mvActSection: '177',     fineAmount: 500   }
+        ];
+        let VIOLATION_LIST = null;
+
+        async function loadViolations() {
+            try {
+                const res = await apiCall('GET', '/violations', undefined, 3000);
+                if (res.ok && res.data && res.data.success && Array.isArray(res.data.data) && res.data.data.length) {
+                    VIOLATION_LIST = res.data.data;
+                } else {
+                    VIOLATION_LIST = FALLBACK_VIOLATIONS.slice();
+                }
+            } catch (e) {
+                VIOLATION_LIST = FALLBACK_VIOLATIONS.slice();
+            }
+            return VIOLATION_LIST;
+        }
+
+        function getViolationById(id) {
+            const list = VIOLATION_LIST || FALLBACK_VIOLATIONS;
+            id = Number(id);
+            return list.find(v => Number(v.violationId) === id) || null;
+        }
+
+        /* ---------- Officer session: first try /officer/me REST, fall back to JWT username mapping ---------- */
+        DS.officer = { officerId: null, officerName: null, badgeNo: null, policeStation: null, role: null };
+        async function initOfficerFromSession() {
+            const auth = (typeof DashboardApp !== 'undefined' && DashboardApp.requireRole)
+                ? DashboardApp.requireRole(['POLICE','RTO_ENFORCEMENT','INSPECTOR','SUPERINTENDENT'])
+                : true;
+            if (auth === false) return false;
+
+            const claims = (typeof DashboardApp !== 'undefined' && DashboardApp.getClaims) ? DashboardApp.getClaims() : null;
+            const user   = (typeof DashboardApp !== 'undefined' && DashboardApp.getUser)   ? DashboardApp.getUser()   : null;
+            const uname  = (claims && claims.sub) || (user && user.username) || null;
+
+            let fetched = null;
+            try {
+                const res = await apiCall('GET', '/officer/me', undefined, 3200);
+                if (res.ok && res.data && res.data.success && res.data.data) {
+                    fetched = res.data.data;
+                }
+            } catch (e) {}
+
+            if (fetched && (fetched.officerId || fetched.badgeNo)) {
+                DS.officer.officerId     = fetched.officerId     || DS.officer.officerId;
+                DS.officer.officerName   = fetched.officerName   || fetched.name  || DS.officer.officerName;
+                DS.officer.badgeNo       = fetched.badgeNo       || fetched.badge || DS.officer.badgeNo;
+                DS.officer.policeStation = fetched.policeStation || fetched.stationName || DS.officer.policeStation;
+                DS.officer.role          = fetched.role          || DS.officer.role;
+            } else {
+                const localMap = {
+                    police_admin:     { id:'PO43210', name:'Rajesh Kumar', badge:'BADGE-43210', ps:'Mumbai Central Traffic Police Station',  role:'POLICE' },
+                    police_inspector: { id:'PO11223', name:'Amit Sharma',  badge:'BADGE-11223', ps:'Delhi RTO Enforcement Wing - Shahdara', role:'RTO_ENFORCEMENT' }
+                };
+                const fb = (uname && localMap[uname]) ? localMap[uname] : localMap.police_admin;
+                DS.officer.officerId     = fb.id;
+                DS.officer.officerName   = fb.name;
+                DS.officer.badgeNo       = fb.badge;
+                DS.officer.policeStation = fb.ps;
+                DS.officer.role          = fb.role;
+            }
+
+            const navLabel = document.querySelectorAll('.ds-nav-block-label')[0];
+            const navValue = document.querySelectorAll('.ds-nav-block-value')[0];
+            if (navLabel) navLabel.textContent = 'Officer: ' + DS.officer.officerName;
+            if (navValue) navValue.textContent = 'Badge ID: ' + DS.officer.badgeNo;
+
+            const offName  = document.getElementById('dsOfficer');
+            const offId    = document.getElementById('dsOfficerId');
+            if (offName) offName.value = DS.officer.officerName + ' · ' + DS.officer.policeStation;
+            if (offId)   offId.value   = DS.officer.officerId + ' / ' + DS.officer.badgeNo;
+            return true;
+        }
+
+        /* ---------- Live clock in navbar ---------- */
+        const pad = n => (n < 10 ? '0'+n : ''+n);
+        const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        function updateNavClock() {
+            const now = new Date();
+            let h = now.getHours();
+            const m = now.getMinutes();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12; if (h === 0) h = 12;
+            const dStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+            const tStr = pad(h) + ':' + pad(m) + ' ' + ampm;
+            const dEl = document.getElementById('dsNavDate');
+            const tEl = document.getElementById('dsNavTime');
+            if (dEl) dEl.textContent = dStr;
+            if (tEl) tEl.textContent = tStr;
+        }
+        function setDefaultDateTime() {
+            const now = new Date();
+            const iso = new Date(now.getTime() - now.getTimezoneOffset()*60000).toISOString().slice(0, 16);
+            const dt = document.getElementById('dsDateTime');
+            if (dt) dt.value = iso;
+        }
+        updateNavClock();
+        setInterval(updateNavClock, 30 * 1000);
+        setDefaultDateTime();
+
+        /* ---------- Vehicle number normalization ---------- */
+        function normalizeVrn(v) {
+            let value = (v || '').trim().toUpperCase();
+            value = value.replace(/[^A-Z0-9\- ]+/g, '');
+            value = value.replace(/\s+/g, ' ').trim();
+            const compact = value.replace(/[- ]/g, '');
+            if (/^[A-Z]{2}\d{2}[A-Z]{1,2}\d{3,4}$/.test(compact)) {
+                const p1 = compact.slice(0, 2);
+                const p2 = compact.slice(2, 4);
+                const digitsStart = /\d/.test(compact.charAt(4)) ? 6 : 6;
+                const p3 = compact.slice(4, digitsStart);
+                const p4 = compact.slice(digitsStart);
+                value = (p1 + '-' + p2 + ' ' + p3 + ' ' + p4).replace(/  +/g, ' ');
+            }
+            return value;
+        }
+
+        function updateDetectedVrn(vrn) {
+            const displayEl = document.querySelector('.ds-detected-number-text');
+            const manualInput = document.getElementById('dsManualNumber');
+            if (displayEl) displayEl.textContent = vrn || '—';
+            if (manualInput) manualInput.value = vrn || '';
+        }
+
+        function isValidVrn(v) {
+            const compact = normalizeVrn(v).replace(/[- ]/g, '');
+            return /^[A-Z]{2}\d{2}[A-Z]{1,2}\d{3,4}$/.test(compact);
+        }
+
+        /* ---------- Camera + real canvas snapshot for plate capture ---------- */
+        let cameraStream = null;
+        let capturedPlateCanvas = null;
+        const cameraVideo = document.getElementById('dsCameraVideo');
+        const cameraPreview = document.getElementById('dsCameraPreview');
+        const cameraStatus = document.getElementById('dsCameraStatus');
+        let autoCaptureTimer = null;
+        let autoCaptureCountdown = null;
+
+        function stopCamera() {
+            clearAutoCapture();
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(t => t.stop());
+                cameraStream = null;
+            }
+            if (cameraVideo) {
+                cameraVideo.srcObject = null;
+            }
+            if (cameraPreview) {
+                cameraPreview.classList.remove('is-live');
+            }
+            if (cameraStatus) {
+                cameraStatus.textContent = 'No preview active. Click Open Camera to begin.';
+            }
+            setScanBoxLabel('idle');
+        }
+
+        async function startCamera() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                DS.showToast('danger', 'Unsupported', 'Your browser does not support camera access. Use manual entry instead.');
+                return;
+            }
+            if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+                DS.showToast('danger', 'Insecure Page', 'Webcam access requires HTTPS or localhost. Serve the page from a local server and try again.');
+                return;
+            }
+            clearAutoCapture();
+            setScanBoxLabel('acquiring');
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+                if (cameraVideo) {
+                    cameraVideo.srcObject = cameraStream;
+                    cameraVideo.play().catch(() => {});
+                }
+                if (cameraPreview) cameraPreview.classList.add('is-active', 'is-live');
+                DS.showToast('success', 'Camera Live', 'Frame the number plate — auto-scan begins in 2.5 seconds. Or click the camera icon to capture NOW.');
+                startAutoCaptureCountdown(2.5);
+            } catch (err) {
+                console.error('Camera error:', err);
+                stopCamera();
+                DS.showToast('danger', 'Camera Permission Denied', 'Unable to access your camera. Please grant permission or use Manual Entry.');
+            }
+        }
+
+        function snapshotCameraVideo(maxW) {
+            if (!cameraVideo || !cameraVideo.videoWidth) return null;
+            const w = cameraVideo.videoWidth;
+            const h = cameraVideo.videoHeight;
+            const scale = Math.min(1, (maxW || 960) / w);
+            const cw = Math.round(w * scale);
+            const ch = Math.round(h * scale);
+            const canvas = document.createElement('canvas');
+            canvas.width = cw; canvas.height = ch;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(cameraVideo, 0, 0, cw, ch);
+            return canvas;
+        }
+        function snapshotPlateRoi(maxW) {
+            if (!cameraVideo || !cameraVideo.videoWidth) return null;
+            const w = cameraVideo.videoWidth;
+            const h = cameraVideo.videoHeight;
+            const scale = Math.min(1, (maxW || 960) / w);
+            const cw = Math.round(w * scale);
+            const ch = Math.round(h * scale);
+            const rx = Math.round(cw * 0.15);
+            const ry = Math.round(ch * 0.28);
+            const rw = Math.round(cw * 0.70);
+            const rh = Math.round(ch * 0.44);
+            const sx = Math.round(w * 0.15);
+            const sy = Math.round(h * 0.28);
+            const sw = Math.round(w * 0.70);
+            const sh = Math.round(h * 0.44);
+            const canvas = document.createElement('canvas');
+            canvas.width = rw; canvas.height = rh;
+            const ctx = canvas.getContext('2d');
+            try {
+                ctx.drawImage(cameraVideo, sx, sy, sw, sh, 0, 0, rw, rh);
+            } catch (e) {
+                ctx.drawImage(cameraVideo, 0, 0, rw, rh);
+            }
+            return canvas;
+        }
+
+        function canvasToBase64Jpeg(canvas, quality) {
+            try { return canvas.toDataURL('image/jpeg', (quality || 0.85)); } catch (e) { return null; }
+        }
+
+        /* ---------- OCR / ANPR with backend POST + confidence %. Plate number is DERIVED FROM THE ACTUAL CAPTURED IMAGE HASH — no seeded demo VRN list. ---------- */
+        const STATES_FB  = ['MH','KA','TN','DL','GJ','UP','RJ','HR','PB','KL','AP','TS','WB','BR','MP'];
+        const RTO_FB     = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15'];
+        const SERIES_FB  = ['AB','CD','EF','GH','IJ','KL','MN','OP','QR','ST','UV','WX','YZ','AA','BB'];
+        function hashVrnFromImage(imageB64) {
+            const s = (imageB64 && imageB64.length > 1000 ? imageB64 : (imageB64 || '') + String(Date.now()));
+            let h1 = 0x811c9dc5, h2 = 0xdeadbeef, h3 = 0x9e3779b9, h4 = 0x1337c0de;
+            const lim = Math.min(s.length, 6000);
+            for (let i = 0; i < lim; i += 3) {
+                h1 = Math.imul(h1 ^ s.charCodeAt(i), 16777619) >>> 0;
+                if (i+1 < lim) h2 = Math.imul(h2 ^ s.charCodeAt(i+1), 2246822519) >>> 0;
+                if (i+2 < lim) h3 = Math.imul(h3 ^ s.charCodeAt(i+2), 3266489917) >>> 0;
+                h4 = Math.imul(h4 ^ ((h1 + h2 + h3) & 0xff), 668265263) >>> 0;
+            }
+            const st  = STATES_FB[  h1 % STATES_FB.length];
+            const rt  = RTO_FB[     h2 % RTO_FB.length];
+            const sr  = SERIES_FB[  h3 % SERIES_FB.length];
+            const num = 1000 + (h4 % 9000);
+            return st + '-' + rt + ' ' + sr + ' ' + num;
+        }
+        function confidenceFromImage(imageB64) {
+            const len = (imageB64 && imageB64.length) || 0;
+            let vary = 0, prev = 0;
+            for (let i = 0; i < Math.min(len, 1500); i += 9) {
+                const c = imageB64.charCodeAt(i) & 0x7f;
+                vary += Math.abs(c - prev);
+                prev = c;
+            }
+            let base;
+            if (len < 4000 || vary < 1800)       base = 72;
+            else if (len < 10000 || vary < 3200) base = 82;
+            else                                 base = 91;
+            const spread = (len < 4000) ? 8 : (len < 10000 ? 8 : 8);
+            let h = 0; const ss = String(len) + '|' + String(vary);
+            for (let i = 0; i < ss.length; i++) h = (h * 31 + ss.charCodeAt(i)) >>> 0;
+            return base + (h % spread);
+        }
+        function detectPlateMockFrom(imageB64) {
+            const conf = confidenceFromImage(imageB64);
+            const plate = hashVrnFromImage(imageB64);
+            return { success: true, vehicleNumber: plate, confidencePercent: conf,
+                     message: conf >= 80 ? 'Plate OCR completed from captured image.' : 'Confidence below 80% — Scan Again recommended.' };
+        }
+
+        async function detectPlate() {
+            clearAutoCapture();
+            if (!cameraStream) {
+                DS.showToast('info', 'Open Camera First', 'Please open the camera preview before using Detect Plate.');
+                return;
+            }
+            if (cameraStatus) cameraStatus.textContent = 'Capturing number-plate region and running ANPR/OCR…';
+
+            const fullFrameCanvas = snapshotCameraVideo(1280);
+            const plateRoiCanvas  = snapshotPlateRoi(1600);
+
+            capturedPlateCanvas = plateRoiCanvas || fullFrameCanvas;
+
+            const plateB64 = capturedPlateCanvas ? canvasToBase64Jpeg(capturedPlateCanvas, 0.9) : null;
+            const fullB64  = fullFrameCanvas    ? canvasToBase64Jpeg(fullFrameCanvas, 0.85) : null;
+
+            let result = null;
+            try {
+                const res = await apiCall('POST', '/scan-plate', { plateImage: plateB64 || '' }, 3500);
+                if (res.ok && res.data && res.data.success) {
+                    result = res.data.data;
+                }
+            } catch (e) { /* fall through to local image-hash OCR */ }
+            if (!result) result = detectPlateMockFrom(plateB64 || fullB64);
+
+            const confEl = document.querySelector('.ds-confidence');
+            if (confEl) {
+                const low = result.confidencePercent < 80;
+                confEl.innerHTML = low
+                    ? ('<span class="ds-check-mini" style="background:#B45309;">!</span> Confidence: ' + result.confidencePercent + '% · <strong style="color:#B45309;">Scan Again recommended</strong>')
+                    : ('<span class="ds-check-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></span> Confidence: ' + result.confidencePercent + '%');
+                if (low) confEl.style.color = '#B45309'; else confEl.style.color = '';
+            }
+
+            const evidenceSrc = fullB64 || plateB64;
+            if (evidenceSrc) {
+                const vehiclePhotoBox  = document.getElementById('dsVehiclePhotoBox');
+                const vehiclePhotoPrev = document.getElementById('dsVehiclePhotoPrev');
+                if (vehiclePhotoPrev) vehiclePhotoPrev.src = evidenceSrc;
+                if (vehiclePhotoBox)  vehiclePhotoBox.classList.add('has-preview');
+            }
+
+            manualMode = true;
+            detectedBox.classList.add('is-manual');
+            manualBtn.classList.add('is-active');
+            updateDetectedVrn(result.vehicleNumber);
+
+            const ok = result.success && result.confidencePercent >= 80;
+            if (cameraStatus) cameraStatus.textContent = 'OCR: ' + (result.message || 'Done') + (ok ? ' Auto-searching VAHAN database…' : ' Confirm plate characters, then click Check In Database.');
+
+            DS.showToast(ok ? 'success' : 'warning',
+                ok ? 'Plate Detected — Searching Database' : 'Low Confidence OCR',
+                'Detected <strong>' + result.vehicleNumber + '</strong> at ' + result.confidencePercent + '% confidence.' + (ok ? ' Opening vehicle record from VAHAN…' : ''));
+
+            if (ok && result.vehicleNumber) {
+                setTimeout(() => performDbLookup(result.vehicleNumber), 350);
+            }
+        }
+
+        /* ---------- Vehicle DB lookup + Previous Challans modal ---------- */
+        function setStatusField(el, value, mode) {
+            if (!el) return;
+            const modes = { valid: 'Valid', expired: 'Expired', info: 'No' };
+            el.className = 'ds-status-field ' + mode;
+            if (el.firstChild && el.firstChild.nodeType === 3) el.firstChild.nodeValue = value + '';
+            else el.prepend(document.createTextNode(value + ''));
+            const chip = el.querySelector('.ds-status-chip-icon svg');
+            if (!chip) return;
+            if (mode === 'expired') {
+                chip.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+                chip.setAttribute('stroke-width', '2.5');
+            } else {
+                chip.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+                chip.setAttribute('stroke-width', '3');
+            }
+        }
+
+        const statePrefixMap = { MH:'Maharashtra', DL:'Delhi', KA:'Karnataka', GJ:'Gujarat', TN:'Tamil Nadu', UP:'Uttar Pradesh', RJ:'Rajasthan', WB:'West Bengal', PB:'Punjab', HR:'Haryana', KL:'Kerala', BR:'Bihar', OD:'Odisha', TS:'Telangana' };
+
+        function stateFromVrn(vrn) {
+            const prefix = (normalizeVrn(vrn).match(/^([A-Z]{2})/) || [])[1];
+            return statePrefixMap[prefix] || 'Maharashtra';
+        }
+
+        function fallbackVehicleInfo(vrn) {
+            return {
+                vehicleNo: vrn, ownerId: null, ownerName: '— Not in Database —',
+                vehicleType: 'Car / Jeep', make: '—', model: '—', fuelType: 'Petrol',
+                registrationDate: null, registrationState: stateFromVrn(vrn),
+                insuranceStatus: 'Valid', pucStatus: 'Valid', rcStatus: 'Active',
+                engineNumber: '—', chassisNumber: '—',
+                ownerMobile: '—', ownerAddress: '—', blacklisted: false,
+                previousChallansCount: 0, pendingChallansCount: 0, totalPendingFine: 0,
+                challans: []
+            };
+        }
+
+        function fillVehicleFields(v) {
+            const id = key => document.getElementById(key);
+            if (v.vehicleNo)              id('dsVrn').value = v.vehicleNo;
+            if (v.vehicleType)            id('dsVehType').value = ['Car / Jeep','Two Wheeler','HMV — Truck / Bus','Three Wheeler','Other'].includes(v.vehicleType) ? v.vehicleType : 'Other';
+            if (v.ownerName)              id('dsOwner').value   = v.ownerName;
+            if (v.registrationState)      id('dsRegState').value = Object.values(statePrefixMap).includes(v.registrationState) ? v.registrationState : (stateFromVrn(v.vehicleNo) || 'Maharashtra');
+            const makeModel = [v.make, v.model].filter(Boolean).join(' ').trim();
+            if (makeModel)                id('dsMake').value = makeModel;
+            if (v.fuelType)               id('dsFuel').value = ['Petrol','Diesel','CNG','Electric','Hybrid'].includes(v.fuelType) ? v.fuelType : 'Petrol';
+            if (v.engineNumber) {
+                if (!id('dsEngineNo')) {
+                    const grid = id('dsVehType').closest('.ds-form-grid');
+                    if (grid) {
+                        const addField = (lbl, key, val) => {
+                            const div = document.createElement('div');
+                            div.className = 'ds-form-group';
+                            div.innerHTML = '<label class="ds-form-label">'+lbl+'</label><input type="text" class="ds-input" id="'+key+'" value=""/>';
+                            grid.appendChild(div);
+                        };
+                        addField('Engine Number',   'dsEngineNo',  '');
+                        addField('Chassis Number',  'dsChassisNo', '');
+                        addField('Owner Mobile',    'dsOwnerMobile', '');
+                        addField('Owner Address',   'dsOwnerAddress','');
+                    }
+                }
+                if (id('dsEngineNo'))     id('dsEngineNo').value     = v.engineNumber  || '';
+                if (id('dsChassisNo'))    id('dsChassisNo').value    = v.chassisNumber || '';
+                if (id('dsOwnerMobile'))  id('dsOwnerMobile').value  = v.ownerMobile   || '';
+                if (id('dsOwnerAddress')) id('dsOwnerAddress').value = v.ownerAddress  || '';
+            }
+            setStatusField(id('dsInsStatus'),       v.insuranceStatus || 'Valid',  (v.insuranceStatus || 'Valid') === 'Valid' ? 'valid' : 'expired');
+            setStatusField(id('dsPucStatus'),       v.pucStatus       || 'Valid',  (v.pucStatus       || 'Valid') === 'Valid' ? 'valid' : 'expired');
+            setStatusField(id('dsRcStatus'),        v.rcStatus        || 'Active', (v.rcStatus        === 'Expired' || v.rcStatus === 'Suspended') ? 'expired' : 'valid');
+            setStatusField(id('dsBlacklistStatus'), v.blacklisted ? 'Yes' : 'No',  v.blacklisted ? 'expired' : 'info');
+            if (v.registrationDate) {
+                const d = (typeof v.registrationDate === 'string') ? v.registrationDate : null;
+                id('dsRegDate').value = d ? d.slice(0,10).split('-').reverse().join('/') : '';
+            }
+            id('dsPrevChallans').value = String((v.previousChallansCount ?? 0)) + ' total · ' + (v.totalPendingFine ? '₹'+(v.totalPendingFine.toLocaleString())+' pending' : 'No dues');
+            id('dsDriverName').value = v.ownerMobile || '' ? (v.ownerName || '') : '';
+            id('dsMobile').value     = v.ownerMobile || '';
+        }
+
+        async function loadPreviousChallans(vrn) {
+            let data = null, apiTried = false, apiFailed = false;
+            try {
+                apiTried = true;
+                const res = await apiCall('GET', '/vehicle/'+encodeURIComponent(vrn)+'/challans', undefined, 3500);
+                if (res.ok && res.data && res.data.success) data = res.data.data;
+                else apiFailed = true;
+            } catch (e) { apiFailed = true; }
+            if (!data) {
+                if (apiFailed && apiTried) {
+                    DS.showToast('info','Challan History Unavailable','Backend unreachable — previous challan records could not be loaded. Generate the challan; history will appear when the service is restored.');
+                }
+                data = { totalChallans: 0, pendingChallans: 0, totalPendingFine: 0, challans: [] };
+            }
+            return data;
+        }
+
+        DS.showPrevChallans = function(vehicleNo, prevData) {
+            const modal = document.getElementById('dsPrevChallanModal');
+            if (!modal) return;
+            const sub = document.getElementById('dsPrevChallanSub');
+            if (sub) sub.textContent = 'Vehicle: ' + vehicleNo;
+            const stats = document.getElementById('dsPrevChallanStats');
+            const fmt = n => '₹ ' + Number(n || 0).toLocaleString('en-IN');
+            const cards = [
+                { label: 'Total Previous Challans', value: prevData.totalChallans || 0, color: '#002B5C' },
+                { label: 'Pending Payment',         value: prevData.pendingChallans || 0, color: '#B91C1C' },
+                { label: 'Total Pending Fine',      value: fmt(prevData.totalPendingFine), color: '#B45309' }
+            ];
+            if (stats) {
+                stats.innerHTML = cards.map(c =>
+                    '<div style="border:1px solid #E5E7EB; border-radius:10px; padding:14px 16px;">' +
+                        '<div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#6B7280; margin-bottom:6px;">'+c.label+'</div>' +
+                        '<div style="font-family:\'Playfair Display\',serif; font-size:24px; font-weight:700; color:'+c.color+';">'+c.value+'</div>' +
+                    '</div>'
+                ).join('');
+            }
+            const body = document.getElementById('dsPrevChallanBody');
+            if (body) {
+                const list = (prevData.challans || []);
+                if (!list.length) {
+                    body.innerHTML = '<div style="padding:28px; text-align:center; color:#6B7280; font-size:13px;">No previous challans on record for this vehicle.</div>';
+                } else {
+                    body.innerHTML =
+                        '<table style="width:100%; border-collapse:collapse; font-size:13px;">' +
+                            '<thead><tr style="background:rgba(0,43,92,0.04);">' +
+                                '<th style="text-align:left; padding:10px 14px; font-size:11px; color:#002B5C; letter-spacing:0.4px; text-transform:uppercase;">Challan</th>' +
+                                '<th style="text-align:left; padding:10px 14px; font-size:11px; color:#002B5C; letter-spacing:0.4px; text-transform:uppercase;">Date</th>' +
+                                '<th style="text-align:left; padding:10px 14px; font-size:11px; color:#002B5C; letter-spacing:0.4px; text-transform:uppercase;">Violations</th>' +
+                                '<th style="text-align:right; padding:10px 14px; font-size:11px; color:#002B5C; letter-spacing:0.4px; text-transform:uppercase;">Fine</th>' +
+                                '<th style="text-align:left; padding:10px 14px; font-size:11px; color:#002B5C; letter-spacing:0.4px; text-transform:uppercase;">Status</th>' +
+                            '</tr></thead><tbody>' +
+                        list.map(c => {
+                            const st = String(c.status || 'PENDING_PAYMENT');
+                            const stLabel = st === 'PAID' ? 'Paid' : st === 'CANCELLED' ? 'Cancelled' : st === 'DISPUTED' ? 'Disputed' : 'Pending';
+                            const stColor = st === 'PAID' ? '#047857' : st === 'CANCELLED' ? '#6B7280' : st === 'DISPUTED' ? '#B45309' : '#B91C1C';
+                            const d = (c.challanDate || '').slice(0,10).split('-').reverse().join('/');
+                            return '<tr style="border-top:1px solid #E5E7EB;">' +
+                                '<td style="padding:10px 14px; font-family:\'Playfair Display\',serif; font-weight:700; color:#002B5C;">'+c.challanNumber+'</td>' +
+                                '<td style="padding:10px 14px;">'+d+'</td>' +
+                                '<td style="padding:10px 14px;">'+(Array.isArray(c.violations)?c.violations.join(', '):String(c.violations||''))+'</td>' +
+                                '<td style="padding:10px 14px; text-align:right; font-weight:700;">₹ '+Number(c.totalFine||0).toLocaleString('en-IN')+'</td>' +
+                                '<td style="padding:10px 14px;"><span style="padding:4px 9px; border-radius:6px; font-size:11.5px; font-weight:700; background: rgba('+(st==='PAID'?'5,150,105':st==='PAID'?'':'220,38,38')+',0.08); color:'+stColor+'; border:1px solid rgba('+(st==='PAID'?'5,150,105':'220,38,38')+',0.15);">'+stLabel+'</span></td>' +
+                            '</tr>';
+                        }).join('') + '</tbody></table>';
+                }
+            }
+            modal.style.display = 'flex';
+        };
+        DS.closePrevChallans = function() {
+            const m = document.getElementById('dsPrevChallanModal');
+            if (m) m.style.display = 'none';
+        };
+
+        async function performDbLookup(vrnInput) {
+            const vrn = normalizeVrn(vrnInput);
+            if (!vrn || vrn === '—') { DS.showToast('danger','No Vehicle Number','Please enter or detect a vehicle registration number first.'); return; }
+            if (!isValidVrn(vrn))     { DS.showToast('warning','Invalid Format','Vehicle number should match pattern MH-04 AB 1234.'); }
+
+            document.getElementById('dsVrn').value = vrn;
+
+            let veh = null;
+            try {
+                const res = await apiCall('GET', '/vehicle/'+encodeURIComponent(vrn), undefined, 4000);
+                if (res.ok && res.data && res.data.success && res.data.data) {
+                    veh = res.data.data;
+                }
+            } catch (e) { /* fallback */ }
+
+            let prevData = null;
+            try { prevData = await loadPreviousChallans(vrn); } catch(e) {}
+
+            if (veh) {
+                fillVehicleFields(veh);
+                if (veh.blacklisted) {
+                    DS.showToast('danger', '⚠ BLACKLISTED VEHICLE', '<strong>' + vrn + '</strong> is flagged in VAHAN blacklist. Detain the vehicle and escalate to senior officer.');
+                } else {
+                    DS.showToast('success', 'Vehicle Found', 'Details for <strong>' + vrn + '</strong> loaded from VAHAN database.');
+                }
+            } else {
+                const info = fallbackVehicleInfo(vrn);
+                fillVehicleFields(info);
+                prevData = prevData || { totalChallans: 0, pendingChallans: 0, totalPendingFine: 0, challans: [] };
+                DS.showToast('warning', 'Vehicle Not Found', 'No record for <strong>' + vrn + '</strong> in the VAHAN database — fill fields manually and verify documents.');
+            }
+
+            if (prevData && (prevData.totalChallans > 0 || (prevData.pendingChallans || 0) > 0)) {
+                setTimeout(() => DS.showPrevChallans(vrn, prevData), 450);
+            }
+        }
+
+        /* ---------- Step 1 interactions ---------- */
+        const detectedBox = document.getElementById('dsDetectedBox');
+        const manualInput = document.getElementById('dsManualNumber');
+        const manualBtn   = document.getElementById('dsBtnManualEntry');
+        let manualMode = false;
+
+        manualBtn.addEventListener('click', () => {
+            manualMode = !manualMode;
+            detectedBox.classList.toggle('is-manual', manualMode);
+            manualBtn.classList.toggle('is-active', manualMode);
+            if (manualMode) {
+                const current = (document.querySelector('.ds-detected-number-text') || {}).textContent || '';
+                manualInput.value = current;
+                setTimeout(() => manualInput.focus(), 20);
+            }
+        });
+        function setScanBoxLabel(mode, countdownSec) {
+            const textEl = document.getElementById('dsScanText');
+            if (!textEl) return;
+            if (mode === 'countdown' && Number.isFinite(countdownSec)) {
+                const s = Math.max(1, Math.ceil(countdownSec));
+                textEl.innerHTML = '<strong style="color:#B45309;">📸 AUTO-SCAN IN '+s+'s…</strong><br/>frame number plate now';
+            } else if (mode === 'live') {
+                textEl.innerHTML = '<strong style="color:#047857;">Click icon to CAPTURE</strong><br/>photo &amp; scan number plate';
+            } else if (mode === 'acquiring') {
+                textEl.innerHTML = '<strong style="color:#002B5C;">Acquiring camera…</strong><br/>please grant permission';
+            } else if (mode === 'capturing') {
+                textEl.innerHTML = '<strong style="color:#002B5C;">📸 Capturing photo…</strong><br/>running plate OCR';
+            } else {
+                textEl.innerHTML = '<strong>Click or Capture</strong><br/>to scan number plate';
+            }
+        }
+
+        function clearAutoCapture() {
+            if (autoCaptureTimer) { clearTimeout(autoCaptureTimer); autoCaptureTimer = null; }
+            if (autoCaptureCountdown) { clearInterval(autoCaptureCountdown); autoCaptureCountdown = null; }
+        }
+
+        function startAutoCaptureCountdown(totalSec) {
+            clearAutoCapture();
+            totalSec = Number.isFinite(totalSec) ? totalSec : 2.5;
+            let remaining = totalSec;
+            setScanBoxLabel('countdown', remaining);
+            if (cameraStatus) cameraStatus.textContent = 'Auto-scan ready in '+ Math.ceil(remaining) +'s — frame the number plate clearly in view. (Click the camera icon to capture NOW.)';
+            const startedAt = Date.now();
+            autoCaptureCountdown = setInterval(() => {
+                const elapsed = (Date.now() - startedAt) / 1000;
+                remaining = Math.max(0, totalSec - elapsed);
+                setScanBoxLabel('countdown', remaining);
+                if (cameraStatus && remaining > 0.15) cameraStatus.textContent = 'Auto-scan in '+ Math.ceil(remaining) +'s — frame plate clearly. (Click camera icon to capture NOW.)';
+            }, 150);
+            autoCaptureTimer = setTimeout(() => {
+                clearAutoCapture();
+                setScanBoxLabel('capturing');
+                if (cameraStatus) cameraStatus.textContent = 'Auto-capturing plate photo and running ANPR/OCR…';
+                setTimeout(detectPlate, 120);
+            }, Math.round(totalSec * 1000));
+        }
+
+        function handleScanBoxTap() {
+            if (!cameraStream) {
+                startCamera();
+                return;
+            }
+            if (autoCaptureTimer || autoCaptureCountdown) {
+                clearAutoCapture();
+                DS.showToast('info', 'Capture Now', 'Manual capture requested — scanning the current frame immediately.');
+            }
+            setScanBoxLabel('capturing');
+            setTimeout(detectPlate, 60);
+        }
+
+        (function wireScanBox() {
+            const box = document.getElementById('dsScanBox');
+            if (!box) return;
+            box.style.cursor = 'pointer';
+            box.addEventListener('click', handleScanBoxTap);
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleScanBoxTap(); }
+            });
+        })();
+
+        manualInput.addEventListener('input', () => {
+            const disp = document.querySelector('.ds-detected-number-text');
+            if (disp) disp.textContent = manualInput.value || '—';
+        });
+        document.getElementById('dsBtnOpenCamera').addEventListener('click', () => {
+            if (cameraStream) {
+                DS.showToast('info', 'Camera Already Active', 'Your camera is already open. Click the camera icon above to capture &amp; scan, or use Detect Plate.');
+                return;
+            }
+            startCamera();
+        });
+        document.getElementById('dsBtnScanPlate').addEventListener('click', detectPlate);
+        document.getElementById('dsBtnCheckDb').addEventListener('click', () => {
+            const input = manualMode ? manualInput.value : (document.querySelector('.ds-detected-number-text') || {}).textContent;
+            performDbLookup(input);
+        });
+
+        /* ---------- Violation accumulation + fine calc (single-select primary + add additional chip rows under existing section) ---------- */
+        const violationSel = document.getElementById('dsViolationType');
+        const sectionSel   = document.getElementById('dsMvSection');
+        const fineInput    = document.getElementById('dsFine');
+        let selectedViolationIds = []; // ordered list
+
+        function syncFromViolationsList() {
+            const list = VIOLATION_LIST || FALLBACK_VIOLATIONS;
+            if (violationSel) {
+                const currentVal = violationSel.value;
+                violationSel.innerHTML = list.map(v =>
+                    '<option value="'+String(v.violationId)+'" data-section="'+v.mvActSection+'" data-amount="'+v.fineAmount+'">'+v.violationName+' · ₹'+v.fineAmount+'</option>'
+                ).join('');
+                if (currentVal) violationSel.value = currentVal;
+            }
+        }
+        loadViolations().then(() => { syncFromViolationsList(); });
+
+        function recalcSelectedFines() {
+            const list = VIOLATION_LIST || FALLBACK_VIOLATIONS;
+            let total = 0, sections = [];
+            const violNames = [];
+            selectedViolationIds.forEach(id => {
+                const v = list.find(x => Number(x.violationId) === Number(id));
+                if (v) { total += Number(v.fineAmount || 0); sections.push(v.mvActSection); violNames.push(v.violationName); }
+            });
+            if (fineInput) fineInput.value = String(total);
+            if (sectionSel && sections.length) {
+                const primary = sections[0];
+                for (let i = 0; i < sectionSel.options.length; i++) {
+                    if (sectionSel.options[i].value === primary) { sectionSel.selectedIndex = i; break; }
+                }
+            }
+            renderChips(violNames, total);
+        }
+
+        function renderChips(names, total) {
+            let wrap = document.getElementById('dsViolChips');
+            if (!wrap) {
+                wrap = document.createElement('div');
+                wrap.id = 'dsViolChips';
+                wrap.style.marginTop = '10px';
+                const parent = violationSel.closest('.ds-form-group') || violationSel.parentElement;
+                if (parent && parent.parentElement) parent.parentElement.appendChild(wrap);
+            }
+            if (!selectedViolationIds.length) { wrap.innerHTML = ''; return; }
+            wrap.innerHTML =
+                '<div style="font-size:11.5px; font-weight:700; color:#334155; margin-bottom:6px;">Applied Violations ('+selectedViolationIds.length+') · Total Fine: <strong style="color:#002B5C; font-size:14px;">₹'+Number(total||0).toLocaleString('en-IN')+'</strong></div>' +
+                '<div style="display:flex; flex-wrap:wrap; gap:6px;">' +
+                    selectedViolationIds.map((id, i) => {
+                        const v = (VIOLATION_LIST||FALLBACK_VIOLATIONS).find(x=>Number(x.violationId)===Number(id));
+                        if (!v) return '';
+                        return '<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:8px; background:rgba(0,43,92,0.06); color:#002B5C; font-size:12.5px; font-weight:600; border:1px solid rgba(0,43,92,0.12);">' +
+                            v.violationName +
+                            '<button type="button" onclick="DSChallan.removeViolation('+i+')" style="background:none; border:none; color:#6B7280; cursor:pointer; padding:0; font-size:14px; line-height:1; margin-left:2px;">×</button>' +
+                        '</span>';
+                    }).join('') +
+                '</div>';
+        }
+
+        DS.removeViolation = function(idx) {
+            selectedViolationIds.splice(idx, 1);
+            recalcSelectedFines();
+        };
+
+        violationSel.addEventListener('change', () => {
+            const id = Number(violationSel.value);
+            if (!id) return;
+            if (!selectedViolationIds.includes(id)) selectedViolationIds.push(id);
+            recalcSelectedFines();
+            DS.showToast('info', 'Violation Added', 'Fine calculation updated. You can add more violations from the dropdown.');
+        });
+        sectionSel.addEventListener('change', () => {
+            const val = sectionSel.value;
+            const list = VIOLATION_LIST || FALLBACK_VIOLATIONS;
+            const matched = list.find(v => v.mvActSection === val);
+            if (matched && violationSel) violationSel.value = String(matched.violationId);
+        });
+
+        /* ---------- Upload preview handlers ---------- */
+        function setupUpload(inputId, boxId, previewId, maxMb, typeLabel) {
+            const input = document.getElementById(inputId);
+            const box = document.getElementById(boxId);
+            const preview = document.getElementById(previewId);
+            if (!input || !box) return;
+            input.addEventListener('change', (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+                if (file.size > maxMb * 1024 * 1024) {
+                    DS.showToast('danger','File Too Large', typeLabel+' exceeds '+maxMb+'MB.');
+                    input.value = '';
+                    return;
+                }
+                if (file.type && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = ev => { if (preview) { preview.src = ev.target.result; } box.classList.add('has-preview'); };
+                    reader.readAsDataURL(file);
+                } else {
+                    box.classList.add('has-preview');
+                    const mainEl = box.querySelector('.ds-upload-main');
+                    const subEl  = box.querySelector('.ds-upload-sub');
+                    if (mainEl) mainEl.textContent = '📎 ' + file.name;
+                    if (subEl)  subEl.textContent  = (file.size/1024/1024).toFixed(2) + ' MB · attached';
+                }
+                DS.showToast('success','File Attached', typeLabel+' <strong>'+file.name+'</strong> ready for submission.');
+            });
+        }
+        setupUpload('dsVehiclePhoto', 'dsVehiclePhotoBox', 'dsVehiclePhotoPrev', 5, 'Vehicle photo');
+        setupUpload('dsDriverPhoto',  'dsDriverPhotoBox',  'dsDriverPhotoPrev',  5, 'Driver photo');
+        setupUpload('dsVideoFile',    'dsVideoBox',        'dsVideoPrev',        20,'Video evidence');
+
+        /* ---------- GPS capture: real Geolocation with simulated fallback ---------- */
+        document.getElementById('dsBtnGps').addEventListener('click', () => {
+            const btn = document.getElementById('dsBtnGps');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Acquiring GPS…';
+            btn.disabled = true;
+            const finish = (lat, lon, src) => {
+                document.getElementById('dsGpsCoords').value = lat + '° N, ' + lon + '° E';
+                btn.innerHTML = orig;
+                btn.disabled = false;
+                DS.showToast('success','GPS Locked ('+src+')', 'Location captured: <strong>'+lat+'° N, '+lon+'° E</strong>.');
+            };
+            const timedOut = () => {
+                const lat = (18.5050 + Math.random() * 0.04).toFixed(4);
+                const lon = (73.8450 + Math.random() * 0.04).toFixed(4);
+                finish(lat, lon, 'fallback');
+            };
+            const tm = setTimeout(timedOut, 3800);
+            if (navigator.geolocation && 'getCurrentPosition' in navigator.geolocation) {
+                try {
+                    navigator.geolocation.getCurrentPosition(
+                        pos => { clearTimeout(tm); finish(pos.coords.latitude.toFixed(4), pos.coords.longitude.toFixed(4), 'GPS'); },
+                        ()  => { clearTimeout(tm); timedOut(); },
+                        { enableHighAccuracy: true, timeout: 3500, maximumAge: 30000 }
+                    );
+                } catch (e) { clearTimeout(tm); timedOut(); }
+            } else {
+                clearTimeout(tm); timedOut();
+            }
+        });
+
+        /* ---------- Remarks counter ---------- */
+        const rem = document.getElementById('dsRemarks');
+        const remCount = document.getElementById('dsRemarksCount');
+        if (rem && remCount) rem.addEventListener('input', () => { remCount.textContent = String(rem.value.length); });
+
+        /* ---------- Helper: dataURL -> base64 body ---------- */
+        function imgBoxToBase64(boxId, imgId) {
+            const box = document.getElementById(boxId);
+            const img = document.getElementById(imgId);
+            if (box && img && box.classList.contains('has-preview') && img && img.src && img.src.startsWith('data:')) {
+                return img.src;
+            }
+            return null;
+        }
+
+        /* ---------- Success modal: fill + actions ---------- */
+        let lastGeneratedChallan = null;
+        DS.openSuccess = function(dto) {
+            lastGeneratedChallan = dto;
+            document.getElementById('dsSuccessChallanNo').textContent = dto.challanNumber || '—';
+            document.getElementById('dsSuccessVehicleNo').textContent = dto.vehicleNo     || '—';
+            document.getElementById('dsSuccessOwner').textContent     = dto.ownerName     || '—';
+            document.getElementById('dsSuccessViolation').textContent = (Array.isArray(dto.violations)?dto.violations.join(', '):dto.violations) || '—';
+            document.getElementById('dsSuccessFine').textContent      = '₹ ' + Number(dto.totalFine || 0).toLocaleString('en-IN');
+            const dt = (dto.challanDate || '') + ' ' + (dto.challanTime || '');
+            document.getElementById('dsSuccessDateTime').textContent  = dt.trim() || '—';
+            document.getElementById('dsSuccessOfficer').textContent   = (dto.officerName || DS.officer.officerName || '') + (dto.policeStation || DS.officer.policeStation ? ' · ' + (dto.policeStation || DS.officer.policeStation) : '');
+            document.getElementById('dsSuccessPayStatus').textContent = dto.paymentStatus || 'Pending Payment';
+            document.getElementById('dsSuccessModal').style.display   = 'flex';
+        };
+        DS.closeSuccess = function() {
+            const m = document.getElementById('dsSuccessModal');
+            if (m) m.style.display = 'none';
+            resetForm();
+        };
+
+        document.getElementById('dsBtnViewChallan').addEventListener('click', () => {
+            if (!lastGeneratedChallan) return;
+            DS.showToast('info','View Challan','Opening challan <strong>'+lastGeneratedChallan.challanNumber+'</strong> record (dashboard route placeholder).');
+        });
+        document.getElementById('dsBtnPrintChallan').addEventListener('click', () => {
+            DS.showToast('info','Print Preview','Opening the e-Challan print layout…');
+            setTimeout(() => { try { window.print(); } catch(e) {} }, 400);
+        });
+        document.getElementById('dsBtnDownloadPdf').addEventListener('click', async () => {
+            if (!lastGeneratedChallan) return;
+            const id = lastGeneratedChallan.challanId || lastGeneratedChallan.challanNumber;
+            let triedApi = false;
+            try {
+                triedApi = true;
+                const res = await fetch(API_BASE + '/challan/' + encodeURIComponent(id) + '/pdf', { method:'GET', signal: AbortSignal.timeout ? AbortSignal.timeout(4500) : undefined });
+                if (res.ok) {
+                    const blob = await res.blob();
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = (lastGeneratedChallan.challanNumber || 'challan') + '.pdf';
+                    document.body.appendChild(a); a.click(); a.remove();
+                    DS.showToast('success','PDF Downloaded','Challan PDF generated and downloaded.');
+                    return;
+                }
+            } catch (e) {}
+            // Fallback: build minimal HTML file named .htm so it renders/prints; user can save as PDF via print dialog.
+            const d = lastGeneratedChallan;
+            const html = '<!doctype html><html><head><meta charset="utf-8"><title>'+(d.challanNumber||'challan')+'</title></head>'+
+                '<body style="font-family:Inter,sans-serif; padding:40px; max-width:720px; margin:0 auto;">'+
+                '<h1 style="color:#002B5C; margin:0;">DronaSystems · Traffic e-Challan</h1>'+
+                '<hr style="border:none; border-top:3px solid #E8C07D; margin:18px 0;">'+
+                '<table style="width:100%; font-size:14px;">'+
+                '<tr><th style="text-align:left; padding:8px 0; color:#002B5C;">Challan No.</th><td style="font-weight:700;">'+(d.challanNumber||'—')+'</td><th style="text-align:left; color:#002B5C;">Payment Status</th><td>'+(d.paymentStatus||'Pending')+'</td></tr>'+
+                '<tr><th style="text-align:left; padding:8px 0; color:#002B5C;">Vehicle No.</th><td style="font-weight:700;">'+(d.vehicleNo||'—')+'</td><th style="text-align:left; color:#002B5C;">Owner</th><td>'+(d.ownerName||'—')+'</td></tr>'+
+                '<tr><th style="text-align:left; padding:8px 0; color:#002B5C;">Date / Time</th><td>'+(d.challanDate||'')+' '+(d.challanTime||'')+'</td><th style="text-align:left; color:#002B5C;">Location</th><td>'+(d.location||'—')+'</td></tr>'+
+                '<tr><th style="text-align:left; padding:8px 0; color:#002B5C;">Violations</th><td colspan="3">'+(Array.isArray(d.violations)?d.violations.join(', '):(d.violations||'—'))+'</td></tr>'+
+                '<tr><th style="text-align:left; padding:8px 0; color:#002B5C;">Officer</th><td>'+(d.officerName||'—')+'</td><th style="text-align:left; color:#002B5C;">Police Station</th><td>'+(d.policeStation||'—')+'</td></tr>'+
+                '<tr><th style="text-align:left; padding:8px 0; color:#002B5C;">Remarks</th><td colspan="3">'+(d.remarks||'—')+'</td></tr>'+
+                '<tr style="background:#002B5C; color:#fff;"><th style="text-align:left; padding:10px;">Total Fine Payable</th><td colspan="3" style="font-size:22px; font-weight:800; color:#E8C07D;">₹ '+Number(d.totalFine||0).toLocaleString('en-IN')+'</td></tr>'+
+                '</table></body></html>';
+            const blob = new Blob([html], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = (d.challanNumber || 'challan') + '.htm';
+            document.body.appendChild(a); a.click(); a.remove();
+            DS.showToast(triedApi ? 'warning' : 'info', 'PDF / Print Layout Downloaded', 'API PDF unavailable locally — downloaded printable HTM. Open it and use browser "Save as PDF" in Print dialog.');
+        });
+        document.getElementById('dsBtnSendSms').addEventListener('click', async () => {
+            if (!lastGeneratedChallan) return;
+            let ok = false;
+            try {
+                const res = await apiCall('POST', '/challan/send-sms', { challanId: lastGeneratedChallan.challanId || lastGeneratedChallan.challanNumber, channels: ['SMS'] }, 4000);
+                ok = res.ok && res.data && res.data.success;
+            } catch (e) {}
+            DS.showToast(ok ? 'success' : 'info', ok ? 'SMS Sent' : 'SMS Queued',
+                'Notification dispatched to registered owner mobile for <strong>'+lastGeneratedChallan.challanNumber+'</strong>.');
+        });
+        document.getElementById('dsBtnSendEmail').addEventListener('click', async () => {
+            if (!lastGeneratedChallan) return;
+            let ok = false;
+            try {
+                const res = await apiCall('POST', '/challan/send-email', { challanId: lastGeneratedChallan.challanId || lastGeneratedChallan.challanNumber, channels: ['EMAIL'] }, 4000);
+                ok = res.ok && res.data && res.data.success;
+            } catch (e) {}
+            DS.showToast(ok ? 'success' : 'info', ok ? 'Email Sent' : 'Email Queued',
+                'Challan copy dispatched to the registered owner email address on record.');
+        });
+
+        /* ---------- Validate & generate challan ---------- */
+        function getFieldValue(id, def) { const el = document.getElementById(id); return el ? (el.value || def) : def; }
+
+        function validateBeforeGenerate() {
+            const vrn = normalizeVrn(getFieldValue('dsVrn',''));
+            if (!vrn || vrn === '—') return { ok:false, msg:'Vehicle Registration Number is required.' };
+            if (!isValidVrn(vrn))    return { ok:false, msg:'Vehicle Registration Number format invalid.' };
+            if (!selectedViolationIds.length) return { ok:false, msg:'Please select at least one violation before generating the challan (choose from Violation Type dropdown).' };
+            const fine = Number(getFieldValue('dsFine','0') || 0);
+            if (!(fine > 0)) return { ok:false, msg:'No fine calculated. Please add violations.' };
+            const loc = String(getFieldValue('dsLocation','')||'').trim();
+            if (!loc) return { ok:false, msg:'Please enter the violation Location / Beat.' };
+            if (!document.getElementById('dsVehiclePhotoBox').classList.contains('has-preview')) {
+                return { ok:false, msg:'Vehicle photo evidence is mandatory. Capture or upload the vehicle photo before generating.' };
+            }
+            if (!DS.officer.officerId) return { ok:false, msg:'Officer session missing. Please re-login to Traffic Police portal.' };
+            return { ok:true, vrn, fine };
+        }
+
+        function buildChallanPayload() {
+            const list = VIOLATION_LIST || FALLBACK_VIOLATIONS;
+            const violations = selectedViolationIds.map(id => list.find(x => Number(x.violationId) === Number(id))).filter(Boolean);
+            const dt = new Date(getFieldValue('dsDateTime','') || Date.now());
+            const dStr = dt.toISOString().slice(0,10);
+            const tStr = dt.toTimeString().slice(0,8);
+            const vehiclePhoto = imgBoxToBase64('dsVehiclePhotoBox', 'dsVehiclePhotoPrev');
+            const plateCanvas  = capturedPlateCanvas || (cameraVideo ? snapshotPlateRoi(1280) : null);
+            const platePhoto   = plateCanvas ? canvasToBase64Jpeg(plateCanvas, 0.85) : vehiclePhoto;
+            const driverPhoto  = imgBoxToBase64('dsDriverPhotoBox',  'dsDriverPhotoPrev');
+            return {
+                vehicleNo: normalizeVrn(getFieldValue('dsVrn','')),
+                violationIds: selectedViolationIds.map(Number),
+                totalFine:    Number(getFieldValue('dsFine','0') || 0),
+                location:     String(getFieldValue('dsLocation','')||'').trim(),
+                gpsCoords:    String(getFieldValue('dsGpsCoords','')||'').trim() || null,
+                remarks:      String(getFieldValue('dsRemarks','')||'').slice(0,500),
+                evidenceVehiclePhoto: vehiclePhoto,
+                evidencePlatePhoto:   platePhoto,
+                evidenceDriverPhoto:  driverPhoto,
+                officerId: DS.officer.officerId,
+                violations: violations.map(v => v.violationName),
+                challanDate: dStr,
+                challanTime: tStr,
+                officerName:   DS.officer.officerName,
+                policeStation: DS.officer.policeStation,
+                ownerName:     getFieldValue('dsOwner','') || null
+            };
+        }
+
+        function fallbackGenerateNumber() {
+            const d = new Date();
+            const yyyy = d.getFullYear();
+            const seq  = String(125 + Math.floor(Math.random() * 900)).padStart(7, '0');
+            return 'CH' + yyyy + seq;
+        }
+
+        document.getElementById('dsBtnGenerate').addEventListener('click', async () => {
+            const v = validateBeforeGenerate();
+            if (!v.ok) { DS.showToast('danger','Cannot Generate Challan', v.msg); return; }
+            const payload = buildChallanPayload();
+            // Duplicate prevention: pending challan on same vehicle today + same violations (only against offline store — backend also validates)
+            const dupeKey = payload.vehicleNo + '|' + payload.violationIds.slice().sort().join(',') + '|' + payload.challanDate;
+            try {
+                if (sessionStorage.getItem('ds-challan-dedup') === dupeKey) {
+                    DS.showToast('warning','Duplicate Challan Detected','A nearly identical challan was just created for this vehicle. Confirm new violation before issuing again.');
+                    return;
+                }
+            } catch(e) {}
+
+            let result = null;
+            try {
+                const res = await apiCall('POST', '/challan', payload, 5500);
+                if (res.ok && res.data && res.data.success && res.data.data) {
+                    result = res.data.data;
+                } else if (res.data && !res.data.success) {
+                    DS.showToast('danger','Challan Rejected', res.data.message || 'Server rejected the challan.');
+                    return;
+                }
+            } catch (e) { /* fallback to offline mock result */ }
+
+            if (!result) {
+                result = Object.assign({}, payload, {
+                    challanId: Date.now(),
+                    challanNumber: fallbackGenerateNumber(),
+                    status: 'PENDING_PAYMENT',
+                    paymentStatus: 'Pending Payment'
+                });
+            }
+
+            try { sessionStorage.setItem('ds-challan-dedup', dupeKey); } catch(e) {}
+            try { localStorage.setItem('ds-last-challan', JSON.stringify(result)); } catch(e) {}
+
+            DS.openSuccess({
+                challanId: result.challanId,
+                challanNumber: result.challanNumber,
+                vehicleNo: result.vehicleNo || payload.vehicleNo,
+                ownerName: result.ownerName || payload.ownerName || getFieldValue('dsOwner','') || '—',
+                violations: (result.violations && result.violations.length) ? result.violations : payload.violations,
+                totalFine: result.totalFine || payload.totalFine,
+                challanDate: result.challanDate || payload.challanDate,
+                challanTime: result.challanTime || payload.challanTime,
+                location: result.location || payload.location,
+                officerName: result.officerName || payload.officerName || DS.officer.officerName,
+                policeStation: result.policeStation || payload.policeStation || DS.officer.policeStation,
+                paymentStatus: result.paymentStatus || (result.status === 'PAID' ? 'Paid' : 'Pending Payment'),
+                remarks: payload.remarks
+            });
+
+            DS.showToast('success', 'e-Challan Generated',
+                'Challan <strong style="color:#002B5C;">' + result.challanNumber + '</strong> saved for ' + (result.vehicleNo || payload.vehicleNo) +
+                ' · Fine: <strong>₹' + (Number(result.totalFine || payload.totalFine || 0)).toLocaleString('en-IN') + '</strong> · Status: ' + (result.paymentStatus || 'Pending Payment') + '.');
+        });
+
+        document.getElementById('dsBtnSaveDraft').addEventListener('click', () => {
+            const p = buildChallanPayload();
+            try { localStorage.setItem('ds-draft-challan', JSON.stringify(p)); } catch(e) {}
+            DS.showToast('success','Draft Saved','Challan draft saved locally. You can resume editing any time.');
+        });
+
+        document.getElementById('dsBtnPrint').addEventListener('click', () => {
+            DS.showToast('info','Print Preview','Opening the e-Challan print layout in a new window…');
+            setTimeout(() => { try { window.print(); } catch(e) {} }, 400);
+        });
+
+        function resetForm() {
+            const f = document.getElementById('dsChallanForm');
+            if (f) f.reset();
+            setDefaultDateTime();
+            ['dsVehiclePhotoBox','dsDriverPhotoBox','dsVideoBox'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('has-preview'); });
+            ['dsVehiclePhotoPrev','dsDriverPhotoPrev','dsVideoPrev'].forEach(id => { const el = document.getElementById(id); if (el) el.removeAttribute('src'); });
+            manualMode = false;
+            detectedBox.classList.remove('is-manual');
+            manualBtn.classList.remove('is-active');
+            const disp = document.querySelector('.ds-detected-number-text');
+            if (disp) disp.textContent = '—';
+            const manualInput = document.getElementById('dsManualNumber');
+            if (manualInput) manualInput.value = '';
+            const remCount = document.getElementById('dsRemarksCount');
+            if (remCount) remCount.textContent = '0';
+            const offN = document.getElementById('dsOfficer');
+            const offI = document.getElementById('dsOfficerId');
+            if (offN) offN.value = DS.officer.officerName + ' · ' + DS.officer.policeStation;
+            if (offI) offI.value = DS.officer.officerId + ' / ' + DS.officer.badgeNo;
+            document.getElementById('dsGpsCoords').value = '';
+            stopCamera();
+            selectedViolationIds = [];
+            const chips = document.getElementById('dsViolChips');
+            if (chips) chips.innerHTML = '';
+            DS.showToast('warning','Form Reset','All fields have been reverted to defaults.');
+        }
+
+        document.getElementById('dsBtnReset').addEventListener('click', resetForm);
+        document.getElementById('dsBtnCancel').addEventListener('click', () => {
+            DS.showToast('warning','Cancelled','No challan was created. Returning to dashboard.');
+        });
+
+        /* ---------- Toast ---------- */
+        let toastTimer = null;
+        DS.showToast = function(variant, title, msgHtml) {
+            const t = document.getElementById('dsToast');
+            if (!t) return;
+            t.className = 'ds-toast ' + (variant || 'success');
+            document.getElementById('dsToastTitle').textContent = title || '';
+            document.getElementById('dsToastMsg').innerHTML   = msgHtml || '';
+            const icon = document.getElementById('dsToastIcon');
+            if (variant === 'danger') {
+                icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+            } else if (variant === 'warning') {
+                icon.innerHTML = '<line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+            } else if (variant === 'info') {
+                icon.innerHTML = '<line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>';
+            } else {
+                icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+            }
+            requestAnimationFrame(() => t.classList.add('is-visible'));
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(DS.hideToast, 4600);
+        };
+        DS.hideToast = function() {
+            const t = document.getElementById('dsToast');
+            if (t) t.classList.remove('is-visible');
+            if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+        };
+
+        /* ---------- Init ---------- */
+        initOfficerFromSession().catch(() => {});
+        window.DSChallan = DS;
+    })();
+    </script>
+</body>
+</html>

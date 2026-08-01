@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUC Reports &amp; Certificates - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .puc-reports-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .filters-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 14px;
+            align-items: end;
+            background: var(--white);
+            border-radius: 14px;
+            padding: 18px 22px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        @media (max-width: 968px) {
+            .filters-panel {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .filters-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--navy-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .filter-input,
+        .filter-select {
+            width: 100%;
+            padding: 9px 12px;
+            font-size: 13.5px;
+            font-family: inherit;
+            color: var(--text-dark);
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            border-color: var(--navy-primary);
+            box-shadow: 0 0 0 3px rgba(0, 43, 92, 0.08);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .reports-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 968px) {
+            .reports-summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .reports-summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .report-summary-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .report-summary-card.tests::before { background: var(--navy-primary); }
+        .report-summary-card.pass::before { background: var(--success); }
+        .report-summary-card.fail::before { background: var(--danger); }
+        .report-summary-card.revenue::before { background: var(--gold-dark); }
+
+        .report-summary-label {
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .report-summary-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .report-summary-card.tests .report-summary-value { color: var(--navy-primary); }
+        .report-summary-card.pass .report-summary-value { color: var(--success); }
+        .report-summary-card.fail .report-summary-value { color: var(--danger); }
+        .report-summary-card.revenue .report-summary-value { color: var(--gold-dark); }
+
+        .report-summary-sub {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .data-card {
+            background: var(--white);
+            border-radius: 14px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            overflow: hidden;
+        }
+
+        .data-card-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .data-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy-primary);
+        }
+
+        .data-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .cert-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        .cert-table thead {
+            background: rgba(0, 43, 92, 0.04);
+        }
+
+        .cert-table th {
+            text-align: left;
+            padding: 12px 18px;
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--navy-primary);
+            white-space: nowrap;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .cert-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            color: var(--text-dark);
+        }
+
+        .cert-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cert-table tbody tr:hover {
+            background: rgba(0, 43, 92, 0.02);
+        }
+
+        .cert-no {
+            font-weight: 700;
+            color: var(--navy-primary);
+            font-family: 'Playfair Display', serif;
+            font-size: 13px;
+        }
+
+        .vehicle-no-cell {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .pollution-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pollution-chip.low {
+            background: rgba(5, 150, 105, 0.08);
+            color: #047857;
+            border: 1px solid rgba(5, 150, 105, 0.15);
+        }
+
+        .pollution-chip.med {
+            background: rgba(217, 119, 6, 0.08);
+            color: #B45309;
+            border: 1px solid rgba(217, 119, 6, 0.15);
+        }
+
+        .pollution-chip.high {
+            background: rgba(220, 38, 38, 0.08);
+            color: #B91C1C;
+            border: 1px solid rgba(220, 38, 38, 0.15);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-icon-sm {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: var(--text-muted);
+        }
+
+        .btn-icon-sm:hover {
+            border-color: var(--navy-primary);
+            color: var(--navy-primary);
+            background: rgba(0, 43, 92, 0.04);
+        }
+
+        .btn-icon-sm svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .progress-section {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 22px 26px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        .progress-section h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy-primary);
+            margin-bottom: 18px;
+        }
+
+        .mini-progress-row {
+            display: grid;
+            grid-template-columns: 160px 1fr 70px;
+            gap: 12px;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .mini-progress-label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mini-progress-track {
+            height: 8px;
+            background: #F3F4F6;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .mini-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+        }
+
+        .mini-progress-value {
+            text-align: right;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--navy-primary);
+        }
+
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 968px) {
+            .two-col-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pagination-bar {
+            padding: 14px 22px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .page-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .page-btn:hover:not(.disabled):not(.active) {
+            border-color: var(--navy-primary);
+            color: var(--navy-primary);
+        }
+
+        .page-btn.active {
+            background: var(--navy-primary);
+            border-color: var(--navy-primary);
+            color: var(--white);
+        }
+
+        .page-btn.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div id="funcPageMount"></div>
+
+    <main class="func-page-layout">
+        <div class="func-breadcrumb" style="margin-bottom: 18px;">
+            <a href="puc-dashboard.html" class="func-breadcrumb-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Back to PUC Dashboard
+            </a>
+        </div>
+
+        <div class="func-page-heading" style="margin-bottom: 24px;">
+            <div class="func-page-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+            </div>
+            <div class="func-page-title-wrap">
+                <h1 class="func-page-title">PUC Reports &amp; Certificates</h1>
+                <p class="func-page-desc">View, search, filter and export all emission test certificates and compliance reports</p>
+            </div>
+        </div>
+
+        <div class="puc-reports-layout">
+            <div class="reports-summary-grid">
+                <div class="report-summary-card tests">
+                    <div class="report-summary-label">Tests Conducted</div>
+                    <div class="report-summary-value">2,484</div>
+                    <div class="report-summary-sub">This year · +18.2% YoY</div>
+                </div>
+                <div class="report-summary-card pass">
+                    <div class="report-summary-label">Certificates Issued</div>
+                    <div class="report-summary-value">2,196</div>
+                    <div class="report-summary-sub">88.4% overall pass rate</div>
+                </div>
+                <div class="report-summary-card fail">
+                    <div class="report-summary-label">Tests Failed</div>
+                    <div class="report-summary-value">288</div>
+                    <div class="report-summary-sub">11.6% failure rate</div>
+                </div>
+                <div class="report-summary-card revenue">
+                    <div class="report-summary-label">Revenue Collected</div>
+                    <div class="report-summary-value">₹ 18.6 L</div>
+                    <div class="report-summary-sub">FY 2026-27 to date</div>
+                </div>
+            </div>
+
+            <div class="filters-panel">
+                <div class="filter-group">
+                    <label class="filter-label">Search</label>
+                    <input type="text" class="filter-input" placeholder="Vehicle / Certificate / Name" id="searchInput">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Date Range</label>
+                    <select class="filter-select" id="dateRangeSelect">
+                        <option>Today</option>
+                        <option>Last 7 Days</option>
+                        <option selected>This Month</option>
+                        <option>Last 3 Months</option>
+                        <option>This Year</option>
+                        <option>Custom Range</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Result</label>
+                    <select class="filter-select" id="resultSelect">
+                        <option value="">All Results</option>
+                        <option value="PASS">Pass Only</option>
+                        <option value="FAIL">Fail Only</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Vehicle Type</label>
+                    <select class="filter-select" id="typeSelect">
+                        <option value="">All Types</option>
+                        <option>Petrol Car</option>
+                        <option>Diesel Truck</option>
+                        <option>Petrol Bike</option>
+                        <option>CNG Auto</option>
+                        <option>Diesel Bus</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button type="button" class="btn btn-outline" id="resetFilterBtn">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        Reset
+                    </button>
+                    <button type="button" class="btn btn-primary" id="applyFilterBtn">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        Apply
+                    </button>
+                </div>
+            </div>
+
+            <div class="two-col-grid">
+                <div class="data-card">
+                    <div class="data-card-header">
+                        <h3 class="data-card-title">Issued Certificates &amp; Test Results</h3>
+                        <div class="data-card-actions">
+                            <button type="button" class="btn btn-outline" id="csvBtn">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Export CSV
+                            </button>
+                            <button type="button" class="btn btn-gold" id="printBtn">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                Print Report
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="cert-table" id="certTable">
+                            <thead>
+                                <tr>
+                                    <th>Cert No.</th>
+                                    <th>Vehicle</th>
+                                    <th>Type / Fuel</th>
+                                    <th>Pollution Level</th>
+                                    <th>Result</th>
+                                    <th>Tested On</th>
+                                    <th>Valid Till</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="certTableBody">
+                                <tr>
+                                    <td><span class="cert-no">PUC/MH/2026/11842</span></td>
+                                    <td><span class="vehicle-no-cell">MH-02 XY 8832</span></td>
+                                    <td>Petrol Car</td>
+                                    <td><span class="pollution-chip low">0.18% CO · Low</span></td>
+                                    <td><span class="status-badge valid">✓ PASS</span></td>
+                                    <td>24 Jul 2025</td>
+                                    <td>24 Jul 2026</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Certificate">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Download PDF">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Send SMS">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cert-no">PUC/MH/2026/11841</span></td>
+                                    <td><span class="vehicle-no-cell">MH-03 ZA 1120</span></td>
+                                    <td>Diesel Truck</td>
+                                    <td><span class="pollution-chip med">2.8% Smoke · Med</span></td>
+                                    <td><span class="status-badge valid">✓ PASS</span></td>
+                                    <td>24 Jul 2025</td>
+                                    <td>15 Jan 2026</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Certificate">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Download PDF">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Send SMS">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cert-no">—</span></td>
+                                    <td><span class="vehicle-no-cell">MH-01 BC 4455</span></td>
+                                    <td>Petrol Bike</td>
+                                    <td><span class="pollution-chip high">4.2% HC · High</span></td>
+                                    <td><span class="status-badge expired">✗ FAIL</span></td>
+                                    <td>23 Jul 2025</td>
+                                    <td>—</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Report">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Retest Notice">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cert-no">PUC/MH/2026/11839</span></td>
+                                    <td><span class="vehicle-no-cell">MH-04 DE 7788</span></td>
+                                    <td>CNG Auto</td>
+                                    <td><span class="pollution-chip low">0.05% CO · Low</span></td>
+                                    <td><span class="status-badge valid">✓ PASS</span></td>
+                                    <td>23 Jul 2025</td>
+                                    <td>11 Mar 2026</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Certificate">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Download PDF">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Send SMS">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cert-no">PUC/MH/2026/11838</span></td>
+                                    <td><span class="vehicle-no-cell">MH-05 FG 9900</span></td>
+                                    <td>Diesel Bus</td>
+                                    <td><span class="pollution-chip low">1.2% Smoke · Low</span></td>
+                                    <td><span class="status-badge valid">✓ PASS</span></td>
+                                    <td>22 Jul 2025</td>
+                                    <td>02 May 2026</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Certificate">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Download PDF">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Send SMS">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cert-no">PUC/MH/2026/11837</span></td>
+                                    <td><span class="vehicle-no-cell">MH-06 HI 2211</span></td>
+                                    <td>Petrol Car</td>
+                                    <td><span class="pollution-chip low">0.22% CO · Low</span></td>
+                                    <td><span class="status-badge valid">✓ PASS</span></td>
+                                    <td>22 Jul 2025</td>
+                                    <td>22 Jul 2026</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Certificate">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Download PDF">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Send SMS">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="cert-no">—</span></td>
+                                    <td><span class="vehicle-no-cell">MH-07 JK 3344</span></td>
+                                    <td>Diesel Truck</td>
+                                    <td><span class="pollution-chip high">5.1% Smoke · High</span></td>
+                                    <td><span class="status-badge expired">✗ FAIL</span></td>
+                                    <td>21 Jul 2025</td>
+                                    <td>—</td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="btn-icon-sm" title="View Report">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            <button class="btn-icon-sm" title="Retest Notice">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-bar">
+                        <div class="pagination-info">Showing <strong>1-7</strong> of <strong>2,484</strong> records</div>
+                        <div class="pagination-controls">
+                            <button class="page-btn disabled">&larr;</button>
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn">4</button>
+                            <button class="page-btn">…</button>
+                            <button class="page-btn">355</button>
+                            <button class="page-btn">&rarr;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:20px;">
+                    <div class="progress-section">
+                        <h4>Emission Compliance by Category</h4>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Petrol Vehicles (CO)</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:92.1%;background:linear-gradient(90deg, #059669, #10B981);"></div>
+                            </div>
+                            <div class="mini-progress-value">92.1%</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Diesel Vehicles (Smoke)</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:84.6%;background:linear-gradient(90deg, #002B5C, #1E40AF);"></div>
+                            </div>
+                            <div class="mini-progress-value">84.6%</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">CNG / LPG Vehicles</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:96.3%;background:linear-gradient(90deg, #B45309, #E8C07D);"></div>
+                            </div>
+                            <div class="mini-progress-value">96.3%</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Two Wheelers (HC+NOx)</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:78.4%;background:linear-gradient(90deg, #B45309, #F59E0B);"></div>
+                            </div>
+                            <div class="mini-progress-value">78.4%</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Commercial Fleets</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:69.7%;background:linear-gradient(90deg, #B91C1C, #EF4444);"></div>
+                            </div>
+                            <div class="mini-progress-value">69.7%</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-section">
+                        <h4>Monthly Test Volume</h4>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Apr 2026</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:68%;background:linear-gradient(90deg, #002B5C, #1E40AF);"></div>
+                            </div>
+                            <div class="mini-progress-value">212</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">May 2026</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:75%;background:linear-gradient(90deg, #002B5C, #1E40AF);"></div>
+                            </div>
+                            <div class="mini-progress-value">235</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Jun 2026</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:82%;background:linear-gradient(90deg, #002B5C, #1E40AF);"></div>
+                            </div>
+                            <div class="mini-progress-value">258</div>
+                        </div>
+                        <div class="mini-progress-row">
+                            <div class="mini-progress-label">Jul 2026</div>
+                            <div class="mini-progress-track">
+                                <div class="mini-progress-fill" style="width:91%;background:linear-gradient(90deg, #002B5C, #1E40AF);"></div>
+                            </div>
+                            <div class="mini-progress-value">284</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.renderFunctionPage({
+                allowedRoles: ['PUC_CENTER'],
+                dashboardLabel: 'PUC Dashboard',
+                pageTitle: 'PUC Reports & Certificates',
+                pageDescription: 'View, search, filter and export all emission test certificates and compliance reports',
+                pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
+                activeMenuKey: 'reports'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suspicious Vehicles Watchlist - Police Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .status-badge.stolen {
+            background: rgba(220, 38, 38, 0.12);
+            color: var(--danger);
+        }
+        .status-badge.blacklist {
+            background: rgba(220, 38, 38, 0.18);
+            color: var(--danger);
+            font-weight: 700;
+        }
+        .status-badge.highrisk {
+            background: rgba(217, 119, 6, 0.15);
+            color: var(--warning);
+        }
+        .status-badge.monitor {
+            background: rgba(0, 43, 92, 0.12);
+            color: var(--navy-primary);
+        }
+        .risk-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div id="funcPageMount"></div>
+    <main class="func-page-layout">
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Watchlist</div>
+                <div class="kpi-value">87</div>
+                <div class="kpi-sub up">▲ 6 new flagged today</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">High Risk</div>
+                <div class="kpi-value" style="color: var(--danger);">14</div>
+                <div class="kpi-sub down">▲ 2 active threats</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Stolen Vehicles</div>
+                <div class="kpi-value" style="color: var(--danger);">22</div>
+                <div class="kpi-sub down">3 recovered this week</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Expired Documents</div>
+                <div class="kpi-value" style="color: var(--warning);">51</div>
+                <div class="kpi-sub down">8 past 30+ days</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title">Suspicious Vehicles Watchlist</h3>
+                <div class="panel-actions">
+                    <button class="btn btn-outline">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Export CSV
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add to Watchlist
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="filter-bar">
+                    <div class="func-form-group">
+                        <label class="func-form-label">Search Vehicle / Owner</label>
+                        <input type="text" class="func-form-input" placeholder="Search by plate, name, chassis..." />
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label">Flag Category</label>
+                        <select class="func-form-select">
+                            <option value="">All Categories</option>
+                            <option>Stolen Vehicle</option>
+                            <option>Expired PUC</option>
+                            <option>Expired Insurance</option>
+                            <option>Blacklisted</option>
+                            <option>High Risk</option>
+                            <option>Multiple Pending Challans</option>
+                        </select>
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label">Risk Level</label>
+                        <select class="func-form-select">
+                            <option value="">All Risks</option>
+                            <option>High Risk</option>
+                            <option>Medium Risk</option>
+                            <option>Low Risk / Monitor</option>
+                        </select>
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label">Location</label>
+                        <select class="func-form-select">
+                            <option value="">All Locations</option>
+                            <option>Mumbai City</option>
+                            <option>Thane</option>
+                            <option>Navi Mumbai</option>
+                            <option>Mira-Bhayandar</option>
+                        </select>
+                    </div>
+                    <div class="func-form-group" style="align-self: flex-end;">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-outline">Reset</button>
+                            <button class="btn btn-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                Apply Filter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 0; margin: 0 -24px -20px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 38px;"></th>
+                                <th>Vehicle No.</th>
+                                <th>Owner / Details</th>
+                                <th>Flag Category</th>
+                                <th>Risk</th>
+                                <th>Last Seen</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="risk-dot" style="background: var(--danger); animation: pulse 1.5s infinite;"></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--navy-primary); font-size: 13.5px;">MH-02 CJ 8712</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Hyundai Creta • White</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-dark);">Mahesh Patil</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Chassis: MALCX21XXX987654</div>
+                                </td>
+                                <td>
+                                    <span class="status-badge stolen">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                        Stolen (FIR #224/2026)
+                                    </span>
+                                </td>
+                                <td><span class="status-badge blacklist">HIGH RISK</span></td>
+                                <td>
+                                    <div style="font-weight: 600; font-size: 12.5px;">38 min ago</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Andheri Hwy · ANPR-14</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button class="btn btn-danger" style="padding: 6px 10px; font-size: 11px;">
+                                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                            Dispatch
+                                        </button>
+                                        <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="risk-dot" style="background: var(--danger);"></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--navy-primary); font-size: 13.5px;">DL-03 CW 4421</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Maruti Swift • Red</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-dark);">Aarav Khanna</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">8 pending challans · ₹24,500</div>
+                                </td>
+                                <td><span class="status-badge blacklist">Blacklisted / Multiple Offences</span></td>
+                                <td><span class="status-badge blacklist">HIGH RISK</span></td>
+                                <td>
+                                    <div style="font-weight: 600; font-size: 12.5px;">1 hr 12 min ago</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Bandra Sea Link · Toll</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button class="btn btn-gold" style="padding: 6px 10px; font-size: 11px;">Issue</button>
+                                        <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="risk-dot" style="background: var(--warning);"></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--navy-primary); font-size: 13.5px;">GJ-01 ZZ 2209</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Tata Harrier • Black</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-dark);">Unknown / Tinted Plates</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Stolen suspect · Gujarat reg.</div>
+                                </td>
+                                <td><span class="status-badge stolen">Stolen Suspect (Unconfirmed)</span></td>
+                                <td><span class="status-badge highrisk">MEDIUM RISK</span></td>
+                                <td>
+                                    <div style="font-weight: 600; font-size: 12.5px;">2 hrs ago</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Thane Border CP-02</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button class="btn btn-primary" style="padding: 6px 10px; font-size: 11px;">Verify</button>
+                                        <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="risk-dot" style="background: var(--warning);"></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--navy-primary); font-size: 13.5px;">MH-05 BT 7788</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Honda Activa • Grey</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-dark);">Rahul Deshpande</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Insurance expired · 62 days</div>
+                                </td>
+                                <td><span class="status-badge expired">✗ Insurance Expired</span></td>
+                                <td><span class="status-badge highrisk">MEDIUM RISK</span></td>
+                                <td>
+                                    <div style="font-weight: 600; font-size: 12.5px;">3 hrs ago</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Dadar TT · ANPR-07</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button class="btn btn-gold" style="padding: 6px 10px; font-size: 11px;">Challan</button>
+                                        <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="risk-dot" style="background: var(--warning);"></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--navy-primary); font-size: 13.5px;">MH-47 AG 3056</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Bajaj Pulsar • Black-Red</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-dark);">Aditya Gaikwad</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">PUC expired · 38 days</div>
+                                </td>
+                                <td><span class="status-badge expired">✗ PUC Expired</span></td>
+                                <td><span class="status-badge highrisk">MEDIUM RISK</span></td>
+                                <td>
+                                    <div style="font-weight: 600; font-size: 12.5px;">4 hrs ago</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Chembur Naka · Spot</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button class="btn btn-gold" style="padding: 6px 10px; font-size: 11px;">Challan</button>
+                                        <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="risk-dot" style="background: var(--navy-primary);"></div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 700; color: var(--navy-primary); font-size: 13.5px;">KA-05 EF 9012</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Toyota Innova • Silver</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-dark);">Vikram Singh</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Inter-state · Sighted 5+ times</div>
+                                </td>
+                                <td><span class="status-badge monitor">Monitor · Out-of-State</span></td>
+                                <td><span class="status-badge monitor">LOW RISK</span></td>
+                                <td>
+                                    <div style="font-weight: 600; font-size: 12.5px;">5 hrs ago</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Sion Panvel · CP-11</div>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button class="btn btn-primary" style="padding: 6px 10px; font-size: 11px;">Verify</button>
+                                        <button class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="data-pagination">
+                        <div class="pagination-info">Showing 1 – 6 of <strong>87</strong> flagged vehicles · 14 high risk alerts active</div>
+                        <div class="pagination-controls">
+                            <button class="page-btn" disabled>← Prev</button>
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn">4</button>
+                            <button class="page-btn">…</button>
+                            <button class="page-btn">15</button>
+                            <button class="page-btn">Next →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.renderFunctionPage({
+                allowedRoles: ['POLICE'],
+                dashboardLabel: 'Police Dashboard',
+                pageTitle: 'Suspicious Vehicles Watchlist',
+                pageDescription: 'Monitor flagged vehicles for stolen, expired docs, or blacklisted',
+                pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4M12 16h.01"/></svg>',
+                activeMenuKey: 'suspiciousList'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permit Services - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="func-page-layout">
+        <div id="funcPageMount"></div>
+
+        <section class="info-strip">
+            <div class="info-strip-item">
+                <span class="info-strip-label">Active Permits</span>
+                <span class="info-strip-value">8,432</span>
+            </div>
+            <div class="info-strip-item">
+                <span class="info-strip-label">Renewals Due (30d)</span>
+                <span class="info-strip-value">217</span>
+            </div>
+            <div class="info-strip-item">
+                <span class="info-strip-label">Inter-State Authorised</span>
+                <span class="info-strip-value">1,206</span>
+            </div>
+        </section>
+
+        <section class="func-content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Apply for Permit</h3>
+                    <div class="panel-actions">
+                        <span class="info-chip gold">Vahan Integrated</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form class="func-inline-form">
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Permit Category</label>
+                                <select class="func-form-select">
+                                    <option>Goods Carriage Permit</option>
+                                    <option>Stage Carriage (Passenger)</option>
+                                    <option>Contract Carriage (Tourist)</option>
+                                    <option>All India Tourist Permit</option>
+                                    <option>National Permit (Goods)</option>
+                                    <option>State Permit (Passenger)</option>
+                                    <option>Temporary / Special Permit</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Permit Validity</label>
+                                <select class="func-form-select">
+                                    <option>1 Year</option>
+                                    <option>3 Years</option>
+                                    <option>5 Years</option>
+                                    <option>7 Years</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Vehicle Registration No.</label>
+                                <input type="text" class="func-form-input" placeholder="MH-04 AB 1234">
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Vehicle Class</label>
+                                <select class="func-form-select">
+                                    <option>LMV Goods</option>
+                                    <option>Medium Goods (MGV)</option>
+                                    <option>Heavy Goods (HGV)</option>
+                                    <option>MAV / ODC</option>
+                                    <option>Bus / Coach</option>
+                                    <option>Maxi Cab</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Operator / Firm Name</label>
+                                <input type="text" class="func-form-input" placeholder="Owner or transport firm">
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">GSTIN (if registered)</label>
+                                <input type="text" class="func-form-input" placeholder="15-character GSTIN">
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Source State / RTO</label>
+                                <select class="func-form-select">
+                                    <option>Maharashtra — Mumbai Central</option>
+                                    <option>Delhi — North RTO</option>
+                                    <option>Karnataka — Bangalore Central</option>
+                                    <option>Tamil Nadu — Chennai Central</option>
+                                    <option>Gujarat — Ahmedabad RTO</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Operating States (Multi)</label>
+                                <select class="func-form-select" multiple>
+                                    <option>Maharashtra</option>
+                                    <option>Gujarat</option>
+                                    <option>Madhya Pradesh</option>
+                                    <option>Rajasthan</option>
+                                    <option>Karnataka</option>
+                                    <option>Tamil Nadu</option>
+                                    <option>Delhi NCR</option>
+                                    <option>Uttar Pradesh</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="func-form-group full">
+                            <label class="func-form-label">Route Description / Purpose</label>
+                            <textarea class="func-form-textarea" placeholder="Specify regular route, type of goods / passengers, and operating schedule"></textarea>
+                        </div>
+                        <div class="panel-form-actions">
+                            <button type="reset" class="btn btn-outline">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                Reset
+                            </button>
+                            <button type="button" class="btn btn-gold">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                                Calculate Fee
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                                Submit Permit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Recent Permit Applications</h3>
+                    <button class="btn btn-outline">All Permits</button>
+                </div>
+                <div class="panel-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Permit No.</th>
+                                <th>Vehicle / Type</th>
+                                <th>States</th>
+                                <th>Valid Till</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>NP-MH-2026-88421</strong></td>
+                                <td>MH-04 FG 5522 / National Goods</td>
+                                <td><span class="info-chip navy">4 States</span></td>
+                                <td>30 Jun 2029</td>
+                                <td><span class="status-badge valid">Approved</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>SP-KA-2026-88420</strong></td>
+                                <td>KA-05 MN 7766 / Stage Carriage</td>
+                                <td><span class="info-chip gold">State Only</span></td>
+                                <td>15 Apr 2027</td>
+                                <td><span class="status-badge valid">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>SP-DL-2026-88419</strong></td>
+                                <td>DL-01 PQ 3311 / Contract Carriage</td>
+                                <td><span class="info-chip gold">State Only</span></td>
+                                <td>02 Dec 2026</td>
+                                <td><span class="status-badge pending">Scrutiny</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>NP-GJ-2026-88418</strong></td>
+                                <td>GJ-06 ST 9988 / Tourist Permit</td>
+                                <td><span class="info-chip navy">8 States</span></td>
+                                <td>10 Mar 2028</td>
+                                <td><span class="status-badge pending">Inspection</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>TMP-TN-2026-88417</strong></td>
+                                <td>TN-07 UV 4433 / Temporary ODC</td>
+                                <td><span class="info-chip warning">TN-AP</span></td>
+                                <td>28 Jul 2026</td>
+                                <td><span class="status-badge expired">Expires Soon</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const permitIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>';
+            DashboardApp.renderPublicServicePage({
+                pageTitle: 'Permit Services',
+                pageIcon: permitIcon,
+                pageDescription: 'Goods & passenger transport permits, national & state permits'
+            });
+        });
+    </script>
+</body>
+</html>

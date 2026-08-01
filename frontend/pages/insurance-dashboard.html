@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Agency Dashboard - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="layout">
+        <div id="welcomeBar"></div>
+
+        <section class="stats-grid">
+            <div class="stat-card police">
+                <div class="stat-header">
+                    <div class="stat-icon police">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M8 12l2 2 4-4"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">₹ 4.82 Cr</div>
+                <div class="stat-label">Premium Collected (MTD)</div>
+                <div class="stat-trend up">▲ 15.6% from last month</div>
+            </div>
+
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div class="stat-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">1,429</div>
+                <div class="stat-label">Active Policies</div>
+                <div class="stat-trend up">▲ 7.9% from last month</div>
+            </div>
+
+            <div class="stat-card warning">
+                <div class="stat-header">
+                    <div class="stat-icon warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">87</div>
+                <div class="stat-label">Policies Expiring (30 days)</div>
+                <div class="stat-trend up">▲ 4.3% from last week</div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="stat-header">
+                    <div class="stat-icon danger">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value">23</div>
+                <div class="stat-label">Pending Claims</div>
+                <div class="stat-trend down">▼ 8.4% from last month</div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel" style="margin-bottom: 20px;">
+                <div class="panel-header">
+                    <h3 class="panel-title">Policy Performance Snapshot</h3>
+                    <div class="panel-actions">
+                        <span class="info-chip gold">IRDAI Registered</span>
+                        <span class="info-chip success">Live Sync</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="progress-list">
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Comprehensive Policies</span>
+                                <span class="progress-value">58.4%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill navy" style="width: 58.4%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Third Party Only</span>
+                                <span class="progress-value">27.1%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill gold" style="width: 27.1%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Zero Depreciation Add-on</span>
+                                <span class="progress-value">41.6%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill success" style="width: 41.6%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Claims Settlement Ratio</span>
+                                <span class="progress-value">94.2%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill warning" style="width: 94.2%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mini-stats-row">
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">6.2</div>
+                            <div class="mini-stat-label">Avg Days Claim</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">₹ 33,744</div>
+                            <div class="mini-stat-label">Avg Premium</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">12</div>
+                            <div class="mini-stat-label">Renewals Today</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-num">8</div>
+                            <div class="mini-stat-label">New Policies</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Recent Policies Issued</h3>
+                    <a href="new-policy.html" class="btn btn-primary">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        New Policy
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Policy No.</th>
+                                <th>Vehicle / Insured</th>
+                                <th>Plan</th>
+                                <th>Premium</th>
+                                <th>Valid Till</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LIC-MH-2026-08472</strong></td>
+                                <td>MH-04 KL 5521 / A. Kapoor</td>
+                                <td>Comprehensive Plus</td>
+                                <td>₹ 24,850</td>
+                                <td><span class="status-badge valid">22 Jul 2027</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-DL-2026-08471</strong></td>
+                                <td>DL-09 MN 3344 / S. Gupta</td>
+                                <td>Third Party</td>
+                                <td>₹ 7,240</td>
+                                <td><span class="status-badge valid">18 Jul 2027</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-KA-2026-08470</strong></td>
+                                <td>KA-03 OP 7766 / R. Iyer</td>
+                                <td>Comprehensive</td>
+                                <td>₹ 18,600</td>
+                                <td><span class="status-badge valid">03 Feb 2027</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-TN-2026-08469</strong></td>
+                                <td>TN-07 QR 2288 / M. Rajan</td>
+                                <td>Zero Depreciation</td>
+                                <td>₹ 32,400</td>
+                                <td><span class="status-badge pending">29 Jul 2026</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-GJ-2026-08468</strong></td>
+                                <td>GJ-01 ST 1199 / P. Shah</td>
+                                <td>Comprehensive Plus</td>
+                                <td>₹ 28,950</td>
+                                <td><span class="status-badge expired">04 Jul 2026</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid" style="margin-top: 20px;">
+            <div>
+                <div class="panel" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Agency Tools</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="quick-links">
+                            <a href="issue-policy.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Issue Policy
+                            </a>
+                            <a href="new-policy.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                Verify Policy
+                            </a>
+                            <a href="insurance-dashboard.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                                Renewals
+                            </a>
+                            <a href="insurance-dashboard.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                                Claims Desk
+                            </a>
+                            <a href="insurance-dashboard.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                Customers
+                            </a>
+                            <a href="insurance-dashboard.html" class="quick-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Notifications</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="activity-list">
+                            <li class="activity-item">
+                                <span class="activity-dot success"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">Policy <strong>LIC-MH-2026-08472</strong> issued successfully</div>
+                                    <div class="activity-time">8 minutes ago</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <span class="activity-dot warning"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text"><strong>87 policies</strong> are expiring in the next 30 days</div>
+                                    <div class="activity-time">1 hour ago</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <span class="activity-dot danger"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">New claim filed — <strong>TN-07 QR 2288</strong> (Accident)</div>
+                                    <div class="activity-time">3 hours ago</div>
+                                </div>
+                            </li>
+                            <li class="activity-item">
+                                <span class="activity-dot police"></span>
+                                <div class="activity-content">
+                                    <div class="activity-text">Synced <strong>1,429 records</strong> with IIB &amp; RTO</div>
+                                    <div class="activity-time">Today 06:00 AM</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Expiring Policies — Priority</h3>
+                    <button class="btn btn-outline">Bulk Renew</button>
+                </div>
+                <div class="panel-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Policy No.</th>
+                                <th>Customer</th>
+                                <th>Expires</th>
+                                <th>Vehicle</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LIC-GJ-2026-08468</strong></td>
+                                <td>P. Shah</td>
+                                <td>04 Jul 2026</td>
+                                <td>GJ-01 ST 1199</td>
+                                <td><span class="status-badge expired">Expired</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-TN-2026-08469</strong></td>
+                                <td>M. Rajan</td>
+                                <td>29 Jul 2026</td>
+                                <td>TN-07 QR 2288</td>
+                                <td><span class="status-badge expired">5 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-AP-2026-08467</strong></td>
+                                <td>K. Reddy</td>
+                                <td>02 Aug 2026</td>
+                                <td>AP-28 TG 8821</td>
+                                <td><span class="status-badge pending">9 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-KL-2026-08466</strong></td>
+                                <td>S. Nair</td>
+                                <td>08 Aug 2026</td>
+                                <td>KL-07 AX 4433</td>
+                                <td><span class="status-badge pending">15 days</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LIC-RJ-2026-08465</strong></td>
+                                <td>A. Singh</td>
+                                <td>14 Aug 2026</td>
+                                <td>RJ-14 CA 9910</td>
+                                <td><span class="status-badge valid">21 days</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-bar">
+        <span class="copyright-text">© 2026 Government of India · Ministry of Road Transport &amp; Highways · All Rights Reserved</span>
+        <span class="version-info">System v2.1.0 · IRDAI IIB Integration · Live</span>
+    </footer>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.init(['INSURANCE_AGENCY'], 'Authorized Insurance Agency');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Policy - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="funcPageMount"></div>
+
+    <main class="func-page-layout">
+        <div class="func-content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">New Policy Application Form</h3>
+                    <span class="info-chip navy">IRDAI Compliant</span>
+                </div>
+                <div class="panel-body">
+                    <form class="func-inline-form">
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Full Name *</label>
+                                <input type="text" class="func-form-input" placeholder="e.g. Arjun Kapoor" required>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Mobile No. *</label>
+                                <input type="tel" class="func-form-input" placeholder="+91 98765 43210" required>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Email Address</label>
+                                <input type="email" class="func-form-input" placeholder="customer@email.com">
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Aadhaar / PAN *</label>
+                                <input type="text" class="func-form-input" placeholder="XXXX-XXXX-XXXX" required>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group full">
+                                <label class="func-form-label">Residential Address</label>
+                                <textarea class="func-form-textarea" placeholder="Plot No., Street, City, State, PIN"></textarea>
+                            </div>
+                        </div>
+                        <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Vehicle Registration No. *</label>
+                                <input type="text" class="func-form-input" placeholder="MH-04 KL-5521" required>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Chassis No. *</label>
+                                <input type="text" class="func-form-input" placeholder="MA3EK81SXXXXXXXX" required>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Make / Model *</label>
+                                <input type="text" class="func-form-input" placeholder="Hyundai Creta SX" required>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Year of Manufacture</label>
+                                <input type="number" class="func-form-input" placeholder="2023" min="1990" max="2026">
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Fuel Type</label>
+                                <select class="func-form-select">
+                                    <option>Petrol</option>
+                                    <option>Diesel</option>
+                                    <option>Electric</option>
+                                    <option>CNG</option>
+                                    <option>Hybrid</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Vehicle Class</label>
+                                <select class="func-form-select">
+                                    <option>Private Car</option>
+                                    <option>Two Wheeler</option>
+                                    <option>Commercial Vehicle</option>
+                                    <option>Three Wheeler</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Policy Type *</label>
+                                <select class="func-form-select" required>
+                                    <option value="comprehensive">Comprehensive Plus</option>
+                                    <option value="comprehensive-std">Comprehensive (Standard)</option>
+                                    <option value="zero-dep">Zero Depreciation Cover</option>
+                                    <option value="third-party">Third Party Only</option>
+                                    <option value="own-damage">Own Damage Only</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Policy Tenure *</label>
+                                <select class="func-form-select" required>
+                                    <option>1 Year</option>
+                                    <option>2 Years</option>
+                                    <option>3 Years</option>
+                                    <option>5 Years (Long Term)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Insured Declared Value (IDV) ₹ *</label>
+                                <input type="number" class="func-form-input" placeholder="e.g. 1250000" required>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">Net Premium (₹) — Auto</label>
+                                <input type="number" class="func-form-input" placeholder="Auto-calculated" readonly>
+                            </div>
+                        </div>
+                        <div class="func-form-row">
+                            <div class="func-form-group">
+                                <label class="func-form-label">Add-on Covers</label>
+                                <select class="func-form-select" multiple size="3">
+                                    <option>Roadside Assistance</option>
+                                    <option>Engine &amp; Gearbox Protector</option>
+                                    <option>Key Replacement</option>
+                                    <option>Consumables Cover</option>
+                                    <option>Return to Invoice</option>
+                                </select>
+                            </div>
+                            <div class="func-form-group">
+                                <label class="func-form-label">No Claim Bonus (NCB) %</label>
+                                <select class="func-form-select">
+                                    <option>0% (Fresh)</option>
+                                    <option>20%</option>
+                                    <option>25%</option>
+                                    <option>35%</option>
+                                    <option>45%</option>
+                                    <option>50% (Max)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="panel-form-actions">
+                            <button type="reset" class="btn btn-outline">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                Reset
+                            </button>
+                            <button type="button" class="btn btn-outline">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Save Draft
+                            </button>
+                            <a href="issue-policy.html" class="btn btn-gold">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                Verify &amp; Issue
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel" style="align-self: start;">
+                <div class="panel-header">
+                    <h3 class="panel-title">Quick Quote Preview</h3>
+                    <span class="info-chip gold">Live Estimate</span>
+                </div>
+                <div class="panel-body">
+                    <div class="mini-stats-row" style="margin-top: 0; margin-bottom: 18px;">
+                        <div class="mini-stat" style="background: rgba(0, 43, 92, 0.05);">
+                            <div class="mini-stat-num" style="color: var(--navy-primary);">₹ 24,850</div>
+                            <div class="mini-stat-label">Base Premium</div>
+                        </div>
+                        <div class="mini-stat" style="background: rgba(232, 192, 125, 0.15);">
+                            <div class="mini-stat-num" style="color: var(--gold-dark);">₹ 12.5 L</div>
+                            <div class="mini-stat-label">IDV Suggested</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-list" style="gap: 14px;">
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Own Damage Cover</span>
+                                <span class="progress-value">₹ 16,200</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill navy" style="width: 65%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Third Party Liability</span>
+                                <span class="progress-value">₹ 6,150</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill gold" style="width: 25%;"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label-row">
+                                <span class="progress-name">Add-ons (Selected)</span>
+                                <span class="progress-value">₹ 2,500</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill success" style="width: 10%;"></div></div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
+                            <span style="color: var(--text-muted);">Subtotal</span>
+                            <span style="font-weight: 600;">₹ 24,850</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
+                            <span style="color: var(--text-muted);">GST @ 18%</span>
+                            <span style="font-weight: 600;">₹ 4,473</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
+                            <span style="color: var(--text-muted);">NCB Discount</span>
+                            <span style="font-weight: 600; color: var(--success);">− ₹ 2,420</span>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 2px solid var(--gold-primary); margin: 18px 0;">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Payable</div>
+                            <div style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--navy-primary); line-height: 1.1;">₹ 26,903</div>
+                        </div>
+                        <span class="info-chip success" style="font-size: 13px; padding: 6px 12px;">Savings ₹ 2,420</span>
+                    </div>
+
+                    <div class="panel-form-actions" style="margin-top: 0; justify-content: stretch;">
+                        <button class="btn btn-primary" style="flex: 1;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            Pay Online
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 18px; padding: 14px; border-radius: 10px; background: rgba(0, 43, 92, 0.04); border-left: 3px solid var(--gold-primary);">
+                        <div style="font-size: 12.5px; color: var(--navy-primary); font-weight: 700; margin-bottom: 4px;">💡 Eligibility Check</div>
+                        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">Vehicle is <strong style="color: var(--success);">RTO verified</strong>. Policy can be issued instantly. Documents will be e-mailed on successful payment.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.renderFunctionPage({
+                allowedRoles: ['INSURANCE_AGENCY'],
+                dashboardLabel: 'Insurance Dashboard',
+                pageTitle: 'Create New Policy',
+                pageDescription: 'Issue a new motor insurance policy for a vehicle',
+                pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>',
+                activeMenuKey: 'newPolicy'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+/* =============================================================================
+   RESPONSIVE — Desktop · Laptop · Tablet · Mobile
+   ============================================================================= */
+
+/* ---------- Large Desktop (>1440px) ---------- */
+@media (min-width: 1441px) {
+    .header-inner { max-width: 1440px; padding: 16px 36px 14px; }
+    .brand-project { font-size: 24px; }
+    .login-card { max-width: 980px; padding: 40px 52px; min-height: 440px; }
+    .card-title { font-size: 36px; }
+    .footer-inner { max-width: 1440px; }
+    .help-bar { max-width: 980px; }
+}
+
+/* ---------- Laptop (1025–1440px) — default styles apply ---------- */
+
+/* ---------- Tablet (768–1024px) ---------- */
+@media (max-width: 1024px) {
+    .header-inner { padding: 8px 20px 6px; gap: 14px; }
+    .header-emblem { width: 36px; height: 46px; }
+    .header-emblem-img { width: 36px; height: 46px; }
+    .brand-project { font-size: 17px; }
+    .brand-ministry { font-size: 11px; }
+    .brand-tagline { font-size: 10.5px; }
+
+    .header-datetime { border-left: none; padding: 0; min-height: 0; }
+    .header-controls { align-items: flex-start; }
+
+    .floating-logo-circle { width: 90px; height: 90px; }
+    .floating-logo-img { width: 70px; height: 70px; }
+
+    .login-card {
+        max-width: 840px;
+        min-height: 400px;
+        padding: 28px 36px;
+        border-radius: 22px;
+        margin-top: -16px;
+        gap: 36px;
+    }
+    .card-left { padding-right: 24px; gap: 14px; }
+    .card-right { gap: 14px; }
+    .card-title { font-size: 30px; }
+    .card-subtitle { font-size: 14px; }
+    .feature-list { gap: 8px; }
+    .feature-item { padding: 10px; }
+    .feature-icon { width: 34px; height: 34px; }
+    .feature-icon svg { width: 18px; height: 18px; }
+    .feature-title { font-size: 13px; }
+    .feature-desc { font-size: 11px; }
+
+    .login-page::before,
+    .login-page::after { opacity: .04; }
+
+    .footer-inner { padding: 12px 20px; }
+    .help-bar { max-width: 840px; }
+}
+
+/* ---------- Mobile Landscape (576–767px) ---------- */
+@media (max-width: 767px) {
+    .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 6px 14px;
+    }
+    .header-controls {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .header-lang-row { gap: 5px; font-size: 12px; }
+    .lang-select { font-size: 12px; padding: 3px 20px 3px 6px; }
+    .lang-link { font-size: 12px; }
+    .header-datetime { border-left: none; padding: 0; }
+    .dt-date { font-size: 11.5px; }
+    .dt-time { font-size: 10.5px; }
+    .dt-calendar { width: 22px; height: 22px; }
+    .dt-calendar svg { width: 13px; height: 13px; }
+
+    .main-stage { padding: 0 12px; gap: 10px; justify-content: center; }
+    .floating-logo-circle { width: 72px; height: 72px; }
+    .floating-logo-img { width: 56px; height: 56px; }
+
+    .login-card {
+        max-width: 520px;
+        min-height: auto;
+        padding: 26px 22px;
+        margin-top: -12px;
+        border-radius: 18px;
+        gap: 20px;
+        flex-direction: column;
+    }
+    .card-left {
+        flex: 1 1 auto;
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid #E5E7EB;
+        padding-bottom: 16px;
+        gap: 12px;
+    }
+    .card-right { flex: 1 1 auto; gap: 14px; }
+    .card-title { font-size: 28px; margin-bottom: 0; }
+    .card-divider { margin: -4px 0; gap: 8px; }
+    .divider-line { max-width: 60px; }
+    .card-subtitle { font-size: 14px; margin-bottom: 0; }
+    .feature-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 0;
+    }
+    .feature-item { flex: 1 1 calc(50% - 5px); padding: 10px; }
+    .feature-item:hover { transform: translateY(-2px); }
+    .feature-icon { width: 30px; height: 30px; }
+    .feature-icon svg { width: 16px; height: 16px; }
+    .feature-title { font-size: 12.5px; }
+    .feature-desc { font-size: 10.5px; }
+
+    .role-tabs { flex-direction: column; gap: 5px; }
+    .role-pill { width: 100%; justify-content: flex-start; padding: 8px 12px; font-size: 13px; height: 40px; }
+
+    .login-form { gap: 14px; }
+    .field-label { font-size: 13px; }
+    .input-wrap input[type="text"],
+    .input-wrap input[type="password"] {
+        height: 42px;
+        padding-left: 38px;
+        font-size: 13.5px;
+    }
+    .input-icon-left { left: 12px; width: 16px; height: 16px; }
+    .input-icon-left svg { width: 16px; height: 16px; }
+
+    .login-btn { height: 44px; font-size: 14px; }
+
+    .security-card { gap: 8px; padding: 10px 12px; }
+    .security-shield-left, .security-shield-right { width: 22px; height: 22px; }
+    .security-shield-left svg, .security-shield-right svg { width: 22px; height: 22px; }
+    .security-title { font-size: 12px; }
+    .security-desc { font-size: 10.5px; }
+
+    .help-bar {
+        flex-direction: column;
+        padding: 8px 12px;
+        gap: 5px;
+        font-size: 11px;
+        margin-top: 12px;
+        max-width: 520px;
+    }
+    .help-sep { display: none; }
+    .help-item svg { width: 13px; height: 13px; }
+
+    .return-home { font-size: 11.5px; }
+    .return-home svg { width: 14px; height: 14px; }
+
+    .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+        padding: 10px;
+    }
+    .footer-links { justify-content: center; }
+    .footer-brand { flex-direction: column; gap: 4px; }
+    .footer-copy { font-size: 11.5px; }
+    .footer-links a { font-size: 11.5px; }
+}
+
+/* ---------- Mobile Portrait (<576px) ---------- */
+@media (max-width: 575px) {
+    .brand-project { font-size: 16px; }
+    .brand-ministry { font-size: 11px; }
+    .brand-tagline { display: none; }
+    .lang-link { display: none; }
+    .lang-sep { display: none; }
+
+    .main-stage { padding: 0 10px; gap: 8px; }
+    .floating-logo-circle { width: 64px; height: 64px; }
+    .floating-logo-img { width: 50px; height: 50px; }
+
+    .login-card {
+        max-width: 440px;
+        min-height: auto;
+        padding: 22px 18px;
+        margin-top: -10px;
+        border-radius: 16px;
+        gap: 16px;
+    }
+    .card-title { font-size: 24px; }
+    .card-subtitle { font-size: 13px; }
+    .feature-list { flex-direction: column; gap: 8px; }
+    .feature-item { flex: 1 1 auto; padding: 10px; }
+
+    .form-options { flex-direction: column; align-items: flex-start; gap: 6px; }
+
+    .login-btn { height: 42px; font-size: 13.5px; border-radius: 10px; }
+
+    .help-bar { font-size: 10.5px; padding: 7px 12px; margin-top: 10px; max-width: 440px; }
+    .help-item svg { width: 13px; height: 13px; }
+}
+
+/* ---------- Very Small Screens (<380px) ---------- */
+@media (max-width: 379px) {
+    .header-inner { padding: 6px 10px; }
+    .header-emblem { width: 32px; height: 40px; }
+    .header-emblem-img { width: 32px; height: 40px; }
+    .brand-project { font-size: 15px; }
+    .main-stage { padding: 0 8px; }
+    .floating-logo-circle { width: 56px; height: 56px; }
+    .floating-logo-img { width: 44px; height: 44px; }
+
+    .login-card {
+        max-width: 360px;
+        min-height: auto;
+        padding: 18px 14px;
+        margin-top: -8px;
+        gap: 12px;
+    }
+    .card-title { font-size: 22px; }
+    .login-btn { height: 40px; font-size: 13px; }
+    .feature-icon { width: 28px; height: 28px; }
+    .feature-icon svg { width: 15px; height: 15px; }
+    .help-bar { max-width: 360px; }
+    .footer-inner { padding: 8px; }
+}
+
+/* ---------- Landscape Orientation ---------- */
+@media (max-height: 600px) and (orientation: landscape) {
+    .main-stage { padding-top: 0; gap: 8px; }
+    .floating-logo { display: none; }
+    .login-card {
+        margin-top: 0;
+        padding-top: 22px;
+        min-height: auto;
+        flex-direction: row;
+        max-width: 840px;
+        padding: 22px;
+        gap: 24px;
+    }
+    .card-left {
+        padding-right: 20px;
+        border-right: 1px solid #E5E7EB;
+        border-bottom: none;
+        padding-bottom: 0;
+        gap: 8px;
+    }
+    .card-right { gap: 10px; }
+    .feature-list { gap: 6px; }
+    .feature-item { padding: 8px; }
+    .help-bar { margin-top: 8px; max-width: 840px; }
+    .site-footer { padding: 4px 0; }
+}
+
+/* ---------- Print Styles ---------- */
+@media print {
+    .site-header, .site-footer, .help-bar, .return-home, .tricolor-strip { display: none; }
+    .login-page { background: white; }
+    .login-page::before, .login-page::after { display: none; }
+    .login-card { box-shadow: none; border: 1px solid #ccc; backdrop-filter: none; }
+}
