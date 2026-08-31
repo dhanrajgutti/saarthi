@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Challan Receipt - Traffic Police</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .receipt-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 297mm;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 48px;
+            color: #e0e0e0;
+            font-weight: bold;
+            opacity: 0.3;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-left {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .emblem-center {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .qr-right {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .sub-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a5f7a;
+            margin-bottom: 3px;
+        }
+
+        .sub-sub-title {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .office-name {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding: 8px;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #16a34a;
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Information Sections */
+        .info-section {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a5f7a;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: #1a1a1a;
+            font-weight: 600;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 2px;
+        }
+
+        .separator {
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        /* Amount Section */
+        .amount-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .amount-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .amount-row:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 2px solid #1a1a1a;
+            font-weight: bold;
+        }
+
+        .amount-label {
+            font-size: 13px;
+            color: #1a1a1a;
+        }
+
+        .amount-value {
+            font-size: 13px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .amount-total {
+            font-size: 16px;
+            color: #1a5f7a;
+        }
+
+        /* Notes */
+        .notes {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .notes p {
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #1a1a1a;
+        }
+
+        .footer-left {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .footer-right {
+            font-size: 11px;
+            color: #666;
+            text-align: right;
+        }
+
+        .footer-brand {
+            font-weight: bold;
+            color: #1a5f7a;
+            font-size: 12px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #1a5f7a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background: #134d61;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .receipt-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 15mm;
+            }
+
+            .print-btn {
+                display: none;
+            }
+
+            .status-badge {
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .receipt-container {
+                padding: 15px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-top {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">Print Receipt</button>
+
+    <div class="receipt-container" id="receipt">
+        <div class="watermark" id="watermark">CHL-000000</div>
+        
+        <div class="status-badge">PAID</div>
+
+        <div class="header">
+            <div class="header-top">
+                <div class="logo-left">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40">
+                        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                        <circle cx="7" cy="17" r="2"/>
+                        <circle cx="17" cy="17" r="2"/>
+                        <path d="M5 17H2"/>
+                    </svg>
+                </div>
+                <div class="emblem-center">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <div class="qr-right">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="main-title">TRAFFIC POLICE / RTO</div>
+            <div class="sub-title">E-Challan Receipt</div>
+            <div class="sub-sub-title">E-Challan Compounding Fee Deposit Receipt</div>
+        </div>
+
+        <div class="office-name" id="officeName">Regional Transport Office, Delhi</div>
+
+        <div class="info-section">
+            <div class="section-title">Challan Details</div>
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Challan No.</div>
+                    <div class="info-value" id="challanNo">CHL-000000</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Vehicle No.</div>
+                    <div class="info-value" id="vehicleNo">MH-00-AB-1234</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Violator Name</div>
+                    <div class="info-value" id="violatorName">Rajesh Kumar</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Challan Date</div>
+                    <div class="info-value" id="challanDate">01 Jan 2026</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Chassis No.</div>
+                    <div class="info-value" id="chassisNo">MA3EKB12ABK123456</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Violation Type</div>
+                    <div class="info-value" id="violationType">No Parking</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="info-section">
+            <div class="section-title">Payment Details</div>
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Receipt No.</div>
+                    <div class="info-value" id="receiptNo">REC-2026-000001</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Receipt Date</div>
+                    <div class="info-value" id="receiptDate">02 Jan 2026</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Payment Date</div>
+                    <div class="info-value" id="paymentDate">02 Jan 2026</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Payment Mode</div>
+                    <div class="info-value" id="paymentMode">Online Payment</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Transaction ID</div>
+                    <div class="info-value" id="transactionId">TXN-20260102123456</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Bank Reference</div>
+                    <div class="info-value" id="bankRef">SBIN-20260102-123456</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="amount-section">
+            <div class="amount-row">
+                <div class="amount-label">Fine Amount</div>
+                <div class="amount-value" id="fineAmount">₹ 500</div>
+            </div>
+            <div class="amount-row">
+                <div class="amount-label">Late Fee</div>
+                <div class="amount-value" id="lateFee">₹ 0</div>
+            </div>
+            <div class="amount-row">
+                <div class="amount-label">Convenience Fee</div>
+                <div class="amount-value" id="convenienceFee">₹ 0</div>
+            </div>
+            <div class="amount-row">
+                <div class="amount-label">Total Amount</div>
+                <div class="amount-value amount-total" id="totalAmount">₹ 500</div>
+            </div>
+            <div class="amount-row" style="margin-top: 10px; font-size: 11px; color: #666;">
+                <div class="amount-label">Amount in Words</div>
+                <div class="amount-value" id="amountInWords">Five Hundred Rupees Only</div>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="info-section">
+            <div class="section-title">Official Details</div>
+            <div class="info-grid">
+                <div class="info-row">
+                    <div class="info-label">Book No.</div>
+                    <div class="info-value" id="bookNo">BK-2026-001</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Form No.</div>
+                    <div class="info-value" id="formNo">FRM-2026-001</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Enforcement Officer</div>
+                    <div class="info-value" id="officerName">Inspector R. Sharma</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Officer Designation</div>
+                    <div class="info-value" id="officerDesignation">Traffic Police</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="notes">
+            <p><strong>Note:</strong> This is a computer generated receipt and no signature is required.</p>
+            <p>Receipt may be verified by web link given in QR code.</p>
+        </div>
+
+        <div class="footer">
+            <div class="footer-left">
+                <div class="footer-brand">e-Challan System</div>
+                <div>Ministry of Road Transport & Highways</div>
+                <div>Government of India</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-brand">DronaSystems</div>
+                <div>National Informatics Centre</div>
+                <div>Generated: <span id="generatedTime">02 Jan 2026 10:30 AM</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get challan data from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const challanNo = urlParams.get('challanNo') || 'CHL-000000';
+        const vehicleNo = urlParams.get('vehicleNo') || 'MH-00-AB-1234';
+        const amount = urlParams.get('amount') || '500';
+        const violatorName = urlParams.get('violatorName') || 'Rajesh Kumar';
+        const violationType = urlParams.get('violationType') || 'No Parking';
+        const challanDate = urlParams.get('challanDate') || '01 Jan 2026';
+
+        // Update receipt with data
+        document.getElementById('challanNo').textContent = challanNo;
+        document.getElementById('vehicleNo').textContent = vehicleNo;
+        document.getElementById('violatorName').textContent = violatorName;
+        document.getElementById('violationType').textContent = violationType;
+        document.getElementById('challanDate').textContent = challanDate;
+        document.getElementById('fineAmount').textContent = '₹ ' + amount;
+        document.getElementById('totalAmount').textContent = '₹ ' + amount;
+        document.getElementById('watermark').textContent = challanNo + ' | ' + challanDate;
+
+        // Generate receipt number
+        const receiptNo = 'REC-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+        document.getElementById('receiptNo').textContent = receiptNo;
+
+        // Generate transaction ID
+        const txnId = 'TXN-' + new Date().toISOString().slice(0,10).replace(/-/g, '') + String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+        document.getElementById('transactionId').textContent = txnId;
+
+        // Set current date
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        
+        document.getElementById('receiptDate').textContent = dateStr;
+        document.getElementById('paymentDate').textContent = dateStr;
+        document.getElementById('generatedTime').textContent = dateStr + ' ' + timeStr;
+
+        // Convert amount to words (simplified)
+        function numberToWords(num) {
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+            const numInt = parseInt(num);
+            if (numInt <= 10) return ones[numInt] + ' Rupees Only';
+            return numInt + ' Rupees Only';
+        }
+        document.getElementById('amountInWords').textContent = numberToWords(amount);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUC Certificate History - Vehicle Verification Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .history-page {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        main.func-page-layout {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 10px 12px 16px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .history-topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-topbar .btn {
+            height: 34px;
+            padding: 0 14px;
+            font-size: 11.5px;
+            border-radius: 8px;
+        }
+
+        .history-filter-panel,
+        .history-table-panel {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+        }
+
+        .history-filter-panel {
+            padding: 10px 10px 8px;
+            border-radius: 10px;
+        }
+
+        .history-filter-panel .func-form-group {
+            gap: 4px;
+        }
+
+        .history-filter-panel .func-form-label {
+            font-size: 10.5px;
+            letter-spacing: 0.15px;
+            margin-bottom: 0;
+        }
+
+        .history-filter-panel .func-form-input,
+        .history-filter-panel .func-form-select {
+            height: 34px;
+            min-height: 34px;
+            padding: 6px 9px;
+            font-size: 12.5px;
+            border-radius: 7px;
+        }
+
+        .history-filter-panel .btn {
+            height: 34px;
+            padding: 0 14px;
+            font-size: 12px;
+            border-radius: 7px;
+        }
+
+        .history-filter-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px 10px;
+            align-items: end;
+        }
+
+        .history-action-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 7px;
+            grid-column: 4 / 6;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .history-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .history-table-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0F172A;
+        }
+
+        .history-table-subtitle {
+            font-size: 10.5px;
+            color: #64748B;
+            margin-top: 1px;
+        }
+
+        .history-table-wrap {
+            overflow-x: auto;
+            overflow-y: auto;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .history-table {
+            width: 100%;
+            min-width: 1400px;
+            max-width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table thead th {
+            background: #F8FAFC;
+            color: #475569;
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+            padding: 6px 5px;
+            border-bottom: 1px solid #E2E8F0;
+            white-space: nowrap;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .history-table thead th.col-sr {
+            width: 44px;
+            text-align: center;
+        }
+
+        .history-table thead th.col-vehicle { width: 9%; }
+        .history-table thead th.col-cert { width: 10%; }
+        .history-table thead th.col-owner { width: 10%; }
+        .history-table thead th.col-center { width: 12%; }
+        .history-table thead th.col-mach { width: 9%; }
+        .history-table thead th.col-fuel { width: 6%; text-align: center; }
+        .history-table thead th.col-testdate { width: 8%; }
+        .history-table thead th.col-valid { width: 8%; }
+        .history-table thead th.col-co { width: 5%; text-align: right; }
+        .history-table thead th.col-hc { width: 5%; text-align: right; }
+        .history-table thead th.col-smoke { width: 5%; text-align: right; }
+        .history-table thead th.col-fee { width: 6%; text-align: right; }
+        .history-table thead th.col-status { width: 6%; }
+        .history-table thead th.col-action { width: 5%; text-align: center; }
+
+        .history-table tbody td {
+            padding: 5.5px 5px;
+            font-size: 11px;
+            color: #0F172A;
+            border-bottom: 1px solid #E2E8F0;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-table tbody tr:hover td {
+            background: #F8FBFF;
+        }
+
+        .history-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .col-sr {
+            width: 44px;
+            text-align: center;
+            color: #64748B;
+            font-weight: 600;
+            font-size: 10.5px;
+        }
+
+        .vehicle-no {
+            font-weight: 700;
+            color: #0F4C81;
+        }
+
+        .cert-no {
+            font-weight: 600;
+            color: #1E3A8A;
+            font-size: 10.5px;
+        }
+
+        .owner-name {
+            font-weight: 600;
+        }
+
+        .owner-phone {
+            font-size: 10px;
+            color: #64748B;
+            display: block;
+        }
+
+        .money {
+            font-weight: 700;
+            color: #0F172A;
+            text-align: right;
+            padding-right: 12px !important;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .num-cell {
+            text-align: right !important;
+            padding-right: 12px !important;
+            font-family: 'Inter', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .num-cell.good { color: #047857; font-weight: 600; }
+        .num-cell.bad { color: #B91C1C; font-weight: 700; }
+        .num-cell.muted { color: #64748B; font-weight: 500; }
+
+        .fuel-cell {
+            text-align: center !important;
+        }
+
+        .fuel-chip {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            border: 1px solid;
+        }
+        .fuel-petrol { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+        .fuel-diesel { background: #E0E7FF; color: #3730A3; border-color: #C7D2FE; }
+        .fuel-cng    { background: #D1FAE5; color: #065F46; border-color: #A7F3D0; }
+        .fuel-lpg    { background: #FFE4E6; color: #9F1239; border-color: #FECDD3; }
+        .fuel-electric { background: #CFFAFE; color: #155E75; border-color: #A5F3FC; }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            padding: 1.5px 6px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .status-pass {
+            background: rgba(22, 163, 74, 0.12);
+            color: #15803D;
+        }
+
+        .status-fail {
+            background: rgba(220, 38, 38, 0.12);
+            color: #DC2626;
+        }
+
+        .status-pending {
+            background: rgba(217, 119, 6, 0.12);
+            color: #D97706;
+        }
+
+        .status-expired {
+            background: rgba(100, 116, 139, 0.14);
+            color: #475569;
+        }
+
+        .action-cell {
+            text-align: center;
+        }
+
+        .view-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 1px solid #DBEAFE;
+            background: #EFF6FF;
+            color: #0F4C81;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 2px;
+        }
+
+        .view-btn:hover {
+            background: #0F4C81;
+            border-color: #0F4C81;
+            color: #FFFFFF;
+        }
+
+        .view-btn.print:hover {
+            background: #047857;
+            border-color: #047857;
+        }
+
+        .view-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .history-table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            border-top: 1px solid #E2E8F0;
+            font-size: 10.5px;
+            color: #64748B;
+            flex-wrap: wrap;
+        }
+
+        .history-pagination {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            min-width: 26px;
+            height: 26px;
+            padding: 0 8px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #334155;
+            font-size: 10.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: #0F4C81;
+            color: #0F4C81;
+        }
+
+        .page-btn.active {
+            background: #0F4C81;
+            border-color: #0F4C81;
+            color: #FFFFFF;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .history-empty {
+            padding: 44px 24px;
+            text-align: center;
+            color: #64748B;
+        }
+
+        .history-empty svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        .history-empty h3 {
+            font-size: 16px;
+            color: #0F172A;
+            margin-bottom: 6px;
+        }
+
+        .history-empty p {
+            font-size: 13px;
+        }
+
+        .cert-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 200;
+        }
+
+        .cert-modal.open {
+            display: flex;
+        }
+
+        .cert-modal-card {
+            width: min(760px, 100%);
+            background: #FFFFFF;
+            border-radius: 18px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.24);
+            overflow: hidden;
+        }
+
+        .cert-modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 22px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .cert-modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0F172A;
+        }
+
+        .cert-modal-close {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 10px;
+            background: #F1F5F9;
+            color: #334155;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .cert-modal-body {
+            padding: 22px;
+        }
+
+        .cert-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .modal-field {
+            padding: 14px 16px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            background: #F8FAFC;
+        }
+
+        .modal-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+            color: #64748B;
+            margin-bottom: 6px;
+        }
+
+        .modal-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0F172A;
+        }
+
+        .modal-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .modal-readings {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .modal-reading {
+            padding: 10px 12px;
+            border-radius: 8px;
+            text-align: center;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+        }
+
+        .modal-reading-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #64748B;
+        }
+
+        .modal-reading-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0F4C81;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 1180px) {
+            .history-filter-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .history-action-row {
+                grid-column: 1 / -1;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .history-filter-grid,
+            .cert-modal-grid,
+            .modal-readings {
+                grid-template-columns: 1fr;
+            }
+
+            .history-topbar {
+                justify-content: flex-start;
+            }
+
+            .history-topbar .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="func-page-layout">
+        <div class="history-page">
+            <div class="history-topbar">
+                <button type="button" class="btn btn-outline" id="exportBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Export
+                </button>
+            </div>
+
+            <section class="history-filter-panel">
+                <div class="history-filter-grid">
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterFromDate">From Date</label>
+                        <input id="filterFromDate" type="date" class="func-form-input" value="2025-05-01">
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterToDate">To Date</label>
+                        <input id="filterToDate" type="date" class="func-form-input" value="2025-05-18">
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterCertNo">Certificate No.</label>
+                        <input id="filterCertNo" type="text" class="func-form-input" placeholder="Enter Cert No.">
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterVehicleNo">Vehicle Number</label>
+                        <input id="filterVehicleNo" type="text" class="func-form-input" placeholder="Enter Vehicle No.">
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterFuelType">Fuel Type</label>
+                        <select id="filterFuelType" class="func-form-select">
+                            <option value="All">All Fuels</option>
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="CNG">CNG</option>
+                            <option value="LPG">LPG</option>
+                            <option value="Electric">Electric</option>
+                        </select>
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterOwnerName">Owner Name</label>
+                        <input id="filterOwnerName" type="text" class="func-form-input" placeholder="Enter Owner Name">
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterPUCCenter">PUC Center</label>
+                        <select id="filterPUCCenter" class="func-form-select">
+                            <option value="All">All Centers</option>
+                        </select>
+                    </div>
+                    <div class="func-form-group">
+                        <label class="func-form-label" for="filterStatus">Status</label>
+                        <select id="filterStatus" class="func-form-select">
+                            <option value="All">All Status</option>
+                            <option value="Pass">Pass</option>
+                            <option value="Fail">Fail</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Expired">Expired</option>
+                        </select>
+                    </div>
+                    <div class="history-action-row">
+                        <button type="button" class="btn btn-outline" id="resetBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <polyline points="1 20 1 14 7 14"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                            Reset
+                        </button>
+                        <button type="button" class="btn btn-primary" id="searchBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="history-table-panel">
+                <div class="history-table-header">
+                    <div>
+                        <div class="history-table-title">PUC Certificate Register</div>
+                        <div class="history-table-subtitle">Search all issued, passed, failed, and expired PUC certificates.</div>
+                    </div>
+                </div>
+
+                <div class="history-table-wrap">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th class="col-sr">Sr. No.</th>
+                                <th class="col-vehicle">Vehicle No.</th>
+                                <th class="col-cert">Certificate No.</th>
+                                <th class="col-owner">Owner / Contact</th>
+                                <th class="col-center">PUC Center</th>
+                                <th class="col-mach">Machine ID</th>
+                                <th class="col-fuel">Fuel</th>
+                                <th class="col-testdate">Test Date</th>
+                                <th class="col-valid">Valid Upto</th>
+                                <th class="col-co">CO %</th>
+                                <th class="col-hc">HC ppm</th>
+                                <th class="col-smoke">Smoke %</th>
+                                <th class="col-fee">Fee (₹)</th>
+                                <th class="col-status">Status</th>
+                                <th class="col-action" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="history-table-footer">
+                    <div id="showingText">Showing 0 to 0 of 0 entries</div>
+                    <div class="history-pagination" id="pagination"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="cert-modal" id="certModal" aria-hidden="true">
+        <div class="cert-modal-card">
+            <div class="cert-modal-head">
+                <div class="cert-modal-title">PUC Certificate Details</div>
+                <button type="button" class="cert-modal-close" id="closeModalBtn" aria-label="Close certificate details">&times;</button>
+            </div>
+            <div class="cert-modal-body">
+                <div class="cert-modal-grid" id="certModalGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        (function() {
+            const PAGE_SIZE = 10;
+            const formatter = new Intl.NumberFormat('en-IN');
+
+            function pad(n, w){ return String(n).padStart(w||2,'0'); }
+            function dmy(d){ return pad(d.getDate())+' '+d.toLocaleString('en-IN',{month:'short'})+' '+d.getFullYear(); }
+
+            const PUC_DATA = ((window.VehicleData && VehicleData.PUC_DATA) || []).map(function(item){
+                return {
+                    i: item.i,
+                    reg: item.reg,
+                    certNo: item.certNo,
+                    name: item.name,
+                    phone: item.phone,
+                    carModel: item.carModel,
+                    center: item.center,
+                    mach: item.mach,
+                    fuel: item.fuel,
+                    testDateIso: item.testDateIso,
+                    testDate: item.testDate,
+                    validDateIso: item.validDateIso,
+                    validDate: item.validDate,
+                    co: item.co, hc: item.hc, smoke: item.smoke,
+                    status: item.status, fee: item.fee,
+                    expiringSoon: !!item.expiringSoon
+                };
+            });
+
+            const state = {
+                page: 1,
+                filtered: PUC_DATA.slice(),
+                activeCert: null
+            };
+
+            function getEl(id) {
+                return document.getElementById(id);
+            }
+
+            function populateCenterOptions(){
+                const set = new Set(PUC_DATA.map(r=>r.center));
+                const sel = getEl('filterPUCCenter');
+                [...set].sort().forEach(c=>{
+                    const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
+                });
+            }
+
+            function formatDate(value) {
+                const date = new Date(value);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return day + '/' + month + '/' + year;
+            }
+
+            function formatDMY(value) {
+                return dmy(new Date(value + 'T00:00:00'));
+            }
+
+            function getFuelClass(fuel) {
+                if (fuel === 'Diesel') return 'fuel-diesel';
+                if (fuel === 'CNG') return 'fuel-cng';
+                if (fuel === 'LPG') return 'fuel-lpg';
+                if (fuel === 'Electric') return 'fuel-electric';
+                return 'fuel-petrol';
+            }
+
+            function getStatusClass(status) {
+                if (status === 'Pass') return 'status-pass';
+                if (status === 'Fail') return 'status-fail';
+                if (status === 'Pending') return 'status-pending';
+                return 'status-expired';
+            }
+
+            function getNumClass(fuel, status, reading) {
+                if (fuel === 'Electric') return 'muted';
+                if (status === 'Fail') return 'bad';
+                return 'good';
+            }
+
+            function matchesText(value, query) {
+                return value.toLowerCase().includes(query.toLowerCase());
+            }
+
+            function getFilters() {
+                return {
+                    fromDate: getEl('filterFromDate').value,
+                    toDate: getEl('filterToDate').value,
+                    certNo: getEl('filterCertNo').value.trim(),
+                    vehicleNo: getEl('filterVehicleNo').value.trim(),
+                    fuelType: getEl('filterFuelType').value,
+                    ownerName: getEl('filterOwnerName').value.trim(),
+                    pucCenter: getEl('filterPUCCenter').value,
+                    status: getEl('filterStatus').value
+                };
+            }
+
+            function applyFilters() {
+                const filters = getFilters();
+                const fromDate = filters.fromDate ? new Date(filters.fromDate + 'T00:00:00') : null;
+                const toDate = filters.toDate ? new Date(filters.toDate + 'T23:59:59') : null;
+
+                state.filtered = PUC_DATA.filter(function(cert) {
+                    const testAt = new Date(cert.testDateIso + 'T00:00:00');
+
+                    if (fromDate && testAt < fromDate) return false;
+                    if (toDate && testAt > toDate) return false;
+                    if (filters.certNo && !matchesText(cert.certNo, filters.certNo)) return false;
+                    if (filters.vehicleNo && !matchesText(cert.reg, filters.vehicleNo)) return false;
+                    if (filters.ownerName && !matchesText(cert.name, filters.ownerName)) return false;
+                    if (filters.fuelType !== 'All' && cert.fuel !== filters.fuelType) return false;
+                    if (filters.pucCenter !== 'All' && cert.center !== filters.pucCenter) return false;
+                    if (filters.status !== 'All' && cert.status !== filters.status) return false;
+
+                    return true;
+                });
+
+                state.page = 1;
+                renderTable();
+            }
+
+            function renderEmptyState() {
+                getEl('historyTableBody').innerHTML = [
+                    '<tr>',
+                    '<td colspan="15">',
+                    '<div class="history-empty">',
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">',
+                    '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>',
+                    '<polyline points="14 2 14 8 20 8"></polyline>',
+                    '<circle cx="11" cy="13" r="2.5"></circle>',
+                    '<line x1="16.5" y1="18.5" x2="20" y2="22"></line>',
+                    '</svg>',
+                    '<h3>No PUC certificate records found</h3>',
+                    '<p>Try changing the filters and search again.</p>',
+                    '</div>',
+                    '</td>',
+                    '</tr>'
+                ].join('');
+
+                getEl('showingText').textContent = 'Showing 0 to 0 of 0 entries';
+                getEl('pagination').innerHTML = '';
+            }
+
+            function renderPagination(totalPages) {
+                const pagination = getEl('pagination');
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                const buttons = [];
+                buttons.push('<button type="button" class="page-btn" data-page="' + (state.page - 1) + '" ' + (state.page === 1 ? 'disabled' : '') + '>&lsaquo;</button>');
+
+                for (let page = 1; page <= totalPages; page += 1) {
+                    buttons.push('<button type="button" class="page-btn ' + (page === state.page ? 'active' : '') + '" data-page="' + page + '">' + page + '</button>');
+                }
+
+                buttons.push('<button type="button" class="page-btn" data-page="' + (state.page + 1) + '" ' + (state.page === totalPages ? 'disabled' : '') + '>&rsaquo;</button>');
+                pagination.innerHTML = buttons.join('');
+            }
+
+            function renderTable() {
+                if (!state.filtered.length) {
+                    renderEmptyState();
+                    return;
+                }
+
+                const totalEntries = state.filtered.length;
+                const totalPages = Math.ceil(totalEntries / PAGE_SIZE);
+                if (state.page > totalPages) {
+                    state.page = totalPages;
+                }
+
+                const startIndex = (state.page - 1) * PAGE_SIZE;
+                const pageRows = state.filtered.slice(startIndex, startIndex + PAGE_SIZE);
+
+                getEl('historyTableBody').innerHTML = pageRows.map(function(cert, index) {
+                    const coClass = getNumClass(cert.fuel, cert.status, cert.co);
+                    const hcClass = getNumClass(cert.fuel, cert.status, cert.hc);
+                    const smClass = getNumClass(cert.fuel, cert.status, cert.smoke);
+                    return [
+                        '<tr>',
+                        '<td class="col-sr">', String(startIndex + index + 1), '</td>',
+                        '<td class="vehicle-no">', cert.reg, '</td>',
+                        '<td class="cert-no">', cert.certNo, '</td>',
+                        '<td><span class="owner-name">', cert.name, '</span><span class="owner-phone">', cert.phone, '</span></td>',
+                        '<td>', cert.center, '</td>',
+                        '<td>', cert.mach, '</td>',
+                        '<td class="fuel-cell"><span class="fuel-chip ', getFuelClass(cert.fuel), '">', cert.fuel, '</span></td>',
+                        '<td>', cert.testDate, '</td>',
+                        '<td>', cert.validDate, (cert.expiringSoon ? '<span style="display:block; font-size:9.5px; color:#B45309; font-weight:700; margin-top:2px;">Soon</span>' : ''), '</td>',
+                        '<td class="num-cell ', coClass, '">', cert.co.toFixed(2), '</td>',
+                        '<td class="num-cell ', hcClass, '">', cert.hc, '</td>',
+                        '<td class="num-cell ', smClass, '">', (cert.fuel === 'Electric' ? '—' : cert.smoke.toFixed(2)), '</td>',
+                        '<td class="money">', formatter.format(cert.fee), '</td>',
+                        '<td><span class="status-chip ', getStatusClass(cert.status), '">', cert.status, '</span></td>',
+                        '<td class="action-cell">',
+                        '<button type="button" class="view-btn" data-cert="', cert.certNo, '" title="View certificate">',
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
+                        '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>',
+                        '<circle cx="12" cy="12" r="3"></circle>',
+                        '</svg>',
+                        '</button>',
+                        '<button type="button" class="view-btn print" data-cert-print="', cert.certNo, '" title="Print certificate">',
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
+                        '<polyline points="6 9 6 2 18 2 18 9"></polyline>',
+                        '<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>',
+                        '<rect x="6" y="14" width="12" height="8"></rect>',
+                        '</svg>',
+                        '</button>',
+                        '</td>',
+                        '</tr>'
+                    ].join('');
+                }).join('');
+
+                const showingFrom = startIndex + 1;
+                const showingTo = Math.min(startIndex + PAGE_SIZE, totalEntries);
+                getEl('showingText').textContent = 'Showing ' + showingFrom + ' to ' + showingTo + ' of ' + totalEntries + ' entries';
+
+                renderPagination(totalPages);
+            }
+
+            function openModal(certNo) {
+                const cert = PUC_DATA.find(function(item) {
+                    return item.certNo === certNo;
+                });
+
+                if (!cert) return;
+
+                state.activeCert = cert;
+                const coClass = getNumClass(cert.fuel, cert.status, cert.co);
+                const hcClass = getNumClass(cert.fuel, cert.status, cert.hc);
+                const smClass = getNumClass(cert.fuel, cert.status, cert.smoke);
+
+                getEl('certModalGrid').innerHTML = [
+                    createModalField('Certificate No.', cert.certNo),
+                    createModalField('Status', '<span class="status-chip ' + getStatusClass(cert.status) + '">' + cert.status + '</span>'),
+                    createModalField('Vehicle No.', cert.reg),
+                    createModalField('Fuel Type', '<span class="fuel-chip ' + getFuelClass(cert.fuel) + '">' + cert.fuel + '</span>'),
+                    createModalField('Owner Name', cert.name),
+                    createModalField('Contact', cert.phone),
+                    createModalField('Vehicle Model', cert.carModel),
+                    createModalField('Fee (₹)', '₹ ' + formatter.format(cert.fee)),
+                    createModalField('PUC Center', cert.center, true),
+                    createModalField('Machine ID', cert.mach),
+                    createModalField('Test Date', cert.testDate),
+                    createModalField('Valid Upto', cert.validDate + (cert.expiringSoon ? ' ⚠ Soon' : '')),
+                    '<div class="modal-field full">',
+                    '<div class="modal-label">Emission Readings</div>',
+                    '<div class="modal-readings">',
+                    '<div class="modal-reading"><div class="modal-reading-label">CO %</div><div class="modal-reading-value ' + (coClass === 'good' ? '' : coClass === 'bad' ? 'style="color:#B91C1C;"' : 'style="color:#64748B;"') + '">' + cert.co.toFixed(2) + '</div></div>',
+                    '<div class="modal-reading"><div class="modal-reading-label">HC ppm</div><div class="modal-reading-value ' + (hcClass === 'good' ? '' : hcClass === 'bad' ? 'style="color:#B91C1C;"' : 'style="color:#64748B;"') + '">' + cert.hc + '</div></div>',
+                    '<div class="modal-reading"><div class="modal-reading-label">Smoke %</div><div class="modal-reading-value ' + (smClass === 'good' ? '' : smClass === 'bad' ? 'style="color:#B91C1C;"' : 'style="color:#64748B;"') + '">' + (cert.fuel === 'Electric' ? '—' : cert.smoke.toFixed(2)) + '</div></div>',
+                    '</div>',
+                    '</div>'
+                ].join('');
+
+                getEl('certModal').classList.add('open');
+                getEl('certModal').setAttribute('aria-hidden', 'false');
+            }
+
+            function createModalField(label, value, full) {
+                return [
+                    '<div class="modal-field', full ? ' full' : '', '">',
+                    '<div class="modal-label">', label, '</div>',
+                    '<div class="modal-value">', value, '</div>',
+                    '</div>'
+                ].join('');
+            }
+
+            function closeModal() {
+                getEl('certModal').classList.remove('open');
+                getEl('certModal').setAttribute('aria-hidden', 'true');
+                state.activeCert = null;
+            }
+
+            function printCert(certNo) {
+                try { location.href = 'issue-puc.html?cert=' + encodeURIComponent(certNo); } catch (err) {}
+            }
+
+            function exportCsv() {
+                const headers = ['Sr. No.','Vehicle No.','Certificate No.','Owner','Contact','Vehicle Model','PUC Center','Machine ID','Fuel','Test Date','Valid Upto','CO %','HC ppm','Smoke %','Fee Rs.','Status'];
+                const rows = state.filtered.map(function(cert, i) {
+                    return [
+                        i + 1, cert.reg, cert.certNo, cert.name, cert.phone.replace(/^\+91-/,''), cert.carModel,
+                        cert.center, cert.mach, cert.fuel, cert.testDateIso, cert.validDateIso,
+                        cert.co, cert.hc, cert.fuel === 'Electric' ? '' : cert.smoke, cert.fee, cert.status
+                    ];
+                });
+
+                const csv = [headers].concat(rows).map(function(row) {
+                    return row.map(function(cell) {
+                        return '"' + String(cell).replace(/"/g, '""') + '"';
+                    }).join(',');
+                }).join('\r\n');
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'puc-certificate-history.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+
+            function resetFilters() {
+                getEl('filterFromDate').value = '2025-05-01';
+                getEl('filterToDate').value = '2025-05-18';
+                getEl('filterCertNo').value = '';
+                getEl('filterVehicleNo').value = '';
+                getEl('filterFuelType').value = 'All';
+                getEl('filterOwnerName').value = '';
+                getEl('filterPUCCenter').value = 'All';
+                getEl('filterStatus').value = 'All';
+                applyFilters();
+            }
+
+            function bindEvents() {
+                getEl('searchBtn').addEventListener('click', applyFilters);
+                getEl('resetBtn').addEventListener('click', resetFilters);
+                getEl('exportBtn').addEventListener('click', exportCsv);
+                getEl('closeModalBtn').addEventListener('click', closeModal);
+
+                ['filterCertNo', 'filterVehicleNo', 'filterOwnerName'].forEach(function(id) {
+                    getEl(id).addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter') {
+                            applyFilters();
+                        }
+                    });
+                });
+
+                getEl('pagination').addEventListener('click', function(event) {
+                    const button = event.target.closest('[data-page]');
+                    if (!button || button.disabled) return;
+                    state.page = Number(button.getAttribute('data-page'));
+                    renderTable();
+                });
+
+                getEl('historyTableBody').addEventListener('click', function(event) {
+                    const viewBtn = event.target.closest('.view-btn[data-cert]');
+                    const printBtn = event.target.closest('.view-btn[data-cert-print]');
+                    if (viewBtn) {
+                        openModal(viewBtn.getAttribute('data-cert'));
+                    } else if (printBtn) {
+                        printCert(printBtn.getAttribute('data-cert-print'));
+                    }
+                });
+
+                getEl('certModal').addEventListener('click', function(event) {
+                    if (event.target === getEl('certModal')) {
+                        closeModal();
+                    }
+                });
+
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape' && getEl('certModal').classList.contains('open')) {
+                        closeModal();
+                    }
+                });
+            }
+
+            function initPage() {
+                populateCenterOptions();
+                bindEvents();
+                applyFilters();
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const auth = DashboardApp.init(['PUC_CENTER'], 'Authorized PUC Testing Center', 'history');
+
+                if (!auth) return;
+                initPage();
+            });
+        })();
+    </script>
+</body>
+</html>

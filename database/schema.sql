@@ -227,3 +227,49 @@ INSERT INTO evidence (challan_id, gps_location, captured_timestamp, officer_id, 
 (4, '28.6685° N, 77.4520° E', '2026-07-02 08:22:00', 'PO77123', 'Worli Traffic Outpost - Mumbai'),
 (5, '19.0596° N, 72.8295° E', '2026-06-28 17:55:00', 'PO55440', 'Andheri Traffic Division - Mumbai');
 
+-- =============== PUC CERTIFICATE MODULE TABLES ===============
+
+DROP TABLE IF EXISTS puc_certificate;
+
+CREATE TABLE puc_certificate (
+    puc_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    certificate_number VARCHAR(30) NOT NULL UNIQUE COMMENT 'Format: MH13010822P1002125',
+    vehicle_no VARCHAR(20) NOT NULL COMMENT 'Vehicle registration number',
+    owner_name VARCHAR(150),
+    vehicle_type VARCHAR(60),
+    fuel_type VARCHAR(30),
+    registration_date DATE,
+    engine_number VARCHAR(50),
+    chassis_number VARCHAR(50),
+    center_id VARCHAR(60) COMMENT 'PUC Center / Machine ID',
+    center_name VARCHAR(150),
+    test_date_time DATETIME NOT NULL,
+    emission_norms VARCHAR(30) DEFAULT 'BHARAT STAGE VI',
+    odometer_km DECIMAL(10,1),
+    co_percent DECIMAL(5,2) COMMENT 'Carbon Monoxide %',
+    hc_ppm DECIMAL(6,2) COMMENT 'Hydrocarbons PPM',
+    co2_percent DECIMAL(5,2) COMMENT 'Carbon Dioxide %',
+    lambda_value DECIMAL(4,2) COMMENT 'Lambda (Air-Fuel ratio)',
+    pollution_under_control VARCHAR(5) NOT NULL DEFAULT 'Yes' COMMENT 'Yes / No',
+    valid_from DATE NOT NULL,
+    valid_upto DATE NOT NULL,
+    status VARCHAR(20) DEFAULT 'Valid' COMMENT 'Valid / Expired / Fail / Revoked',
+    remarks TEXT COMMENT 'Optional remarks',
+    issued_by_user_id BIGINT COMMENT 'FK to users.id',
+    issued_by_name VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_puc_cert_no (certificate_number),
+    INDEX idx_puc_vehicle (vehicle_no),
+    INDEX idx_puc_center (center_id),
+    INDEX idx_puc_status (status),
+    INDEX idx_puc_valid_upto (valid_upto)
+);
+
+INSERT INTO puc_certificate (certificate_number, vehicle_no, owner_name, vehicle_type, fuel_type, registration_date, engine_number, chassis_number, center_id, center_name, test_date_time, emission_norms, odometer_km, co_percent, hc_ppm, co2_percent, lambda_value, pollution_under_control, valid_from, valid_upto, status, remarks, issued_by_user_id, issued_by_name) VALUES
+('MH13150725P1002001', 'MH-04 AB 1234', 'Amit Sharma',        'Car / Jeep',                 'Petrol',  '2020-05-15', 'EN37FE881234', 'CH12345678MSA1', 'PUC10024', 'Mumbai PUC Testing Center - Andheri', '2025-07-15 10:30:00', 'BHARAT STAGE VI', 42350.0, 0.22, 38, 12.4, 0.99, 'Yes', '2025-07-15', '2026-07-14', 'Expired', 'All emission parameters within limits.', 3, 'Suresh Patel'),
+('MH13020526P1002002', 'MH-12 CD 5678', 'Priya Verma',        'Two Wheeler',                'Petrol',  '2021-09-22', 'ENHW21K78901', 'CH78901234HW12', 'PUC10024', 'Mumbai PUC Testing Center - Andheri', '2026-05-02 14:12:00', 'BHARAT STAGE VI', 18920.0, 0.18, 42, 11.8, 0.97, 'Yes', '2026-05-02', '2027-05-01', 'Valid',   'Excellent condition, well maintained.', 3, 'Suresh Patel'),
+('MH13140726P1002003', 'MH-03 ZA 1120', 'Rajesh Patel',       'HMV — Truck / Bus',          'Diesel',  '2019-03-05', 'ENTM19D11220', 'CH11220033TM01', 'PUC10024', 'Mumbai PUC Testing Center - Andheri', '2026-07-14 09:45:00', 'BHARAT STAGE VI', 128400.0, 0.38, 210, 13.1, 1.02, 'Yes', '2026-07-14', '2027-07-13', 'Valid',   'Smoke opacity within permissible limits.', 3, 'Suresh Patel'),
+('DL10010826P5678001', 'DL-10 XY 8832', 'Vikram Singh',       'Car / Jeep',                 'Diesel',  '2022-01-28', 'ENHM22D99800', 'CH99800765HM02', 'PUC10023', 'Delhi Emission Testing Lab',            '2026-08-01 11:20:00', 'BHARAT STAGE VI', 35670.0, 0.25, 78, 12.8, 1.00, 'Yes', '2026-08-01', '2027-07-31', 'Valid',   'All readings within BS VI limits.', 4, 'Vikram Singh'),
+('KA05010626P1002001', 'KA-05 DE 7788', 'Anita Desai',        'Car / Jeep',                 'Electric','2023-02-14', 'EN-TM23E0012', 'CHTM001234EV03', 'PUC10025', 'Solapur Center',                       '2026-06-01 16:00:00', 'BHARAT STAGE VI', 9840.0,  NULL, NULL, NULL, NULL, 'Yes', '2026-06-01', '2028-05-31', 'Valid',   'Electric Vehicle - Emission exempt, validity 2 years.', 3, 'Suresh Patel');
+

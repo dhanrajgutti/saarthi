@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo Data — 200 Centralized Vehicle Records (Print to PDF)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --navy: #002B5C;
+        --gold: #E8C07D;
+        --navy-2: #003C7E;
+        --ink: #0F172A;
+        --mute: #475569;
+        --line: #CBD5E1;
+        --soft: #F1F5F9;
+        --white: #FFFFFF;
+        --green: #047857;
+        --red: #B91C1C;
+        --amber: #92400E;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; }
+    .toolbar {
+        position: sticky; top: 0; z-index: 50;
+        background: var(--navy); color: #fff; padding: 12px 20px;
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        border-bottom: 3px solid var(--gold);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        backdrop-filter: blur(10px);
+    }
+    .toolbar-title { font-size: 15px; font-weight: 700; letter-spacing: 0.3px; }
+    .toolbar-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+        background: var(--gold); color: #1f2937; border: none;
+        font-weight: 700; font-size: 13px; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+        letter-spacing: 0.2px; transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn.secondary { background: rgba(255,255,255,0.15); color: #fff; backdrop-filter: blur(10px); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .btn:active { transform: translateY(0); }
+
+    .page {
+        max-width: 1400px; margin: 20px auto; background: #fff;
+        box-shadow: 0 20px 60px rgba(15,23,42,0.15);
+        border-radius: 16px; overflow: hidden;
+    }
+
+    .branding {
+        display: grid;
+        grid-template-columns: 120px 1fr 160px;
+        gap: 20px;
+        align-items: center;
+        padding: 28px 32px 20px;
+        background: linear-gradient(135deg, #002B5C 0%, #003C7E 50%, #004A8F 100%);
+        color: #fff;
+        border-bottom: 4px solid var(--gold);
+    }
+    .emblem {
+        width: 100px; height: 100px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fde9c2 0%, #e8c07d 55%, #b78f4a 100%);
+        display: flex; align-items: center; justify-content: center;
+        border: 4px solid #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .emblem-inner {
+        width: 80px; height: 80px; border-radius: 50%;
+        border: 2px solid #fff; color: #5a3f16;
+        display: flex; align-items: center; justify-content: center;
+        text-align: center; font-size: 10px; font-weight: 800; line-height: 1.2;
+    }
+    .morth { text-align: center; }
+    .morth-sub { font-size: 12px; opacity: 0.9; letter-spacing: 0.4px; text-transform: uppercase; }
+    .morth-main { font-size: 24px; font-weight: 800; letter-spacing: 0.5px; margin-top: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .morth-en { font-size: 12px; opacity: 0.9; margin-top: 6px; letter-spacing: 0.3px; }
+    .tricolor {
+        display: flex; flex-direction: column; gap: 0; height: 85px; border-radius: 8px; overflow: hidden;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+    }
+    .tricolor > div { flex: 1; }
+    .tc-saffron { background: #FF9933; }
+    .tc-white { background: #FFFFFF; position: relative; }
+    .tc-green { background: #138808; }
+    .ashoka {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: 20px; height: 20px; border: 2px solid #000080; border-radius: 50%;
+    }
+
+    .report-head {
+        padding: 24px 32px 16px; border-bottom: 1px solid var(--line);
+        display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;
+        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .report-head h1 { margin: 0; font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; }
+    .report-head p { margin: 6px 0 0 0; color: var(--mute); font-size: 13px; line-height: 1.5; }
+    .meta { text-align: right; font-size: 12px; color: var(--mute); background: var(--soft); padding: 12px 16px; border-radius: 8px; }
+    .meta b { color: var(--ink); }
+
+    .summary {
+        padding: 20px 32px 16px; display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+    .kpi {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); 
+        border: 1px solid #e2e8f0; border-radius: 12px;
+        padding: 16px 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        transition: all 0.3s ease;
+    }
+    .kpi:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); }
+    .kpi-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--mute); font-weight: 700; }
+    .kpi-value { font-size: 28px; font-weight: 800; color: var(--navy); margin-top: 6px; }
+    .kpi-sub { font-size: 12px; color: var(--mute); margin-top: 4px; line-height: 1.4; }
+
+    /* Search Section */
+    .filter-section {
+        padding: 16px 32px; background: var(--soft); border-bottom: 1px solid var(--line);
+        display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    }
+    .search-box {
+        flex: 1; min-width: 250px;
+        position: relative;
+    }
+    .search-box input {
+        width: 100%; padding: 12px 16px 12px 44px;
+        border: 1px solid var(--line); border-radius: 8px;
+        font-size: 14px; outline: none; transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    .search-box input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(0,43,92,0.1); }
+    .search-box::before {
+        content: '🔍'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+        font-size: 16px; opacity: 0.5;
+    }
+    .filter-btn {
+        padding: 8px 16px; background: var(--white); border: 1px solid var(--line);
+        border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    .filter-btn:hover { background: var(--soft); border-color: var(--navy); }
+    .filter-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    section { padding: 20px 32px 24px; }
+    section + section { border-top: 1px solid var(--line); }
+    .sec-title {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 16px;
+    }
+    .sec-title h2 {
+        margin: 0; font-size: 16px; font-weight: 800; color: var(--navy);
+        display: inline-flex; align-items: center; gap: 10px;
+        letter-spacing: -0.2px;
+    }
+    .sec-title h2::before {
+        content: ''; width: 5px; height: 20px; background: linear-gradient(180deg, var(--gold) 0%, #d4a84b 100%); border-radius: 3px;
+    }
+    .sec-count { font-size: 12px; color: var(--mute); font-weight: 600; background: var(--soft); padding: 4px 12px; border-radius: 20px; }
+
+    table.tbl {
+        width: 100%; border-collapse: collapse; font-size: 12px;
+        background: #fff; border-radius: 8px; overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    table.tbl thead th {
+        background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%); 
+        color: #fff; text-align: left;
+        padding: 12px 10px; font-weight: 700; letter-spacing: 0.3px;
+        border: 1px solid var(--navy-2);
+        white-space: nowrap; font-size: 11px; text-transform: uppercase;
+    }
+    table.tbl tbody td {
+        padding: 10px 10px; border: 1px solid #e2e8f0; vertical-align: middle;
+    }
+    table.tbl tbody tr:nth-child(even) td { background: #f8fafc; }
+    table.tbl tbody tr:hover td { background: #fff8e7; transform: scale(1.01); }
+    .cen { text-align: center; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .mono { font-family: 'Inter', monospace; letter-spacing: 0.3px; font-weight: 600; }
+    .pill {
+        display: inline-block; padding: 3px 10px; border-radius: 20px;
+        font-size: 10px; font-weight: 700; border: 1px solid;
+        text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .pill-issued  { background: rgba(4,120,87,0.15);  color: var(--green); border-color: rgba(4,120,87,0.3); }
+    .pill-expired { background: rgba(100,116,139,0.15); color: #334155; border-color: rgba(100,116,139,0.3); }
+    .pill-draft   { background: rgba(217,119,6,0.15);  color: var(--amber); border-color: rgba(217,119,6,0.3); }
+    .pill-renew   { background: rgba(30,64,175,0.15); color: #1E3A8A; border-color: rgba(30,64,175,0.3); }
+    .pill-pass    { background: rgba(4,120,87,0.15);  color: var(--green); border-color: rgba(4,120,87,0.3); }
+    .pill-fail    { background: rgba(185,28,28,0.15); color: var(--red);   border-color: rgba(185,28,28,0.3); }
+    .pill-pending { background: rgba(217,119,6,0.15);  color: var(--amber); border-color: rgba(217,119,6,0.3); }
+
+    .fuel-p { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+    .fuel-d { background: #E0E7FF; color: #3730A3; border-color: #C7D2FE; }
+    .fuel-c { background: #D1FAE5; color: #065F46; border-color: #A7F3D0; }
+    .fuel-l { background: #FFE4E6; color: #9F1239; border-color: #FECDD3; }
+    .fuel-e { background: #CFFAFE; color: #155E75; border-color: #A5F3FC; }
+
+    .footer {
+        padding: 20px 32px 24px; border-top: 2px solid var(--navy);
+        display: flex; justify-content: space-between; align-items: center;
+        color: var(--mute); font-size: 12px;
+        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .summary { grid-template-columns: repeat(2, 1fr); }
+        .branding { grid-template-columns: 1fr; text-align: center; }
+        .emblem { margin: 0 auto; }
+        .tricolor { display: none; }
+    }
+
+    @media (max-width: 768px) {
+        .toolbar { flex-direction: column; align-items: stretch; }
+        .toolbar-actions { justify-content: center; }
+        .summary { grid-template-columns: 1fr; }
+        .filter-section { flex-direction: column; }
+        .search-box { min-width: 100%; }
+        table.tbl { font-size: 10px; }
+        table.tbl thead th, table.tbl tbody td { padding: 8px 6px; }
+        .branding { grid-template-columns: 1fr; text-align: center; }
+        .emblem { margin: 0 auto; }
+        .tricolor { display: none; }
+    }
+
+    @media print {
+        body { background: #fff; }
+        .toolbar, .filter-section { display: none; }
+        .page { box-shadow: none; margin: 0; max-width: 100%; border-radius: 0; }
+        section { break-inside: avoid-page; page-break-inside: avoid; }
+        table.tbl thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        table.tbl tbody tr:nth-child(even) td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .pill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .kpi { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        @page { size: A4 landscape; margin: 8mm 7mm; }
+    }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+    <div class="toolbar-title">Government of India · MoRTH · Centralized Demo Data (200 Vehicle Records)</div>
+    <div class="toolbar-actions">
+        <button class="btn secondary" onclick="window.print()">🖨  Print / Save as PDF</button>
+        <button class="btn" onclick="window.history.length > 1 ? history.back() : window.close()">← Back</button>
+    </div>
+</div>
+
+<div class="page" id="report">
+    <div class="branding">
+        <div class="emblem">
+            <div class="emblem-inner">सत्यमेव<br>जयते</div>
+        </div>
+        <div class="morth">
+            <div class="morth-sub">भारत सरकार · सड़क परिवहन एवं राजमार्ग मंत्रालय</div>
+            <div class="morth-main">MINISTRY OF ROAD TRANSPORT &amp; HIGHWAYS</div>
+            <div class="morth-en">Parivahan Sewa · Centralized Vehicle Data Register · Demo Reference Dataset</div>
+        </div>
+        <div class="tricolor" aria-hidden="true">
+            <div class="tc-saffron"></div>
+            <div class="tc-white"><div class="ashoka"></div></div>
+            <div class="tc-green"></div>
+        </div>
+    </div>
+
+    <div class="report-head">
+        <div>
+            <h1>Centralized Demo Data — Vehicle Master Register, Insurance Policies &amp; PUC Certificates</h1>
+            <p>Deterministic, seeded dataset (seed = 20260808) — 200 vehicle records with linked policies &amp; emission certificates.</p>
+            <p style="color: #DC2626; font-weight: 600; margin-top: 8px;">🔐 For Citizen Login: Copy Vehicle Registration No. and Contact No. from the Vehicle table below</p>
+        </div>
+        <div class="meta">
+            <div><b>Report Date:</b> <span id="repDate">08 Aug 2026</span></div>
+            <div><b>Dataset Version:</b> v1.0 · Seeded PRNG</div>
+            <div><b>Data Source:</b> VehicleData (frontend/js/data.js)</div>
+        </div>
+    </div>
+
+    <div class="summary" id="summary"></div>
+
+    <div class="filter-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search across all records (vehicle numbers, names, policies, PUC)...">
+        </div>
+        <button class="filter-btn active" data-filter="all">All Vehicles</button>
+        <button class="filter-btn" data-filter="pending-challan">Pending Challans</button>
+        <button class="filter-btn" data-filter="no-challan">No Challans</button>
+    </div>
+
+    <section>
+        <div class="sec-title">
+            <h2>1. VEHICLE MASTER REGISTER (200 Records)</h2>
+            <span class="sec-count" id="countV">—</span>
+        </div>
+        <table class="tbl" id="tblVehicles">
+            <thead>
+                <tr>
+                    <th class="cen" style="width:40px;">#</th>
+                    <th>Vehicle Registration No.</th>
+                    <th>Owner Name</th>
+                    <th>Contact No.</th>
+                    <th>Fuel</th>
+                    <th>Vehicle Model</th>
+                    <th>Vehicle Type</th>
+                    <th>Registration Date</th>
+                    <th>Engine Number</th>
+                    <th>Chassis Number</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <div class="sec-title">
+            <h2>2. INSURANCE POLICY REGISTER (200 Records)</h2>
+            <span class="sec-count" id="countP">—</span>
+        </div>
+        <table class="tbl" id="tblPolicies">
+            <thead>
+                <tr>
+                    <th class="cen" style="width:40px;">#</th>
+                    <th>Policy Number</th>
+                    <th>Vehicle Reg.</th>
+                    <th>Insured / Owner</th>
+                    <th>Insurer</th>
+                    <th>Plan</th>
+                    <th class="cen">Tenure</th>
+                    <th class="num">IDV (₹)</th>
+                    <th class="num">Premium (₹)</th>
+                    <th>Issue Date</th>
+                    <th>Period (Start → End)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <div class="sec-title">
+            <h2>3. PUC / EMISSION CERTIFICATE REGISTER (200 Records)</h2>
+            <span class="sec-count" id="countC">—</span>
+        </div>
+        <table class="tbl" id="tblPUC">
+            <thead>
+                <tr>
+                    <th class="cen" style="width:40px;">#</th>
+                    <th>Certificate No.</th>
+                    <th>Vehicle Reg.</th>
+                    <th>Owner / Contact</th>
+                    <th>PUC Center</th>
+                    <th>Machine ID</th>
+                    <th class="cen">Fuel</th>
+                    <th class="num">CO %</th>
+                    <th class="num">HC ppm</th>
+                    <th class="num">Smoke %</th>
+                    <th class="num">Fee (₹)</th>
+                    <th>Test Date</th>
+                    <th>Valid Upto</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <div class="footer">
+        <span>© 2026 Government of India · Ministry of Road Transport &amp; Highways · For demonstration / reference only.</span>
+        <span>Generated: <span id="genTime">—</span></span>
+    </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+(function(){
+    const DTF = new Intl.NumberFormat('en-IN');
+    const INR = n => '₹ ' + DTF.format(Number(n) || 0);
+    const dmy = iso => {
+        const d = new Date(iso + 'T00:00:00');
+        return String(d.getDate()).padStart(2,'0') + ' ' + d.toLocaleString('en-IN',{month:'short'}) + ' ' + d.getFullYear();
+    };
+
+    // Search and Filter Functionality
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function filterData(data, type) {
+        if (currentFilter !== 'all' && currentFilter !== type && type !== 'vehicles') return [];
+        if (!searchQuery && currentFilter === 'all') return data;
+        
+        const query = searchQuery.toLowerCase();
+        let filtered = data;
+        
+        // Apply search filter
+        if (searchQuery) {
+            filtered = data.filter(item => {
+                return Object.values(item).some(value => 
+                    String(value).toLowerCase().includes(query)
+                );
+            });
+        }
+        
+        // Apply challan status filter for vehicles
+        if (type === 'vehicles' && currentFilter !== 'all') {
+            const CH = (window.VehicleData && VehicleData.CHALLAN_DATA) || [];
+            if (currentFilter === 'pending-challan') {
+                // Show only vehicles with pending challans
+                const pendingVehicles = new Set();
+                CH.filter(c => c.status === 'Pending').forEach(c => {
+                    const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    pendingVehicles.add(normReg);
+                });
+                filtered = filtered.filter(v => {
+                    const normReg = v.reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    return pendingVehicles.has(normReg);
+                });
+            } else if (currentFilter === 'no-challan') {
+                // Show only vehicles with no challans
+                const allVehiclesWithChallans = new Set();
+                CH.forEach(c => {
+                    const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    allVehiclesWithChallans.add(normReg);
+                });
+                filtered = filtered.filter(v => {
+                    const normReg = v.reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    return !allVehiclesWithChallans.has(normReg);
+                });
+            }
+        }
+        
+        return filtered;
+    }
+
+    function setupSearchAndFilter() {
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            refreshTables();
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                refreshTables();
+            });
+        });
+    }
+
+    function refreshTables() {
+        const cache = window.demoDataCache || { V: [], P: [], C: [], CH: [] };
+        const V = cache.V;
+        const P = cache.P;
+        const C = cache.C;
+        const CH = cache.CH;
+
+        const filteredV = filterData(V, 'vehicles');
+        const filteredP = filterData(P, 'policies');
+        const filteredC = filterData(C, 'puc');
+
+        fillVehicles(document.querySelector('#tblVehicles tbody'), filteredV);
+        fillPolicies(document.querySelector('#tblPolicies tbody'), filteredP);
+        fillPUC(document.querySelector('#tblPUC tbody'), filteredC);
+
+        document.getElementById('countV').textContent = filteredV.length + ' records';
+        document.getElementById('countP').textContent = filteredP.length + ' records';
+        document.getElementById('countC').textContent = filteredC.length + ' records';
+        
+        renderSummary(document.getElementById('summary'), V, P, C, CH);
+        
+        // Store data for filter updates
+        window.demoDataCache = { V, P, C, CH };
+    }
+
+    function fuelClass(f){
+        f = (f||'').toLowerCase();
+        if (f === 'diesel') return 'fuel-d';
+        if (f === 'cng')    return 'fuel-c';
+        if (f === 'lpg')    return 'fuel-l';
+        if (f === 'electric') return 'fuel-e';
+        return 'fuel-p';
+    }
+
+    function policyClass(s){
+        if (s === 'Issued')       return 'pill-issued';
+        if (s === 'Expired')      return 'pill-expired';
+        if (s === 'Renewal Due')  return 'pill-renew';
+        return 'pill-draft';
+    }
+    function pucClass(s){
+        if (s === 'Pass')    return 'pill-pass';
+        if (s === 'Fail')    return 'pill-fail';
+        if (s === 'Pending') return 'pill-pending';
+        return 'pill-expired';
+    }
+
+    function fillVehicles(tbody, list){
+        const rows = list.map((v,i) => `
+            <tr>
+                <td class="cen">${i+1}</td>
+                <td class="mono"><b>${v.reg}</b></td>
+                <td>${v.ownerName}</td>
+                <td class="mono">${v.ownerPhone}</td>
+                <td class="cen"><span class="pill ${fuelClass(v.fuelType)}">${v.fuelType}</span></td>
+                <td>${v.vehicleModel}</td>
+                <td>${v.vehicleType}</td>
+                <td>${v.registrationDateDMY || dmy(v.registrationDateIso)}</td>
+                <td class="mono">${v.engineNo}</td>
+                <td class="mono">${v.chassisNo}</td>
+            </tr>
+        `).join('');
+        tbody.innerHTML = rows;
+    }
+
+    function fillPolicies(tbody, list){
+        const rows = list.map((p,i) => `
+            <tr>
+                <td class="cen">${i+1}</td>
+                <td class="mono"><b>${p.policyNo}</b></td>
+                <td class="mono"><b>${p.vehicleReg}</b></td>
+                <td>${p.ownerName}<br><span style="color:#64748B;font-size:9.5px;">${p.ownerPhone}</span></td>
+                <td>${p.insurer}</td>
+                <td>${p.plan}</td>
+                <td class="cen">${p.tenureYears}Y</td>
+                <td class="num">${INR(p.idv)}</td>
+                <td class="num">${INR(p.totalPremium)}</td>
+                <td>${p.issueDateDMY || dmy(p.issueDateIso)}</td>
+                <td>${p.startDateDMY || dmy(p.startDateIso)} → ${p.endDateDMY || dmy(p.endDateIso)}</td>
+                <td><span class="pill ${policyClass(p.status)}">${p.status}</span></td>
+            </tr>
+        `).join('');
+        tbody.innerHTML = rows;
+    }
+
+    function fillPUC(tbody, list){
+        const rows = list.map((c,i) => `
+            <tr>
+                <td class="cen">${i+1}</td>
+                <td class="mono"><b>${c.certNo}</b></td>
+                <td class="mono"><b>${c.reg}</b></td>
+                <td>${c.name}<br><span style="color:#64748B;font-size:9.5px;">${c.phone}</span></td>
+                <td>${c.center}</td>
+                <td class="mono">${c.mach}</td>
+                <td class="cen"><span class="pill ${fuelClass(c.fuel)}">${c.fuel}</span></td>
+                <td class="num">${(Number(c.co)||0).toFixed(2)}</td>
+                <td class="num">${Number(c.hc)||0}</td>
+                <td class="num">${c.fuel === 'Electric' ? '—' : (Number(c.smoke)||0).toFixed(2)}</td>
+                <td class="num">${INR(c.fee)}</td>
+                <td>${c.testDate || dmy(c.testDateIso)}</td>
+                <td>${c.validDate || dmy(c.validDateIso)}</td>
+                <td><span class="pill ${pucClass(c.status)}">${c.status}</span></td>
+            </tr>
+        `).join('');
+        tbody.innerHTML = rows;
+    }
+
+    function renderSummary(summaryEl, V, P, C, CH){
+        const totalPrem = P.reduce((s,p)=>s + (Number(p.totalPremium)||0), 0);
+        const totalFee  = C.reduce((s,c)=>s + (Number(c.fee)||0), 0);
+        const passed    = C.filter(c => c.status === 'Pass').length;
+        const issued    = P.filter(p => p.status === 'Issued' || p.status === 'Renewal Due').length;
+        const pendingChallans = CH.filter(c => c.status === 'Pending').length;
+        
+        // Calculate based on current filter
+        let displayLabel = 'Data Coverage';
+        let displayValue = '1:1:1';
+        let displaySub = 'Vehicle ↔ Policy ↔ PUC linkage';
+        
+        if (currentFilter === 'pending-challan') {
+            displayLabel = 'Pending Challans';
+            displayValue = pendingChallans;
+            displaySub = 'Vehicles with pending challans';
+        } else if (currentFilter === 'no-challan') {
+            const vehiclesWithChallans = new Set();
+            CH.forEach(c => {
+                const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                vehiclesWithChallans.add(normReg);
+            });
+            const vehiclesWithoutChallans = V.length - vehiclesWithChallans.size;
+            displayLabel = 'Clean Vehicles';
+            displayValue = vehiclesWithoutChallans;
+            displaySub = 'No pending challans';
+        }
+
+        summaryEl.innerHTML = `
+            <div class="kpi">
+                <div class="kpi-label">Vehicles Registered</div>
+                <div class="kpi-value">${V.length}</div>
+                <div class="kpi-sub">Master register records</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Policies Issued / Linked</div>
+                <div class="kpi-value">${issued}</div>
+                <div class="kpi-sub">Total Premium Collected: <b>${INR(totalPrem)}</b></div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">PUC Certificates</div>
+                <div class="kpi-value">${C.length}</div>
+                <div class="kpi-sub">Pass: <b>${passed}</b> · Total Fee: <b>${INR(totalFee)}</b></div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">${displayLabel}</div>
+                <div class="kpi-value">${displayValue}</div>
+                <div class="kpi-sub">${displaySub}</div>
+            </div>
+        `;
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const V = (window.VehicleData && VehicleData.VEHICLES) || [];
+        const P = (window.VehicleData && VehicleData.POLICY_DATA) || [];
+        const C = (window.VehicleData && VehicleData.PUC_DATA) || [];
+        const CH = (window.VehicleData && VehicleData.CHALLAN_DATA) || [];
+
+        document.getElementById('countV').textContent = V.length + ' records';
+        document.getElementById('countP').textContent = P.length + ' records';
+        document.getElementById('countC').textContent = C.length + ' records';
+
+        fillVehicles(document.querySelector('#tblVehicles tbody'), V);
+        fillPolicies(document.querySelector('#tblPolicies tbody'), P);
+        fillPUC(document.querySelector('#tblPUC tbody'), C);
+        renderSummary(document.getElementById('summary'), V, P, C, CH);
+        
+        // Store data for filter updates
+        window.demoDataCache = { V, P, C, CH };
+        
+        setupSearchAndFilter();
+        
+        // Log first few vehicle numbers for reference
+        console.log('Available vehicles for testing (first 10):');
+        V.slice(0, 10).forEach((v, i) => {
+            console.log(`${i+1}. ${v.reg} - ${v.ownerName}`);
+        });
+        
+        console.log('Total challans in system:', CH.length);
+        console.log('Vehicles with pending challans:', CH.filter(c => c.status === 'Pending').length);
+
+        const now = new Date();
+        document.getElementById('genTime').textContent =
+            String(now.getDate()).padStart(2,'0') + ' ' +
+            now.toLocaleString('en-IN',{month:'short',year:'numeric'}) + ' · ' +
+            now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    });
+})();
+</script>
+</body>
+</html>

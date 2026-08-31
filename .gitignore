@@ -1,0 +1,23 @@
+# Java / Maven
+backend/target/
+*.class
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment / secrets
+.env
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Git archive
+.git.zip

@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue PUC Certificate - Bharat RTO Portal</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .func-page-layout {
+            background: #FFFFFF;
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .puc-page-wrap {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            align-items: start;
+            background: #FFFFFF;
+            min-height: calc(100vh - 140px);
+            width: 100%;
+            margin: 0;
+            padding: 14px 20px 24px;
+            box-sizing: border-box;
+        }
+
+        .puc-form-panel, .puc-preview-panel {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .puc-preview-panel {
+            display: none;
+            border-top: 2px solid #E2E8F0;
+            background: #F8FAFC;
+        }
+        .puc-preview-panel.visible {
+            display: block;
+            animation: panelSlideIn .45s cubic-bezier(.2,.8,.2,1) both;
+        }
+        @keyframes panelSlideIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .puc-page-wrap { padding: 12px 14px 20px; margin: 0; }
+            .puc-form-panel, .puc-preview-panel { padding: 0; }
+        }
+        @media (max-width: 968px) {
+            .func-page-layout { padding: 0 !important; max-width: none !important; }
+        }
+
+        .gov-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #0B4F8A;
+        }
+        .gov-section-number {
+            width: 32px;
+            height: 32px;
+            background: #0B4F8A;
+            color: #FFFFFF;
+            display: grid;
+            place-items: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+        }
+        .gov-section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #0B4F8A;
+            letter-spacing: 0.2px;
+        }
+
+        .gov-divider {
+            height: 1px;
+            background: #E2E8F0;
+            margin: 28px 0;
+        }
+        .gov-divider-thin {
+            height: 1px;
+            background: #EDF2F7;
+            margin: 18px 0;
+        }
+
+        .gov-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px 24px;
+        }
+        .gov-form-grid .full-width { grid-column: span 2; }
+        @media (max-width: 768px) {
+            .gov-form-grid { grid-template-columns: 1fr 1fr; }
+            .gov-form-grid .full-width { grid-column: span 2; }
+        }
+        @media (max-width: 520px) {
+            .gov-form-grid, .gov-form-grid.full-width { grid-template-columns: 1fr; }
+            .gov-form-grid .full-width { grid-column: span 1; }
+        }
+
+        .gov-form-group { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+        .gov-form-label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            letter-spacing: 0.1px;
+        }
+        .gov-required { color: #DC2626; font-size: 14px; font-weight: 700; }
+
+        .gov-input,
+        .gov-select,
+        .gov-textarea {
+            width: 100%;
+            height: 42px;
+            padding: 0 13px;
+            font-size: 14px;
+            color: #0F172A;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+            box-sizing: border-box;
+        }
+        .gov-textarea {
+            height: auto;
+            padding: 11px 13px;
+            resize: vertical;
+            min-height: 78px;
+            line-height: 1.5;
+        }
+        .gov-input::placeholder, .gov-textarea::placeholder { color: #94A3B8; }
+        .gov-input:focus, .gov-select:focus, .gov-textarea:focus {
+            border-color: #0B4F8A;
+            box-shadow: 0 0 0 3px rgba(11, 79, 138, 0.1);
+        }
+        .gov-input:disabled, .gov-select:disabled {
+            background: #F8FAFC;
+            color: #475569;
+            cursor: not-allowed;
+        }
+        .gov-input.has-error, .gov-select.has-error {
+            border-color: #DC2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+        }
+
+        .gov-field-error {
+            font-size: 11.5px;
+            color: #DC2626;
+            font-weight: 600;
+            min-height: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .gov-field-error:not(:empty)::before {
+            content: '';
+            display: inline-block;
+            width: 0; height: 0;
+            border-left: 3.5px solid transparent;
+            border-right: 3.5px solid transparent;
+            border-bottom: 5px solid #DC2626;
+        }
+
+        .gov-search-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+        @media (max-width: 768px) {
+            .gov-search-row { grid-template-columns: 1fr; }
+            .gov-btn-search { margin-bottom: 0; }
+        }
+
+        /* Autocomplete dropdown */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 4px;
+        }
+        .autocomplete-dropdown.visible {
+            display: block;
+        }
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #F1F5F9;
+            transition: background 0.2s;
+        }
+        .autocomplete-item:hover {
+            background: #F8FAFC;
+        }
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+        .autocomplete-item .reg-number {
+            font-weight: 700;
+            color: #0F172A;
+            font-size: 14px;
+        }
+        .autocomplete-item .owner-name {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 2px;
+        }
+        .autocomplete-item .fuel-type {
+            font-size: 11px;
+            color: #94A3B8;
+            margin-top: 2px;
+        }
+        .autocomplete-search-wrapper {
+            position: relative;
+        }
+
+        .gov-btn-search {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 20px;
+            height: 42px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #0B4F8A;
+            background: #FFFFFF;
+            color: #0B4F8A;
+            transition: all .15s;
+            white-space: nowrap;
+            letter-spacing: 0.1px;
+            margin-bottom: 19px;
+        }
+        .gov-btn-search:hover { background: #0B4F8A; color: #FFFFFF; }
+        .gov-btn-search:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #F1F5F9;
+            color: #64748B;
+            border-color: #CBD5E1;
+        }
+
+        .gov-vehicle-auto {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px 24px;
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: #F1F5F9;
+            border-left: 3px solid #0B4F8A;
+            display: none;
+        }
+        .gov-vehicle-auto.visible { display: grid; }
+        @media (max-width: 520px) {
+            .gov-vehicle-auto { grid-template-columns: 1fr; }
+        }
+        .gov-vehicle-auto .gov-auto-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #0B4F8A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .gov-vehicle-auto .gov-auto-value {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #0F172A;
+            padding-bottom: 10px;
+        }
+
+        .diesel-only-row {
+            opacity: 0.35;
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+        .diesel-only-row.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .gov-section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .gov-section-header { margin-bottom: 0; }
+
+        .test-run-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 16px 0 12px;
+            height: 40px;
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #34D399;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .15s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.2px;
+            user-select: none;
+        }
+        .test-run-btn:hover:not(:disabled) {
+            background: #065F46;
+            color: #fff;
+        }
+        .test-run-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+        .test-run-btn.running {
+            background: #EFF6FF;
+            color: #1E40AF;
+            border-color: #93C5FD;
+        }
+        .test-run-btn svg.run-icon { width: 15px; height: 15px; }
+
+        .circ-timer {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+        .circ-timer svg { width: 24px; height: 24px; transform: rotate(-90deg); display: block; }
+        .circ-timer .circ-track {
+            stroke: #D1FAE5;
+            fill: none;
+            stroke-width: 3;
+        }
+        .circ-timer .circ-progress {
+            stroke: #10B981;
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 62.83;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.3s linear, stroke .2s;
+        }
+        .test-run-btn.running .circ-timer .circ-track { stroke: #DBEAFE; }
+        .test-run-btn.running .circ-timer .circ-progress { stroke: #2563EB; }
+        .circ-timer .circ-counter {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: 9px;
+            font-weight: 800;
+            color: inherit;
+            font-family: 'Inter', monospace;
+        }
+
+        .test-live-panel {
+            display: none;
+            margin-top: 18px;
+            padding: 14px 18px;
+            background: #EFF6FF;
+            border-left: 3px solid #2563EB;
+        }
+        .test-live-panel.visible {
+            display: block;
+            animation: testPanelIn .25s ease both;
+        }
+        @keyframes testPanelIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .test-live-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #1E3A8A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .test-live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2563EB;
+            box-shadow: 0 0 0 0 rgba(37,99,235,0.5);
+            animation: pulseRing 1.4s infinite;
+        }
+        @keyframes pulseRing {
+            0%   { box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
+            70%  { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
+            100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+        }
+        .test-live-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .test-live-row { grid-template-columns: repeat(2, 1fr); }
+        }
+        .test-live-cell {
+            background: #fff;
+            border: 1px solid #BFDBFE;
+            padding: 8px 10px;
+        }
+        .test-live-cell .lbl {
+            font-size: 10px;
+            font-weight: 700;
+            color: #1E40AF;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .test-live-cell .val {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0F172A;
+            margin-top: 2px;
+            font-family: 'Inter', monospace;
+            min-height: 19px;
+        }
+
+        .gov-generate-row {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #E2E8F0;
+        }
+
+        .gov-btn-generate {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 26px;
+            height: 52px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            background: #0B4F8A;
+            color: #fff;
+            transition: all .15s;
+            letter-spacing: 0.3px;
+            font-family: 'Inter', sans-serif;
+        }
+        .gov-btn-generate:hover:not(:disabled) {
+            background: #083D6E;
+        }
+        .gov-btn-generate:disabled {
+            background: #CBD5E1;
+            color: #94A3B8;
+            cursor: not-allowed;
+        }
+        .gov-btn-generate svg { width: 18px; height: 18px; }
+
+        .gov-btn-reset {
+            margin-top: 12px;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 20px;
+            height: 40px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #FFFFFF;
+            color: #475569;
+            border: 1px solid #CBD5E1;
+            transition: all .15s;
+        }
+        .gov-btn-reset:hover { background: #F8FAFC; border-color: #94A3B8; }
+
+        /* ====== Right: Preview Panel ====== */
+        .puc-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            margin-bottom: 28px;
+            border-bottom: 2px solid #0B4F8A;
+        }
+        .puc-preview-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #0B4F8A;
+        }
+
+        .puc-empty-state {
+            display: grid;
+            place-items: center;
+            padding: 80px 20px;
+            text-align: center;
+            color: #94A3B8;
+            border: 2px dashed #CBD5E1;
+            min-height: 500px;
+        }
+        .puc-empty-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 18px;
+            color: #CBD5E1;
+        }
+        .puc-empty-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #64748B;
+            margin-bottom: 6px;
+        }
+        .puc-empty-sub {
+            font-size: 13px;
+            color: #94A3B8;
+            line-height: 1.5;
+        }
+
+        .puc-cert-wrap {
+            display: none;
+        }
+        .puc-cert-wrap.visible {
+            display: block;
+            animation: certFadeSlide .5s cubic-bezier(.2,.8,.2,1) both;
+        }
+        @keyframes certFadeSlide {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .puc-loading {
+            display: none;
+            place-items: center;
+            padding: 100px 20px;
+            min-height: 500px;
+        }
+        .puc-loading.visible { display: grid; }
+        .puc-spinner {
+            width: 52px;
+            height: 52px;
+            border: 3px solid #DBEAFE;
+            border-top-color: #0B4F8A;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .puc-loading-text {
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0B4F8A;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== Certificate Content ===== */
+        .puc-cert-wrap {
+            padding: 16px 20px 20px;
+        }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #FFFFFF !important;
+            }
+            .top-navbar,
+            .app-shell .sidebar-nav,
+            .app-shell .sidebar-overlay,
+            .footer-bar,
+            .func-page-hero,
+            .func-breadcrumb,
+            .puc-form-panel,
+            .puc-preview-header,
+            .puc-cert-actions,
+            .gov-divider,
+            .gov-divider-thin {
+                display: none !important;
+            }
+            .app-shell {
+                display: block !important;
+                background: #FFFFFF !important;
+            }
+            .app-shell .main-content {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
+            .puc-page-wrap {
+                padding: 0 !important;
+                margin: 0 !important;
+                min-height: 0 !important;
+                background: #FFFFFF !important;
+                display: block !important;
+            }
+            .func-page-layout {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: none !important;
+                background: #FFFFFF !important;
+            }
+            .puc-preview-panel {
+                display: block !important;
+                position: static !important;
+                width: auto !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #FFFFFF !important;
+                border: none !important;
+                border-top: none !important;
+                animation: none !important;
+            }
+            .puc-preview-panel.visible {
+                animation: none !important;
+            }
+            .puc-cert-wrap {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .puc-certificate {
+                box-shadow: none !important;
+                border: none !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
+                max-width: 210mm !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+        .puc-certificate {
+            border: 1.5px solid #CBD5E1;
+            background: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            width: 210mm;
+            min-height: 297mm;
+            max-width: 100%;
+            box-sizing: border-box;
+            margin: 0 auto;
+            box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+        }
+        .puc-cert-tricolor {
+            height: 4px;
+            background: linear-gradient(90deg, #FF9933 0%, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%, #138808 100%);
+        }
+        .puc-cert-inner { padding: 16px 22px 18px; }
+
+        .puc-cert-head {
+            display: grid;
+            grid-template-columns: 44px 1fr 68px;
+            gap: 12px;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .puc-emblem-svg { width: 44px; height: 50px; }
+        .puc-gov-header { text-align: center; line-height: 1.2; }
+        .puc-gov-state {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: #0B4F8A;
+            letter-spacing: 0.5px;
+        }
+        .puc-gov-cert {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 15px;
+            font-weight: 800;
+            color: #0B4F8A;
+            letter-spacing: 0.2px;
+            margin-top: 3px;
+            text-transform: uppercase;
+        }
+        .puc-gov-auth {
+            font-size: 10px;
+            color: #475569;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .puc-status-badge-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .puc-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 9px;
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+        }
+        .puc-status-badge.pass {
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #34D399;
+        }
+        .puc-status-badge.fail {
+            background: #FEF2F2;
+            color: #991B1B;
+            border: 1px solid #FCA5A5;
+        }
+
+        .puc-cert-meta-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #EDF2F7;
+            align-items: start;
+        }
+        .puc-meta-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 3px;
+        }
+        .puc-meta-value {
+            font-family: 'Inter', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0F172A;
+        }
+        .puc-cert-qr {
+            width: 62px;
+            height: 62px;
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            display: grid;
+            place-items: center;
+            padding: 3px;
+        }
+        .puc-cert-qr svg { width: 100%; height: 100%; }
+
+        .puc-cert-section {
+            padding: 12px 0;
+            border-bottom: 1px solid #EDF2F7;
+        }
+        .puc-cert-section:last-of-type { border-bottom: none; }
+        .puc-cert-section-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #0B4F8A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 9px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #BFDBFE;
+            display: inline-block;
+        }
+
+        .puc-details-rows {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 18px;
+        }
+        @media (max-width: 520px) {
+            .puc-details-rows { grid-template-columns: 1fr; }
+        }
+        .puc-detail { display: flex; flex-direction: column; gap: 2px; }
+        .puc-detail-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+        }
+        .puc-detail-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0F172A;
+        }
+
+        .puc-emissions-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #E2E8F0;
+        }
+        .puc-emissions-tbl thead th {
+            background: #F1F5F9;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #334155;
+            text-align: left;
+            padding: 7px 10px;
+            letter-spacing: 0.2px;
+            border-bottom: 1px solid #CBD5E1;
+        }
+        .puc-emissions-tbl tbody td {
+            font-size: 11.5px;
+            color: #0F172A;
+            padding: 7px 10px;
+            border-bottom: 1px solid #F1F5F9;
+            font-weight: 500;
+        }
+        .puc-emissions-tbl tbody tr:last-child td { border-bottom: none; }
+        .puc-emissions-tbl td.limit { color: #475569; font-weight: 500; }
+        .puc-emissions-tbl td.fail-val {
+            color: #DC2626;
+            font-weight: 700;
+        }
+        .puc-emissions-tbl td.pass-val {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .puc-cert-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            padding-top: 12px;
+            border-top: 1px dashed #CBD5E1;
+            margin-top: 6px;
+        }
+        .puc-bottom-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+        }
+        .puc-bottom-val-pass {
+            font-size: 15px;
+            font-weight: 800;
+            color: #059669;
+            letter-spacing: 0.3px;
+        }
+        .puc-bottom-val-fail {
+            font-size: 15px;
+            font-weight: 800;
+            color: #DC2626;
+            letter-spacing: 0.3px;
+        }
+        .puc-bottom-date {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0B4F8A;
+        }
+
+        .puc-cert-footer-note {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #CBD5E1;
+            font-size: 10px;
+            color: #64748B;
+            font-style: italic;
+            line-height: 1.45;
+        }
+
+        .puc-cert-sign {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #EDF2F7;
+        }
+        .puc-sign-block {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .puc-sign-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .puc-sign-line {
+            height: 1px;
+            background: #0F172A;
+            margin: 12px 0 3px;
+            width: 80%;
+        }
+        .puc-sign-value {
+            font-size: 11px;
+            font-weight: 600;
+            color: #0F172A;
+        }
+
+        /* ===== Certificate Action Buttons ===== */
+        .puc-cert-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 2px solid #E2E8F0;
+        }
+        @media (max-width: 768px) {
+            .puc-cert-actions { grid-template-columns: repeat(2, 1fr); }
+        }
+        .cert-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0 10px;
+            height: 40px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            color: #334155;
+            transition: all .15s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.1px;
+        }
+        .cert-action-btn:hover {
+            background: #0B4F8A;
+            border-color: #0B4F8A;
+            color: #FFFFFF;
+        }
+        .cert-action-btn svg { width: 14px; height: 14px; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="funcPageMount"></div>
+
+    <main class="func-page-layout">
+        <div class="puc-page-wrap">
+            <!-- =============== LEFT: FORM PANEL =============== -->
+            <div class="puc-form-panel">
+                <form id="pucIssueForm" onsubmit="return false;">
+
+                    <!-- Section 1: Vehicle Details -->
+                    <section>
+                        <div class="gov-section-header">
+                            <div class="gov-section-number">1</div>
+                            <span class="gov-section-title">Vehicle Details</span>
+                        </div>
+
+                        <div class="gov-search-row">
+                            <div class="gov-form-group autocomplete-search-wrapper">
+                                <label class="gov-form-label">Vehicle Number <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_vehicleNo" placeholder="Start typing to search vehicles..." style="text-transform:uppercase;" autocomplete="off">
+                                <div class="gov-field-error" id="err_vehicleNo"></div>
+                                <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+                            </div>
+                            <button type="button" class="gov-btn-search" id="btnSearchVehicle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                Search Vehicle
+                            </button>
+                        </div>
+
+                        <div class="gov-vehicle-auto" id="vehicleAutoBlock">
+                            <div>
+                                <div class="gov-auto-label">Engine Number</div>
+                                <div class="gov-auto-value" id="pv_engine">—</div>
+                            </div>
+                            <div>
+                                <div class="gov-auto-label">Chassis Number</div>
+                                <div class="gov-auto-value" id="pv_chassis">—</div>
+                            </div>
+                        </div>
+                        
+                        <div id="challanWarning" style="display: none; margin-top: 16px; padding: 12px 16px; background: #FEF2F2; border-left: 4px solid #DC2626; border-radius: 4px; color: #991B1B; font-size: 13px; line-height: 1.4;"></div>
+
+                        <div class="gov-divider"></div>
+
+                        <div class="gov-form-grid">
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Registration Date <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_regDate" placeholder="DD/MM/YYYY">
+                                <div class="gov-field-error" id="err_regDate"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Owner Name <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_ownerName" placeholder="Owner full name">
+                                <div class="gov-field-error" id="err_ownerName"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Fuel Type <span class="gov-required">*</span></label>
+                                <select class="gov-select" id="f_fuelType">
+                                    <option value="">— Select Fuel Type —</option>
+                                    <option>Petrol</option>
+                                    <option>Diesel</option>
+                                    <option>CNG</option>
+                                    <option>LPG</option>
+                                    <option>Hybrid (Petrol + Electric)</option>
+                                    <option>Electric</option>
+                                </select>
+                                <div class="gov-field-error" id="err_fuelType"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Vehicle Type <span class="gov-required">*</span></label>
+                                <select class="gov-select" id="f_vehicleType">
+                                    <option value="">— Select Vehicle Type —</option>
+                                    <option>Light Motor Vehicle (LMV)</option>
+                                    <option>Motor Car (Petrol)</option>
+                                    <option>Motor Car (Diesel)</option>
+                                    <option>Two Wheeler (Petrol)</option>
+                                    <option>Three Wheeler (CNG)</option>
+                                    <option>Goods Vehicle (Diesel)</option>
+                                    <option>Passenger Bus (Diesel)</option>
+                                    <option>HMV — Truck / Bus</option>
+                                </select>
+                                <div class="gov-field-error" id="err_vehicleType"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="gov-divider"></div>
+
+                    <!-- Section 2: PUC Test Details -->
+                    <section>
+                        <div class="gov-section-header-row">
+                            <div class="gov-section-header">
+                                <div class="gov-section-number">2</div>
+                                <span class="gov-section-title">PUC Test Details</span>
+                            </div>
+                            <button type="button" class="test-run-btn" id="btnRunTest">
+                                <span class="circ-timer">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle class="circ-track" cx="12" cy="12" r="10"/>
+                                        <circle class="circ-progress" id="circProgress" cx="12" cy="12" r="10"/>
+                                    </svg>
+                                    <span class="circ-counter" id="circCounter">60</span>
+                                </span>
+                                <svg class="run-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                <span id="btnRunTestText">Run Emission Test</span>
+                            </button>
+                        </div>
+
+                        <div class="test-live-panel" id="testLivePanel">
+                            <div class="test-live-title"><span class="test-live-dot"></span><span id="testLiveStatus">Initialising emission analyser…</span></div>
+                            <div class="test-live-row">
+                                <div class="test-live-cell"><div class="lbl">CO %</div><div class="val" id="live_co">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">HC (PPM)</div><div class="val" id="live_hc">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">CO₂ %</div><div class="val" id="live_co2">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">O₂ %</div><div class="val" id="live_o2">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">Lambda</div><div class="val" id="live_lambda">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">Smoke %</div><div class="val" id="live_smoke">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">RPM</div><div class="val" id="live_rpm">—</div></div>
+                                <div class="test-live-cell"><div class="lbl">Temp °C</div><div class="val" id="live_temp">—</div></div>
+                            </div>
+                        </div>
+
+                        <div class="gov-form-grid" style="margin-top:18px;">
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">PUC Center <span class="gov-required">*</span></label>
+                                <select class="gov-select" id="f_centerId">
+                                    <option value="">— Select PUC Center —</option>
+                                    <option>PUC10025 - Solapur Center</option>
+                                    <option>PUC10024 - Mumbai PUC Testing Center - Andheri</option>
+                                    <option>PUC10023 - Delhi Emission Testing Lab</option>
+                                    <option>PUC10022 - Pune Emission Check Point</option>
+                                </select>
+                                <div class="gov-field-error" id="err_centerId"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Machine ID <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_machineId" placeholder="e.g. PUC-MACH-5621">
+                                <div class="gov-field-error" id="err_machineId"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Test Date &amp; Time <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_testDateTime" placeholder="DD/MM/YYYY HH:MM AM">
+                                <div class="gov-field-error" id="err_testDateTime"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Emission Norm</label>
+                                <input type="text" class="gov-input" id="f_emissionNorms" value="BHARAT STAGE VI" disabled>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Odometer Reading (KM)</label>
+                                <input type="text" class="gov-input" id="f_odometer" placeholder="e.g. 25,680">
+                            </div>
+                        </div>
+
+                        <div class="gov-divider-thin"></div>
+
+                        <div class="gov-form-grid">
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">CO % <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_co" placeholder="0.23" data-emission="co">
+                                <div class="gov-field-error" id="err_co"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">HC (PPM) <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_hc" placeholder="45" data-emission="hc">
+                                <div class="gov-field-error" id="err_hc"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">CO₂ % <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_co2" placeholder="1.02" data-emission="co2">
+                                <div class="gov-field-error" id="err_co2"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">O₂ % <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_o2" placeholder="0.85" data-emission="o2">
+                                <div class="gov-field-error" id="err_o2"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Lambda (λ) <span class="gov-required">*</span></label>
+                                <input type="text" class="gov-input" id="f_lambda" placeholder="0.98" data-emission="lambda">
+                                <div class="gov-field-error" id="err_lambda"></div>
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">RPM</label>
+                                <input type="text" class="gov-input" id="f_rpm" placeholder="e.g. 2500">
+                            </div>
+                            <div class="gov-form-group diesel-only-row" id="smokeRow">
+                                <label class="gov-form-label">Smoke Density % <span style="color:#94A3B8;font-weight:500;font-size:11px;">(Diesel)</span></label>
+                                <input type="text" class="gov-input" id="f_smoke" placeholder="e.g. 45" data-emission="smoke">
+                            </div>
+                            <div class="gov-form-group">
+                                <label class="gov-form-label">Temperature (°C)</label>
+                                <input type="text" class="gov-input" id="f_temp" placeholder="e.g. 85">
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="gov-generate-row">
+                        <button type="button" class="gov-btn-generate" id="btnGenerate" disabled>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                            <span id="btnGenerateText">Generate PUC Certificate</span>
+                        </button>
+                        <button type="button" class="gov-btn-reset" id="btnReset">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <polyline points="1 4 1 10 7 10"/>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                            </svg>
+                            Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- =============== PREVIEW PANEL (shown only after Generate) =============== -->
+            <div class="puc-preview-panel" id="pucPreviewPanel">
+                <div class="puc-preview-header">
+                    <span class="puc-preview-title">Generated PUC Certificate</span>
+                </div>
+
+                <!-- Loading State -->
+                <div class="puc-loading" id="pucLoading">
+                    <div style="text-align:center;">
+                        <div class="puc-spinner"></div>
+                        <div class="puc-loading-text">Generating Certificate...</div>
+                    </div>
+                </div>
+
+                <!-- Certificate Preview -->
+                <div class="puc-cert-wrap" id="pucCertWrap">
+                    <div class="puc-certificate" id="pucCertificate">
+                        <div class="puc-cert-tricolor"></div>
+                        <div class="puc-cert-inner">
+
+                            <div class="puc-cert-head">
+                                <svg class="puc-emblem-svg" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="55" r="46" fill="none" stroke="#0B4F8A" stroke-width="2"/>
+                                    <circle cx="50" cy="55" r="39" fill="none" stroke="#E8C07D" stroke-width="1.5"/>
+                                    <circle cx="50" cy="55" r="33" fill="none" stroke="#0B4F8A" stroke-width="1"/>
+                                    <path d="M50 20 L54 47 L79 47 L60 59 L67 82 L50 68 L33 82 L40 59 L21 47 L46 47 Z" fill="#E8C07D" opacity="0.92"/>
+                                    <text x="50" y="103" text-anchor="middle" font-family="Playfair Display, serif" font-size="7" fill="#0B4F8A" font-weight="700" letter-spacing="0.5">SATYAMEVA</text>
+                                    <text x="50" y="110" text-anchor="middle" font-family="Playfair Display, serif" font-size="6" fill="#0B4F8A" font-weight="700" letter-spacing="0.5">JAYATE</text>
+                                </svg>
+                                <div class="puc-gov-header">
+                                    <div class="puc-gov-state">GOVERNMENT OF INDIA</div>
+                                    <div class="puc-gov-cert">Pollution Under Control Certificate</div>
+                                    <div class="puc-gov-auth">Authorised by Ministry of Road Transport &amp; Highways</div>
+                                </div>
+                                <div class="puc-status-badge-head">
+                                    <div class="puc-status-badge pass" id="certStatusBadge">
+                                        <span id="certStatusIcon">✅</span>
+                                        <span id="certStatusText">PUC PASSED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-meta-row">
+                                <div>
+                                    <div class="puc-meta-label">Certificate Number</div>
+                                    <div class="puc-meta-value" id="pv_certNo">—</div>
+                                </div>
+                                <div>
+                                    <div class="puc-meta-label">Issue Date &amp; Time</div>
+                                    <div class="puc-meta-value" id="pv_certDate">—</div>
+                                </div>
+                                <div class="puc-cert-qr" title="Scan to verify certificate">
+                                    <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="50" height="50" fill="#fff"/>
+                                        <g fill="#0F172A">
+                                            <rect x="2" y="2" width="14" height="14"/><rect x="34" y="2" width="14" height="14"/><rect x="2" y="34" width="14" height="14"/>
+                                            <rect x="5" y="5" width="8" height="8" fill="#fff"/><rect x="37" y="5" width="8" height="8" fill="#fff"/><rect x="5" y="37" width="8" height="8" fill="#fff"/>
+                                            <rect x="7" y="7" width="4" height="4"/><rect x="39" y="7" width="4" height="4"/><rect x="7" y="39" width="4" height="4"/>
+                                            <rect x="19" y="2" width="3" height="3"/><rect x="24" y="2" width="3" height="3"/><rect x="29" y="5" width="3" height="3"/>
+                                            <rect x="19" y="7" width="3" height="3"/><rect x="24" y="10" width="3" height="3"/><rect x="29" y="13" width="3" height="3"/>
+                                            <rect x="19" y="13" width="3" height="3"/><rect x="24" y="5" width="3" height="3"/>
+                                            <rect x="2" y="19" width="3" height="3"/><rect x="7" y="22" width="3" height="3"/><rect x="12" y="19" width="3" height="3"/>
+                                            <rect x="17" y="19" width="3" height="3"/><rect x="22" y="22" width="3" height="3"/><rect x="27" y="19" width="3" height="3"/><rect x="32" y="22" width="3" height="3"/><rect x="37" y="19" width="3" height="3"/><rect x="42" y="22" width="3" height="3"/>
+                                            <rect x="2" y="24" width="3" height="3"/><rect x="10" y="27" width="3" height="3"/><rect x="17" y="27" width="3" height="3"/><rect x="22" y="27" width="3" height="3"/><rect x="30" y="27" width="3" height="3"/><rect x="37" y="27" width="3" height="3"/><rect x="45" y="27" width="3" height="3"/>
+                                            <rect x="5" y="30" width="3" height="3"/><rect x="15" y="30" width="3" height="3"/><rect x="22" y="32" width="3" height="3"/><rect x="28" y="30" width="3" height="3"/><rect x="35" y="32" width="3" height="3"/><rect x="42" y="32" width="3" height="3"/>
+                                            <rect x="19" y="37" width="3" height="3"/><rect x="24" y="34" width="3" height="3"/><rect x="29" y="37" width="3" height="3"/><rect x="34" y="40" width="3" height="3"/><rect x="40" y="37" width="3" height="3"/><rect x="45" y="40" width="3" height="3"/>
+                                            <rect x="19" y="42" width="3" height="3"/><rect x="25" y="45" width="3" height="3"/><rect x="31" y="42" width="3" height="3"/><rect x="37" y="45" width="3" height="3"/><rect x="42" y="45" width="3" height="3"/>
+                                            <rect x="22" y="45" width="3" height="3"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-section">
+                                <div class="puc-cert-section-label">Vehicle Details</div>
+                                <div class="puc-details-rows">
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Registration No.</span>
+                                        <span class="puc-detail-value" id="pv_regNo">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Registration Date</span>
+                                        <span class="puc-detail-value" id="pv_regDate">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Engine Number</span>
+                                        <span class="puc-detail-value" id="pv_engineCert">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Chassis Number</span>
+                                        <span class="puc-detail-value" id="pv_chassisCert">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Vehicle Type</span>
+                                        <span class="puc-detail-value" id="pv_vehType">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Fuel Type</span>
+                                        <span class="puc-detail-value" id="pv_fuel">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-section">
+                                <div class="puc-cert-section-label">Owner Details</div>
+                                <div class="puc-details-rows">
+                                    <div class="puc-detail full-width">
+                                        <span class="puc-detail-label">Owner Name</span>
+                                        <span class="puc-detail-value" id="pv_owner">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-section">
+                                <div class="puc-cert-section-label">Emission Test Values</div>
+                                <table class="puc-emissions-tbl">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:38%;">Pollutant</th>
+                                            <th style="width:32%;">Measured Value</th>
+                                            <th style="width:30%;">Permissible Limit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="emissionsTbody">
+                                    </tbody>
+                                </table>
+
+                                <div class="puc-cert-bottom">
+                                    <div>
+                                        <div class="puc-bottom-label">Overall Status</div>
+                                        <div class="puc-bottom-val-pass" id="pv_status">✅ PUC PASSED</div>
+                                    </div>
+                                    <div>
+                                        <div class="puc-bottom-label">Valid Up To</div>
+                                        <div class="puc-bottom-date" id="pv_validity">—</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-section">
+                                <div class="puc-cert-section-label">Test Center Details</div>
+                                <div class="puc-details-rows">
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">PUC Center</span>
+                                        <span class="puc-detail-value" id="pv_center">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Machine ID</span>
+                                        <span class="puc-detail-value" id="pv_machineId">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Test Date &amp; Time</span>
+                                        <span class="puc-detail-value" id="pv_testDate">—</span>
+                                    </div>
+                                    <div class="puc-detail">
+                                        <span class="puc-detail-label">Odometer Reading</span>
+                                        <span class="puc-detail-value" id="pv_odo">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-sign">
+                                <div class="puc-sign-block">
+                                    <span class="puc-sign-label">PUC Status</span>
+                                    <div class="puc-sign-line"></div>
+                                    <span class="puc-sign-value" id="pv_signStatus">PASSED</span>
+                                </div>
+                                <div class="puc-sign-block">
+                                    <span class="puc-sign-label">Authorized Signatory</span>
+                                    <div class="puc-sign-line"></div>
+                                    <span class="puc-sign-value" id="pv_signName">—</span>
+                                </div>
+                            </div>
+
+                            <div class="puc-cert-footer-note">
+                                This is a computer generated certificate under the Central Motor Vehicles Rules, 1989.
+                                Certificate valid subject to verification through QR code. This certificate is valid for
+                                a period of one year from the date of issue for vehicles older than one year.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="puc-cert-actions">
+                        <button type="button" class="cert-action-btn" id="btnDownloadPdf">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Download PDF
+                        </button>
+                        <button type="button" class="cert-action-btn" id="btnPrint">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            Print Certificate
+                        </button>
+                        <button type="button" class="cert-action-btn" id="btnShare">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                            Share
+                        </button>
+                        <button type="button" class="cert-action-btn" id="btnEmail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Email Certificate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                DashboardApp.renderFunctionPage({
+                    allowedRoles: ['PUC_CENTER'],
+                    dashboardLabel: 'PUC Dashboard',
+                    pageTitle: 'Issue PUC Certificate',
+                    pageDescription: 'Search vehicle, enter emission readings and generate official PUC certificate.',
+                    pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+                    activeMenuKey: 'issuePuc'
+                });
+
+                initPucPage();
+            });
+
+            function initPucPage() {
+                const API_BASE_URL = 'http://localhost:8080/api';
+                const REQUEST_TIMEOUT = 5000;
+
+                const $ = (id) => document.getElementById(id);
+
+                const auth = DashboardApp.getAuthData ? DashboardApp.getAuthData() : null;
+                const authHeaders = {};
+                if (auth && auth.token) {
+                    authHeaders['Authorization'] = 'Bearer ' + auth.token;
+                }
+
+                async function apiFetch(path, options) {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+                    try {
+                        const res = await fetch(API_BASE_URL + path, Object.assign({
+                            signal: controller.signal,
+                            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders)
+                        }, options || {}));
+                        clearTimeout(timeout);
+                        return await res.json();
+                    } catch (err) {
+                        clearTimeout(timeout);
+                        return null;
+                    }
+                }
+
+                const EMISSION_LIMITS = {
+                    co:     { limit: 0.50, unit: '%',    label: 'CO' },
+                    hc:     { limit: 750,  unit: 'PPM',  label: 'HC' },
+                    co2:    { limit: null, unit: '%',    label: 'CO₂' },
+                    o2:     { limit: null, unit: '%',    label: 'O₂' },
+                    lambda: { min: 0.90, max: 1.10, unit: '', label: 'Lambda (λ)' },
+                    smoke:  { limit: 65,   unit: '%',    label: 'Smoke Density' }
+                };
+
+                let vehicleSearched = false;
+                let engineNumber = '';
+                let chassisNumber = '';
+                let certGenerated = false;
+                let hasPendingChallans = false;
+                let pendingChallanCount = 0;
+
+                function setFieldError(id, message) {
+                    const errEl = $('err_' + id);
+                    const input = $('f_' + id);
+                    if (errEl) errEl.textContent = message || '';
+                    if (input) {
+                        if (message) input.classList.add('has-error');
+                        else input.classList.remove('has-error');
+                    }
+                }
+
+                function clearAllErrors() {
+                    ['vehicleNo','regDate','ownerName','fuelType','vehicleType','centerId','machineId','testDateTime','co','hc','co2','o2','lambda'].forEach(id => setFieldError(id, ''));
+                }
+
+                function isNumberValid(s) {
+                    if (s === null || s === undefined) return false;
+                    const n = parseFloat(String(s).trim());
+                    return !isNaN(n) && isFinite(n);
+                }
+
+                function validateAll() {
+                    clearAllErrors();
+                    let valid = true;
+
+                    const vn = $('f_vehicleNo').value.trim();
+                    if (!vn) { setFieldError('vehicleNo', 'Vehicle number is required.'); valid = false; }
+                    else if (vn.length < 6) { setFieldError('vehicleNo', 'Enter a valid vehicle number.'); valid = false; }
+
+                    const rd = $('f_regDate').value.trim();
+                    if (!rd) { setFieldError('regDate', 'Registration date is required.'); valid = false; }
+                    else if (!/^\d{2}\/\d{2}\/\d{4}$/.test(rd)) { setFieldError('regDate', 'Format: DD/MM/YYYY'); valid = false; }
+
+                    const on = $('f_ownerName').value.trim();
+                    if (!on) { setFieldError('ownerName', 'Owner name is required.'); valid = false; }
+
+                    const ft = $('f_fuelType').value;
+                    if (!ft) { setFieldError('fuelType', 'Select fuel type.'); valid = false; }
+
+                    const vt = $('f_vehicleType').value;
+                    if (!vt) { setFieldError('vehicleType', 'Select vehicle type.'); valid = false; }
+
+                    const ci = $('f_centerId').value;
+                    if (!ci) { setFieldError('centerId', 'Select PUC center.'); valid = false; }
+
+                    const mi = $('f_machineId').value.trim();
+                    if (!mi) { setFieldError('machineId', 'Machine ID is required.'); valid = false; }
+
+                    const td = $('f_testDateTime').value.trim();
+                    if (!td) { setFieldError('testDateTime', 'Test date & time is required.'); valid = false; }
+                    else if (!/^\d{2}\/\d{2}\/\d{4}\s+\d{1,2}:\d{2}\s*(AM|PM)$/i.test(td)) { setFieldError('testDateTime', 'Format: DD/MM/YYYY HH:MM AM'); valid = false; }
+
+                    const co = $('f_co').value.trim();
+                    if (!co) { setFieldError('co', 'CO value required.'); valid = false; }
+                    else if (!isNumberValid(co)) { setFieldError('co', 'Must be a number.'); valid = false; }
+
+                    const hc = $('f_hc').value.trim();
+                    if (!hc) { setFieldError('hc', 'HC value required.'); valid = false; }
+                    else if (!isNumberValid(hc)) { setFieldError('hc', 'Must be a number.'); valid = false; }
+
+                    const co2 = $('f_co2').value.trim();
+                    if (!co2) { setFieldError('co2', 'CO₂ value required.'); valid = false; }
+                    else if (!isNumberValid(co2)) { setFieldError('co2', 'Must be a number.'); valid = false; }
+
+                    const o2 = $('f_o2').value.trim();
+                    if (!o2) { setFieldError('o2', 'O₂ value required.'); valid = false; }
+                    else if (!isNumberValid(o2)) { setFieldError('o2', 'Must be a number.'); valid = false; }
+
+                    const lambda = $('f_lambda').value.trim();
+                    if (!lambda) { setFieldError('lambda', 'Lambda value required.'); valid = false; }
+                    else if (!isNumberValid(lambda)) { setFieldError('lambda', 'Must be a number.'); valid = false; }
+
+                    return valid && vehicleSearched;
+                }
+
+                function updateGenerateButton() {
+                    const btn = $('btnGenerate');
+                    const ok = validateAllSilent();
+                    btn.disabled = !ok;
+                    if (!vehicleSearched) btn.disabled = true;
+                    if (hasPendingChallans) btn.disabled = true;
+                }
+
+                function validateAllSilent() {
+                    const vn = $('f_vehicleNo').value.trim();
+                    if (!vn || vn.length < 6) return false;
+                    if (!/^\d{2}\/\d{2}\/\d{4}$/.test($('f_regDate').value.trim())) return false;
+                    if (!$('f_ownerName').value.trim()) return false;
+                    if (!$('f_fuelType').value) return false;
+                    if (!$('f_vehicleType').value) return false;
+                    if (!$('f_centerId').value) return false;
+                    if (!$('f_machineId').value.trim()) return false;
+                    if (!/^\d{2}\/\d{2}\/\d{4}\s+\d{1,2}:\d{2}\s*(AM|PM)$/i.test($('f_testDateTime').value.trim())) return false;
+                    const keys = ['co','hc','co2','o2','lambda'];
+                    for (let i = 0; i < keys.length; i++) {
+                        if (!isNumberValid($('f_' + keys[i]).value.trim())) return false;
+                    }
+                    return true;
+                }
+
+                ['f_vehicleNo','f_regDate','f_ownerName','f_fuelType','f_vehicleType','f_centerId','f_machineId','f_testDateTime','f_co','f_hc','f_co2','f_o2','f_lambda','f_smoke','f_rpm','f_temp'].forEach(id => {
+                    const el = $(id);
+                    if (!el) return;
+                    el.addEventListener('input', updateGenerateButton);
+                    el.addEventListener('change', updateGenerateButton);
+                });
+
+                $('f_fuelType').addEventListener('change', function() {
+                    const ft = (this.value || '').toLowerCase();
+                    const smokeRow = $('smokeRow');
+                    const isDiesel = ft === 'diesel';
+                    if (isDiesel) smokeRow.classList.add('active');
+                    else smokeRow.classList.remove('active');
+                });
+
+                function generateCertNo() {
+                    const vn = ($('f_vehicleNo').value || '').replace(/\s|-/g, '').toUpperCase();
+                    const dt = $('f_testDateTime').value || '';
+                    const parts = dt.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                    let dd = '01', mm = '01', yy = '2026';
+                    if (parts) { dd = parts[1]; mm = parts[2]; yy = parts[3]; }
+                    const center = ($('f_centerId').value || '').split(' - ')[0].replace(/\D/g, '').slice(-4) || '1025';
+                    const rand = String(Math.floor(100 + Math.random() * 899));
+                    return ((vn.slice(0,4) || 'MH13') + dd + mm + yy.slice(2) + 'P' + center + rand.slice(-3)).toUpperCase();
+                }
+
+                function computeExpiry(testDateStr) {
+                    const m = (testDateStr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                    if (!m) return '';
+                    const d = parseInt(m[1], 10);
+                    const mo = parseInt(m[2], 10) - 1;
+                    const y = parseInt(m[3], 10);
+                    const dt = new Date(y, mo, d);
+                    dt.setFullYear(dt.getFullYear() + 1);
+                    return String(dt.getDate()).padStart(2,'0') + '/' + String(dt.getMonth()+1).padStart(2,'0') + '/' + dt.getFullYear();
+                }
+
+                function evaluateEmissions(fuelType) {
+                    const isDiesel = (fuelType || '').toLowerCase() === 'diesel';
+                    const results = [];
+                    let overallPass = true;
+
+                    function check(key, val) {
+                        const cfg = EMISSION_LIMITS[key];
+                        if (!cfg) return;
+                        let pass = true;
+                        let limitDisplay = '—';
+                        if (key === 'lambda') {
+                            if (val < cfg.min || val > cfg.max) pass = false;
+                            limitDisplay = cfg.min + ' – ' + cfg.max;
+                        } else if (cfg.limit !== null) {
+                            if (val > cfg.limit) pass = false;
+                            limitDisplay = cfg.limit + ' ' + cfg.unit;
+                        } else {
+                            limitDisplay = '—';
+                        }
+                        if (!pass) overallPass = false;
+                        results.push({
+                            label: cfg.label + (cfg.unit && cfg.limit !== null ? ' (' + cfg.unit + ')' : (cfg.unit ? ' ('+cfg.unit+')' : '')),
+                            value: val,
+                            limit: limitDisplay,
+                            pass: pass,
+                            unit: cfg.unit
+                        });
+                    }
+
+                    check('co', parseFloat($('f_co').value));
+                    check('hc', parseFloat($('f_hc').value));
+                    check('co2', parseFloat($('f_co2').value));
+                    check('o2', parseFloat($('f_o2').value));
+                    check('lambda', parseFloat($('f_lambda').value));
+                    if (isDiesel) {
+                        const smokeRaw = $('f_smoke').value.trim();
+                        if (isNumberValid(smokeRaw)) {
+                            check('smoke', parseFloat(smokeRaw));
+                        }
+                    }
+                    return { pass: overallPass, results: results };
+                }
+
+                function renderEmissionsTable(emissionData) {
+                    const tbody = $('emissionsTbody');
+                    tbody.innerHTML = emissionData.results.map(r => `
+                        <tr>
+                            <td>${r.label}</td>
+                            <td class="${r.pass ? 'pass-val' : 'fail-val'}">${r.value}${r.unit && !r.label.includes(r.unit) ? ' '+r.unit : ''}</td>
+                            <td class="limit">${r.limit}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                function lookupVehicleInStore(rawVN) {
+                    if (!window.VehicleData || !VehicleData.VEHICLES) return null;
+                    const norm = (rawVN || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    console.log('Looking up vehicle:', rawVN, '-> Normalized:', norm);
+                    console.log('Total vehicles in database:', VehicleData.VEHICLES.length);
+                    
+                    for (let i = 0; i < VehicleData.VEHICLES.length; i++) {
+                        const v = VehicleData.VEHICLES[i];
+                        const vnNorm = (v.reg || '').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+                        
+                        if (vnNorm === norm) {
+                            console.log('Match found for:', v.reg);
+                            return {
+                                regDate: v.registrationDateSlash || '',
+                                owner: v.ownerName || '',
+                                fuel: v.fuelType || '',
+                                type: v.vehicleType || '',
+                                engine: v.engineNo || '',
+                                chassis: v.chassisNo || ''
+                            };
+                        }
+                    }
+                    console.log('No match found for:', rawVN);
+                    console.log('Available vehicles (first 5):', VehicleData.VEHICLES.slice(0, 5).map(v => v.reg));
+                    return null;
+                }
+
+                function applyVehicleSearchResult(d) {
+                    $('f_regDate').value = d.regDate || '';
+                    $('f_ownerName').value = d.owner || '';
+                    if (d.fuel) {
+                        const opts = Array.from($('f_fuelType').options).map(o => o.value);
+                        if (opts.includes(d.fuel)) $('f_fuelType').value = d.fuel;
+                        else {
+                            const fuelOpts = Array.from($('f_fuelType').options).map(o => o.value.toLowerCase());
+                            const idx = fuelOpts.indexOf((d.fuel || '').toLowerCase());
+                            if (idx >= 0) $('f_fuelType').value = Array.from($('f_fuelType').options)[idx].value;
+                        }
+                        const ft = (d.fuel || '').toLowerCase();
+                        const smokeRow = $('smokeRow');
+                        if (ft === 'diesel') smokeRow.classList.add('active');
+                        else smokeRow.classList.remove('active');
+                    }
+                    if (d.type) {
+                        const opts = Array.from($('f_vehicleType').options).map(o => o.value);
+                        if (opts.includes(d.type)) $('f_vehicleType').value = d.type;
+                    }
+                    engineNumber = d.engine || '';
+                    chassisNumber = d.chassis || '';
+                    $('pv_engine').textContent = d.engine || '—';
+                    $('pv_chassis').textContent = d.chassis || '—';
+                    $('vehicleAutoBlock').classList.add('visible');
+                    vehicleSearched = true;
+                    
+                    // Handle challan status
+                    hasPendingChallans = d.hasPendingChallans || false;
+                    pendingChallanCount = d.pendingChallanCount || 0;
+                    
+                    // Show challan warning if applicable
+                    const challanWarningEl = document.getElementById('challanWarning');
+                    if (hasPendingChallans && challanWarningEl) {
+                        challanWarningEl.style.display = 'block';
+                        challanWarningEl.innerHTML = '<strong>⚠️ ' + pendingChallanCount + ' Pending Challan(s)</strong><br>PUC certificate cannot be issued until all challans are cleared.';
+                    } else if (challanWarningEl) {
+                        challanWarningEl.style.display = 'none';
+                    }
+                    
+                    updateGenerateButton();
+                }
+
+                let lastSearchedVN = '';
+                let autoSearchTimer = null;
+
+                async function searchVehicle(rawVN, opts) {
+                    opts = opts || {};
+                    const silent = opts.silent === true;
+                    const vn = (rawVN || '').trim();
+                    if (!vn) {
+                        if (!silent) {
+                            setFieldError('vehicleNo', 'Enter vehicle number to search.');
+                            $('f_vehicleNo').focus();
+                        }
+                        return { found: false };
+                    }
+                    setFieldError('vehicleNo', '');
+
+                    const normVN = vn.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    if (opts.avoidRepeated && lastSearchedVN === normVN) {
+                        return { found: true, skipped: true };
+                    }
+                    lastSearchedVN = normVN;
+
+                    const btn = $('btnSearchVehicle');
+                    const original = btn ? btn.innerHTML : '';
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8" style="animation:spin 1s linear infinite;"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Searching...';
+                    }
+
+                    let found = false;
+                    let resultData = null;
+                    const apiRes = await apiFetch('/puc/search-vehicle/' + encodeURIComponent(vn), { method: 'GET' });
+                    if (apiRes && apiRes.success && apiRes.data) {
+                        const v = apiRes.data;
+                        const fmt = v.registrationDate ? (() => {
+                            try {
+                                const d = new Date(v.registrationDate);
+                                if (!isNaN(d)) {
+                                    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+                                }
+                            } catch(e){}
+                            return v.registrationDate;
+                        })() : '';
+                        resultData = {
+                            regDate: fmt,
+                            owner: v.ownerName || '',
+                            fuel: v.fuelType || '',
+                            type: v.vehicleType || '',
+                            engine: v.engineNumber || '',
+                            chassis: v.chassisNumber || ''
+                        };
+                        
+                        // Check for pending challans
+                        const normVN = vn.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                        const hasPendingChallans = window.VehicleData && window.VehicleData.hasPendingChallans ? window.VehicleData.hasPendingChallans(normVN) : false;
+                        if (hasPendingChallans) {
+                            const pendingCount = window.VehicleData && window.VehicleData.getPendingChallanCount ? window.VehicleData.getPendingChallanCount(normVN) : 0;
+                            resultData.hasPendingChallans = true;
+                            resultData.pendingChallanCount = pendingCount;
+                        }
+                        
+                        applyVehicleSearchResult(resultData);
+                        found = true;
+                        if (!silent) {
+                            if (hasPendingChallans) {
+                                showToast('Vehicle found but has ' + resultData.pendingChallanCount + ' pending challan(s). PUC cannot be issued until challans are cleared.', 'error');
+                            } else {
+                                showToast('Vehicle found in RTO database. Details auto-filled.', 'success');
+                            }
+                        }
+                    } else {
+                        const storeResult = lookupVehicleInStore(vn);
+                        if (storeResult) {
+                            resultData = storeResult;
+                            
+                            // Check for pending challans in store result
+                            const normVN = vn.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                            const hasPendingChallans = window.VehicleData && window.VehicleData.hasPendingChallans ? window.VehicleData.hasPendingChallans(normVN) : false;
+                            if (hasPendingChallans) {
+                                const pendingCount = window.VehicleData && window.VehicleData.getPendingChallanCount ? window.VehicleData.getPendingChallanCount(normVN) : 0;
+                                resultData.hasPendingChallans = true;
+                                resultData.pendingChallanCount = pendingCount;
+                            }
+                            
+                            applyVehicleSearchResult(resultData);
+                            found = true;
+                            if (!silent) {
+                                if (hasPendingChallans) {
+                                    showToast('Vehicle found but has ' + resultData.pendingChallanCount + ' pending challan(s). PUC cannot be issued until challans are cleared.', 'error');
+                                } else {
+                                    showToast('Vehicle found in offline database. Details auto-filled.', 'success');
+                                }
+                            }
+                        }
+                    }
+
+                    if (!found) {
+                        engineNumber = '';
+                        chassisNumber = '';
+                        $('pv_engine').textContent = '—';
+                        $('pv_chassis').textContent = '—';
+                        $('vehicleAutoBlock').classList.remove('visible');
+                        vehicleSearched = true;
+                        updateGenerateButton();
+                        if (!silent) showToast('Vehicle not found in database. You may continue with manual entry.', 'warning');
+                    }
+
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = original;
+                        setTimeout(() => {
+                            if (btn && !btn.disabled) {
+                                const has = btn.querySelector('svg');
+                                if (!has) btn.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15" style="margin-right:7px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+                            }
+                        }, 0);
+                    }
+                    return { found: found, data: resultData };
+                }
+
+                $('btnSearchVehicle').addEventListener('click', function() {
+                    const vn = $('f_vehicleNo').value;
+                    searchVehicle(vn, { silent: false });
+                });
+
+                $('f_vehicleNo').addEventListener('input', function(e) {
+                    const vn = this.value.trim();
+                    clearTimeout(autoSearchTimer);
+                    if (vn.length < 6) return;
+                    autoSearchTimer = setTimeout(() => {
+                        searchVehicle(vn, { silent: false, avoidRepeated: true });
+                    }, 500);
+                });
+
+                $('f_vehicleNo').addEventListener('blur', function(e) {
+                    const vn = this.value.trim();
+                    clearTimeout(autoSearchTimer);
+                    if (vn.length < 6) return;
+                    searchVehicle(vn, { silent: false, avoidRepeated: true });
+                });
+
+                $('f_vehicleNo').addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        clearTimeout(autoSearchTimer);
+                        searchVehicle(this.value, { silent: false, avoidRepeated: true });
+                    }
+                });
+
+                // Autocomplete functionality for PUC portal
+                const pucVehicleInput = $('f_vehicleNo');
+                const pucAutocompleteDropdown = $('autocompleteDropdown');
+                let pucDebounceTimer;
+
+                pucVehicleInput.addEventListener('input', function(e) {
+                    const query = this.value.trim().toUpperCase();
+                    clearTimeout(pucDebounceTimer);
+                    
+                    if (query.length < 2) {
+                        pucAutocompleteDropdown.classList.remove('visible');
+                        return;
+                    }
+                    
+                    pucDebounceTimer = setTimeout(() => {
+                        if (!window.VehicleData || !VehicleData.VEHICLES) {
+                            pucAutocompleteDropdown.classList.remove('visible');
+                            return;
+                        }
+                        
+                        const matches = VehicleData.VEHICLES.filter(v => {
+                            const normReg = v.reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                            return normReg.includes(query.replace(/[^a-zA-Z0-9]/g, ''));
+                        }).slice(0, 10);
+                        
+                        if (matches.length > 0) {
+                            pucAutocompleteDropdown.innerHTML = matches.map(v => `
+                                <div class="autocomplete-item" data-reg="${v.reg}">
+                                    <div class="reg-number">${v.reg}</div>
+                                    <div class="owner-name">${v.ownerName}</div>
+                                    <div class="fuel-type">${v.fuelType} · ${v.vehicleType}</div>
+                                </div>
+                            `).join('');
+                            pucAutocompleteDropdown.classList.add('visible');
+                        } else {
+                            pucAutocompleteDropdown.classList.remove('visible');
+                        }
+                    }, 300);
+                });
+
+                // Handle autocomplete selection for PUC
+                pucAutocompleteDropdown.addEventListener('click', function(e) {
+                    const item = e.target.closest('.autocomplete-item');
+                    if (item) {
+                        const reg = item.dataset.reg;
+                        pucVehicleInput.value = reg;
+                        pucAutocompleteDropdown.classList.remove('visible');
+                        
+                        // Directly populate vehicle data first
+                        if (window.VehicleData && VehicleData.VEHICLES) {
+                            const normReg = reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                            for (let i = 0; i < VehicleData.VEHICLES.length; i++) {
+                                const v = VehicleData.VEHICLES[i];
+                                const vnNorm = (v.reg || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                                if (vnNorm === normReg) {
+                                    // Populate vehicle details directly
+                                    $('f_regDate').value = v.registrationDateSlash || '';
+                                    $('f_ownerName').value = v.ownerName || '';
+                                    if (v.fuelType) {
+                                        const opts = Array.from($('f_fuelType').options).map(o => o.value);
+                                        if (opts.includes(v.fuelType)) $('f_fuelType').value = v.fuelType;
+                                        else {
+                                            const fuelOpts = Array.from($('f_fuelType').options).map(o => o.value.toLowerCase());
+                                            const idx = fuelOpts.indexOf((v.fuelType || '').toLowerCase());
+                                            if (idx >= 0) $('f_fuelType').value = Array.from($('f_fuelType').options)[idx].value;
+                                        }
+                                        const ft = (v.fuelType || '').toLowerCase();
+                                        const smokeRow = $('smokeRow');
+                                        if (ft === 'diesel') smokeRow.classList.add('active');
+                                        else smokeRow.classList.remove('active');
+                                    }
+                                    if (v.vehicleType) {
+                                        const opts = Array.from($('f_vehicleType').options).map(o => o.value);
+                                        if (opts.includes(v.vehicleType)) $('f_vehicleType').value = v.vehicleType;
+                                    }
+                                    engineNumber = v.engineNo || '';
+                                    chassisNumber = v.chassisNo || '';
+                                    $('pv_engine').textContent = v.engineNo || '—';
+                                    $('pv_chassis').textContent = v.chassisNo || '—';
+                                    $('vehicleAutoBlock').classList.add('visible');
+                                    vehicleSearched = true;
+                                    
+                                    // Check for pending challans
+                                    const hasPendingChallans = window.VehicleData && window.VehicleData.hasPendingChallans ? window.VehicleData.hasPendingChallans(normReg) : false;
+                                    pendingChallanCount = window.VehicleData && window.VehicleData.getPendingChallanCount ? window.VehicleData.getPendingChallanCount(normReg) : 0;
+                                    
+                                    // Show challan warning if applicable
+                                    const challanWarningEl = document.getElementById('challanWarning');
+                                    if (hasPendingChallans && challanWarningEl) {
+                                        challanWarningEl.style.display = 'block';
+                                        challanWarningEl.innerHTML = '<strong>⚠️ ' + pendingChallanCount + ' Pending Challan(s)</strong><br>PUC certificate cannot be issued until all challans are cleared.';
+                                    } else if (challanWarningEl) {
+                                        challanWarningEl.style.display = 'none';
+                                    }
+                                    
+                                    updateGenerateButton();
+                                    console.log('Vehicle details populated via autocomplete:', v.reg);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Hide dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.autocomplete-search-wrapper')) {
+                        pucAutocompleteDropdown.classList.remove('visible');
+                    }
+                });
+
+                /* ====== Emission Test Simulator ====== */
+                let testTimerId = null;
+                let testSecondsLeft = 0;
+                let testRunning = false;
+                const TEST_DURATION_SEC = 60;
+                const CIRCUMFERENCE = 2 * Math.PI * 10;
+
+                function resetTestVisuals() {
+                    if ($('circProgress')) $('circProgress').style.strokeDashoffset = '0';
+                    if ($('circCounter')) $('circCounter').textContent = TEST_DURATION_SEC;
+                    if ($('btnRunTestText')) $('btnRunTestText').textContent = 'Run Emission Test';
+                    if ($('btnRunTest')) $('btnRunTest').classList.remove('running');
+                    if ($('testLivePanel')) $('testLivePanel').classList.remove('visible');
+                    ['co','hc','co2','o2','lambda','smoke','rpm','temp'].forEach(k => {
+                        const el = $('live_' + k);
+                        if (el) el.textContent = '—';
+                    });
+                }
+
+                function cancelEmissionTest() {
+                    if (testTimerId) { clearInterval(testTimerId); testTimerId = null; }
+                    testRunning = false;
+                    testSecondsLeft = 0;
+                    resetTestVisuals();
+                    if ($('btnRunTest')) $('btnRunTest').disabled = false;
+                }
+
+                function randBetween(a, b, decimals) {
+                    decimals = typeof decimals === 'number' ? decimals : 2;
+                    const v = a + Math.random() * (b - a);
+                    return (Math.round(v * Math.pow(10, decimals)) / Math.pow(10, decimals));
+                }
+
+                function generatePassingEmissionResults(fuelType) {
+                    const isDiesel = (fuelType || '').toLowerCase() === 'diesel';
+                    return {
+                        co:     randBetween(0.08, 0.35, 2),
+                        hc:     randBetween(35, 320, 0),
+                        co2:    randBetween(0.60, 1.45, 2),
+                        o2:     randBetween(0.30, 1.30, 2),
+                        lambda: randBetween(0.94, 1.04, 3),
+                        smoke:  isDiesel ? randBetween(22, 48, 1) : null,
+                        rpm:    randBetween(2100, 2800, 0),
+                        temp:   randBetween(72, 95, 0)
+                    };
+                }
+
+                function formatEmissionLive(key, val, fuelType) {
+                    if (val === null || val === undefined) return '—';
+                    if (key === 'smoke' && (fuelType || '').toLowerCase() !== 'diesel') return 'N/A';
+                    if (key === 'lambda') return Number(val).toFixed(3);
+                    if (key === 'hc' || key === 'rpm' || key === 'temp') return String(Math.round(val));
+                    return Number(val).toFixed(2);
+                }
+
+                function setFieldValue(id, val, triggerEvents) {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const strVal = (val === null || val === undefined) ? '' : String(val);
+                    try { el.value = strVal; } catch(e) { try { el.setAttribute('value', strVal); } catch(err){} }
+                    if (triggerEvents !== false) {
+                        try {
+                            el.dispatchEvent(new Event('input',  { bubbles: true, cancelable: true }));
+                        } catch(e){}
+                        try {
+                            el.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+                        } catch(e){}
+                    }
+                }
+
+                $('btnRunTest').addEventListener('click', function() {
+                    if (testRunning) return;
+
+                    const fuelType = $('f_fuelType').value;
+
+                    if (!$('f_centerId').value) {
+                        setFieldError('centerId', 'Select PUC center before starting test.');
+                        showToast('Select PUC Center and enter Machine ID before starting test.', 'warning');
+                        return;
+                    }
+                    if (!$('f_machineId').value.trim()) {
+                        setFieldError('machineId', 'Enter Machine ID before starting test.');
+                        showToast('Enter Machine ID before starting test.', 'warning');
+                        return;
+                    }
+                    if ($('f_vehicleNo').value.trim().length < 6 || !vehicleSearched) {
+                        showToast('Search the vehicle first before starting emission test.', 'warning');
+                        return;
+                    }
+                    setFieldError('centerId', '');
+                    setFieldError('machineId', '');
+
+                    testRunning = true;
+                    testSecondsLeft = TEST_DURATION_SEC;
+                    const btn = $('btnRunTest');
+                    btn.disabled = true;
+                    btn.classList.add('running');
+                    $('btnRunTestText').textContent = 'Test Running…';
+                    $('testLivePanel').classList.add('visible');
+                    $('testLiveStatus').textContent = 'Initialising emission analyser…';
+
+                    // Explicit visual reset of timer to 60
+                    $('circCounter').textContent = String(TEST_DURATION_SEC);
+                    $('circProgress').style.strokeDashoffset = String(CIRCUMFERENCE);
+
+                    const finalResults = generatePassingEmissionResults(fuelType);
+
+                    const isDiesel = (fuelType || '').toLowerCase() === 'diesel';
+                    const smokeShow = (fuelType || '').toLowerCase() === 'diesel';
+                    if (isDiesel && $('smokeRow')) $('smokeRow').classList.add('active');
+
+                    // Fixed-signature ramp function (randFn is 4th positional, actually used)
+                    function ramp(target, minN, noiseAmt, randFn, fallback) {
+                        try {
+                            const elapsed = TEST_DURATION_SEC - testSecondsLeft;
+                            const t = Math.min(1, Math.max(0, elapsed / TEST_DURATION_SEC));
+                            let base;
+                            if (t < 0.15) {
+                                base = minN + Math.random() * (target - minN) * 0.4;
+                            } else if (t < 0.80) {
+                                const rampT = (t - 0.15) / 0.65;
+                                base = minN + (target - minN) * (0.4 + 0.55 * rampT) + (Math.random() - 0.5) * noiseAmt;
+                            } else {
+                                base = target + (Math.random() - 0.5) * (noiseAmt * 0.25);
+                            }
+                            if (typeof randFn === 'function') return randFn(base);
+                            return Number(base).toFixed(2);
+                        } catch (e) {
+                            return fallback !== undefined ? fallback : '—';
+                        }
+                    }
+
+                    function safeText(id, value) {
+                        try {
+                            const el = document.getElementById(id);
+                            if (el) el.textContent = (value === null || value === undefined) ? '—' : String(value);
+                        } catch(e) {}
+                    }
+
+                    function commitResultsToForm() {
+                        try {
+                            const coStr  = Number(finalResults.co).toFixed(2);
+                            const hcStr  = String(Math.round(finalResults.hc));
+                            const co2Str = Number(finalResults.co2).toFixed(2);
+                            const o2Str  = Number(finalResults.o2).toFixed(2);
+                            const laStr  = Number(finalResults.lambda).toFixed(3);
+                            const smStr  = smokeShow ? Number(finalResults.smoke).toFixed(1) : '';
+                            const rpStr  = String(Math.round(finalResults.rpm));
+                            const tpStr  = String(Math.round(finalResults.temp));
+
+                            const ids = [
+                                ['f_co', coStr], ['f_hc', hcStr], ['f_co2', co2Str], ['f_o2', o2Str],
+                                ['f_lambda', laStr], ['f_smoke', smStr], ['f_rpm', rpStr], ['f_temp', tpStr]
+                            ];
+                            ids.forEach(function(pair) {
+                                try {
+                                    const inp = document.getElementById(pair[0]);
+                                    if (!inp) return;
+                                    inp.value = pair[1];
+                                    try { inp.dispatchEvent(new Event('input',  { bubbles: true })); } catch(e){}
+                                    try { inp.dispatchEvent(new Event('change', { bubbles: true })); } catch(e){}
+                                } catch(e) {}
+                            });
+                            try { updateGenerateButton(); } catch(e) {}
+                        } catch(err) {
+                            try { showToast('Fill error: ' + err.message, 'danger'); } catch(e) {}
+                        }
+                    }
+
+                    function finishTest() {
+                        try { clearInterval(testTimerId); } catch(e) {}
+                        testTimerId = null;
+                        testRunning = false;
+                        testSecondsLeft = 0;
+
+                        $('circCounter').textContent = '✓';
+                        $('circProgress').style.strokeDashoffset = '0';
+                        try {
+                            $('testLiveStatus').innerHTML = '<span style="color:#065F46;">✅ Test complete. Results filled into form below.</span>';
+                        } catch(e) {}
+
+                        commitResultsToForm();
+                        setTimeout(commitResultsToForm, 50);
+                        setTimeout(commitResultsToForm, 200);
+
+                        try {
+                            $('btnRunTestText').textContent = 'Re-run Test';
+                            btn.disabled = false;
+                            btn.classList.remove('running');
+                            btn.style.background = '#ECFDF5';
+                            btn.style.color = '#065F46';
+                            btn.style.borderColor = '#34D399';
+                        } catch(e) {}
+
+                        try { updateGenerateButton(); } catch(e) {}
+                        try { showToast('✅ Emission test completed. All values auto-filled (PASS range).', 'success'); } catch(e) {}
+
+                        setTimeout(function() {
+                            try { $('testLivePanel').classList.remove('visible'); } catch(e) {}
+                            try { $('circProgress').style.strokeDashoffset = '0'; } catch(e) {}
+                            try { $('circCounter').textContent = String(TEST_DURATION_SEC); } catch(e) {}
+                        }, 3500);
+                    }
+
+                    // Fallback: ensure results fill even if the interval throws every tick
+                    const fallbackTimer = setTimeout(finishTest, TEST_DURATION_SEC * 1000 + 400);
+
+                    testTimerId = setInterval(function() {
+                        try {
+                            testSecondsLeft = Math.max(0, testSecondsLeft - 1);
+                            const elapsed = TEST_DURATION_SEC - testSecondsLeft;
+                            const progress = elapsed / TEST_DURATION_SEC;
+
+                            safeText('circCounter', String(testSecondsLeft));
+                            try {
+                                $('circProgress').style.strokeDashoffset = String(CIRCUMFERENCE * (1 - progress));
+                            } catch(e) {}
+
+                            try {
+                                const live_co     = ramp(finalResults.co, 0.02, 0.08, v => Number(v).toFixed(2));
+                                const live_hc     = ramp(finalResults.hc, 10, 35, v => String(Math.round(v)));
+                                const live_co2    = ramp(finalResults.co2, 0.25, 0.12, v => Number(v).toFixed(2));
+                                const live_o2     = ramp(finalResults.o2, 0.25, 0.12, v => Number(v).toFixed(2));
+                                const live_lambda = ramp(finalResults.lambda, 0.97, 0.03, v => Number(v).toFixed(3));
+                                const live_smoke  = smokeShow ? ramp(finalResults.smoke, 20, 10, v => Number(v).toFixed(1)) : 'N/A';
+                                const live_rpm    = ramp(finalResults.rpm, 900, 180, v => String(Math.round(v)));
+                                const live_temp   = ramp(finalResults.temp, 30, 2.5, v => String(Math.round(v)));
+
+                                safeText('live_co', live_co);
+                                safeText('live_hc', live_hc);
+                                safeText('live_co2', live_co2);
+                                safeText('live_o2', live_o2);
+                                safeText('live_lambda', live_lambda);
+                                safeText('live_smoke', live_smoke);
+                                safeText('live_rpm', live_rpm);
+                                safeText('live_temp', live_temp);
+                            } catch(rampErr) {}
+
+                            try {
+                                let status = 'Finalising readings & computing smoke density…';
+                                if (elapsed < 4)       status = 'Initialising emission analyser…';
+                                else if (elapsed < 15) status = 'Warming up engine… sample intake ongoing.';
+                                else if (elapsed < 42) status = 'Measuring CO, HC, CO₂, O₂ — idle test cycle.';
+                                else if (elapsed < 52) status = 'High-idle lambda verification in progress…';
+                                $('testLiveStatus').textContent = status;
+                            } catch(e) {}
+
+                            if (testSecondsLeft <= 0) {
+                                try { clearTimeout(fallbackTimer); } catch(e) {}
+                                finishTest();
+                                return;
+                            }
+                        } catch(tickErr) {
+                            // Any uncaught error in a tick: still check if we should end
+                            try {
+                                if (testSecondsLeft <= 0) {
+                                    clearTimeout(fallbackTimer);
+                                    finishTest();
+                                }
+                            } catch(e) {}
+                        }
+                    }, 1000);
+                });
+
+                $('btnReset').addEventListener('click', function() {
+                    cancelEmissionTest();
+                    if ($('btnRunTest')) {
+                        $('btnRunTest').style.background = '';
+                        $('btnRunTest').style.color = '';
+                        $('btnRunTest').style.borderColor = '';
+                    }
+                    if (!confirm('Reset all entered data?')) return;
+                    $('pucIssueForm').reset();
+                    $('f_fuelType').dispatchEvent(new Event('change'));
+                    vehicleSearched = false;
+                    certGenerated = false;
+                    engineNumber = '';
+                    chassisNumber = '';
+                    lastSearchedVN = '';
+                    clearTimeout(autoSearchTimer);
+                    $('pv_engine').textContent = '—';
+                    $('pv_chassis').textContent = '—';
+                    $('vehicleAutoBlock').classList.remove('visible');
+                    clearAllErrors();
+                    updateGenerateButton();
+                    $('pucPreviewPanel').classList.remove('visible');
+                    $('pucLoading').classList.remove('visible');
+                    $('pucCertWrap').classList.remove('visible');
+                    const now = new Date();
+                    const dateStr = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();
+                    let hrs = now.getHours();
+                    const mins = String(now.getMinutes()).padStart(2,'0');
+                    const ampm = hrs >= 12 ? 'PM' : 'AM';
+                    hrs = hrs % 12 || 12;
+                    $('f_testDateTime').value = dateStr + ' ' + hrs + ':' + mins + ' ' + ampm;
+                    showToast('Form has been reset.', 'info');
+                });
+
+                function parseDDMMYYYY(s) {
+                    if (!s) return null;
+                    const parts = s.split('/');
+                    if (parts.length === 3) {
+                        try {
+                            const d = parseInt(parts[0], 10);
+                            const m = parseInt(parts[1], 10);
+                            const y = parseInt(parts[2], 10);
+                            if (y > 0 && m >= 1 && m <= 12 && d >= 1 && d <= 31) {
+                                return y + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+                            }
+                        } catch (e) {}
+                    }
+                    return s;
+                }
+
+                function parseTestDateTime(s) {
+                    if (!s) return null;
+                    const m = s.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+                    if (m) {
+                        let hr = parseInt(m[4], 10);
+                        const mi = parseInt(m[5], 10);
+                        const mo = parseInt(m[2], 10);
+                        const da = parseInt(m[1], 10);
+                        const ye = parseInt(m[3], 10);
+                        if (/PM/i.test(m[6]) && hr < 12) hr += 12;
+                        if (/AM/i.test(m[6]) && hr === 12) hr = 0;
+                        return ye + '-' + String(mo).padStart(2,'0') + '-' + String(da).padStart(2,'0') +
+                            'T' + String(hr).padStart(2,'0') + ':' + String(mi).padStart(2,'0') + ':00';
+                    }
+                    return s;
+                }
+
+                $('btnGenerate').addEventListener('click', async function() {
+                    if (!validateAll()) {
+                        showToast('Please correct highlighted errors before generating.', 'danger');
+                        return;
+                    }
+                    if (!vehicleSearched) {
+                        showToast('Please search the vehicle first.', 'warning');
+                        return;
+                    }
+
+                    const fuelType = $('f_fuelType').value;
+                    const emissionEval = evaluateEmissions(fuelType);
+                    const certNo = generateCertNo();
+                    const testDateStr = $('f_testDateTime').value;
+                    const expiryDate = computeExpiry(testDateStr);
+
+                    $('pucPreviewPanel').classList.add('visible');
+                    $('pucCertWrap').classList.remove('visible');
+                    $('pucLoading').classList.add('visible');
+
+                    window.requestAnimationFrame(() => {
+                        $('pucPreviewPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+
+                    await new Promise(r => setTimeout(r, 1000));
+
+                    $('pv_regNo').textContent = $('f_vehicleNo').value.trim().toUpperCase();
+                    $('pv_owner').textContent = $('f_ownerName').value.trim();
+                    $('pv_vehType').textContent = $('f_vehicleType').value || '—';
+                    $('pv_fuel').textContent = fuelType || '—';
+                    $('pv_regDate').textContent = $('f_regDate').value.trim() || '—';
+                    $('pv_engineCert').textContent = engineNumber || '—';
+                    $('pv_chassisCert').textContent = chassisNumber || '—';
+
+                    $('pv_certNo').textContent = certNo;
+                    $('pv_certDate').textContent = testDateStr;
+                    $('pv_testDate').textContent = testDateStr;
+                    $('pv_center').textContent = $('f_centerId').value || '—';
+                    $('pv_machineId').textContent = $('f_machineId').value.trim() || '—';
+                    const odoRaw = $('f_odometer').value.trim();
+                    $('pv_odo').textContent = odoRaw ? (odoRaw.toUpperCase().endsWith('KM') ? odoRaw : odoRaw + ' KM') : '—';
+                    $('pv_validity').textContent = expiryDate || '—';
+
+                    renderEmissionsTable(emissionEval);
+
+                    const badge = $('certStatusBadge');
+                    const statusIcon = $('certStatusIcon');
+                    const statusText = $('certStatusText');
+                    const pvStatus = $('pv_status');
+                    const signStatus = $('pv_signStatus');
+
+                    if (emissionEval.pass) {
+                        badge.className = 'puc-status-badge pass';
+                        statusIcon.textContent = '✅';
+                        statusText.textContent = 'PUC PASSED';
+                        pvStatus.className = 'puc-bottom-val-pass';
+                        pvStatus.textContent = '✅ PUC PASSED';
+                        signStatus.textContent = 'PASSED';
+                    } else {
+                        badge.className = 'puc-status-badge fail';
+                        statusIcon.textContent = '❌';
+                        statusText.textContent = 'PUC FAILED';
+                        pvStatus.className = 'puc-bottom-val-fail';
+                        pvStatus.textContent = '❌ PUC FAILED';
+                        signStatus.textContent = 'FAILED';
+                    }
+
+                    const signerName = auth && auth.user ? auth.user.fullName : 'Authorized PUC Officer';
+                    $('pv_signName').textContent = signerName;
+
+                    $('pucLoading').classList.remove('visible');
+                    $('pucCertWrap').classList.add('visible');
+
+                    const btn = $('btnGenerate');
+                    const origHTML = btn.innerHTML;
+                    btn.disabled = true;
+                    $('btnGenerateText').textContent = 'Processing...';
+
+                    const centerVal = $('f_centerId').value || '';
+                    const centerParts = centerVal.split(' - ');
+                    const centerId = centerParts[0] || '';
+                    const centerName = centerParts.slice(1).join(' - ') || '';
+                    const validFromVal = parseDDMMYYYY(testDateStr.split(' ')[0]) || new Date().toISOString().slice(0,10);
+                    const validUptoVal = parseDDMMYYYY(expiryDate) || null;
+                    const testDtVal = parseTestDateTime(testDateStr) || new Date().toISOString().slice(0,16);
+                    const odoStr = odoRaw.replace(/,/g,'');
+                    const odoNum = odoStr ? parseFloat(odoStr) : null;
+
+                    const payload = {
+                        vehicleNo: $('f_vehicleNo').value.trim(),
+                        ownerName: $('f_ownerName').value.trim(),
+                        vehicleType: $('f_vehicleType').value,
+                        fuelType: fuelType,
+                        registrationDate: parseDDMMYYYY($('f_regDate').value),
+                        engineNumber: engineNumber || null,
+                        chassisNumber: chassisNumber || null,
+                        centerId: centerId,
+                        centerName: centerName,
+                        machineId: $('f_machineId').value.trim(),
+                        testDateTime: testDtVal,
+                        emissionNorms: $('f_emissionNorms').value || 'BHARAT STAGE VI',
+                        odometerKm: isNaN(odoNum) ? null : odoNum,
+                        coPercent: $('f_co').value ? parseFloat($('f_co').value) : null,
+                        hcPpm: $('f_hc').value ? parseFloat($('f_hc').value) : null,
+                        co2Percent: $('f_co2').value ? parseFloat($('f_co2').value) : null,
+                        o2Percent: $('f_o2').value ? parseFloat($('f_o2').value) : null,
+                        lambdaValue: $('f_lambda').value ? parseFloat($('f_lambda').value) : null,
+                        smokeDensity: (fuelType || '').toLowerCase() === 'diesel' && isNumberValid($('f_smoke').value) ? parseFloat($('f_smoke').value) : null,
+                        rpm: isNumberValid($('f_rpm').value) ? parseFloat($('f_rpm').value) : null,
+                        temperature: isNumberValid($('f_temp').value) ? parseFloat($('f_temp').value) : null,
+                        pollutionUnderControl: emissionEval.pass ? 'Yes' : 'No',
+                        passStatus: emissionEval.pass ? 'PASS' : 'FAIL',
+                        validFrom: validFromVal,
+                        validUpto: validUptoVal,
+                        certificateNumber: certNo,
+                        issuedByUserId: auth && auth.user ? auth.user.id : null,
+                        issuedByName: signerName
+                    };
+
+                    let success = true;
+                    const apiRes = await apiFetch('/puc/issue', {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+                    if (apiRes && apiRes.success && apiRes.data) {
+                        const finalCertNo = apiRes.data.certificateNumber || certNo;
+                        if (apiRes.data.certificateNumber) {
+                            $('pv_certNo').textContent = apiRes.data.certificateNumber;
+                        }
+                        showToast('✅ PUC Certificate issued & saved to database! No.: ' + finalCertNo, 'success');
+                    } else {
+                        showToast('✅ PUC Certificate generated (offline mode). No.: ' + certNo, 'warning');
+                    }
+
+                    btn.innerHTML = origHTML;
+                    btn.disabled = false;
+                    certGenerated = true;
+                });
+
+                function buildStandaloneCertificateHtml() {
+                    const certEl = $('pucCertificate');
+                    if (!certEl) return '';
+                    const styleEl = document.querySelector('style');
+                    const stylesText = styleEl ? styleEl.innerHTML : '';
+                    const googleFonts = document.querySelectorAll('link[rel="stylesheet"]');
+                    let fontLinks = '';
+                    googleFonts.forEach(l => { fontLinks += l.outerHTML; });
+                    return (
+                        '<!DOCTYPE html><html><head>' +
+                        '<meta charset="UTF-8">' +
+                        '<title>PUC Certificate - ' + ($('pv_certNo').textContent || '') + '</title>' +
+                        fontLinks +
+                        '<style>' +
+                        '@page { size: A4 portrait; margin: 0; }' +
+                        'html, body { margin: 0; padding: 0; background: #F1F5F9; }' +
+                        '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
+                        stylesText +
+                        '.puc-preview-header, .puc-cert-actions { display: none !important; }' +
+                        '.puc-certificate { margin: 20px auto; border: 1px solid #CBD5E1; box-shadow: 0 4px 24px rgba(15,23,42,.08); width: 210mm; min-height: 297mm; background:#FFFFFF; }' +
+                        '@media print { html, body { background: #fff; } .puc-certificate { margin: 0 auto; border: none; box-shadow: none; } }' +
+                        '</style>' +
+                        '</head><body>' +
+                        certEl.outerHTML +
+                        '</body></html>'
+                    );
+                }
+
+                $('btnPrint').addEventListener('click', function() {
+                    if (!certGenerated) return;
+                    const standaloneHtml = buildStandaloneCertificateHtml();
+                    const printWin = window.open('', '_blank', 'noopener,noreferrer');
+                    if (!printWin) {
+                        showToast('⚠️ Please allow pop-ups to open print preview.', 'warning');
+                        try { window.print(); } catch (e) {}
+                        return;
+                    }
+                    printWin.document.open();
+                    printWin.document.write(standaloneHtml);
+                    printWin.document.close();
+                    function tryPrint() {
+                        try {
+                            printWin.focus();
+                            setTimeout(() => {
+                                try { printWin.print(); }
+                                catch (e) {}
+                            }, 600);
+                        } catch (e) {}
+                    }
+                    if (printWin.document.readyState === 'complete') {
+                        tryPrint();
+                    } else {
+                        printWin.onload = tryPrint;
+                        setTimeout(tryPrint, 1500);
+                    }
+                });
+
+                $('btnDownloadPdf').addEventListener('click', function() {
+                    if (!certGenerated) return;
+                    const standaloneHtml = buildStandaloneCertificateHtml();
+                    if (!standaloneHtml) return;
+                    const certNo = $('pv_certNo').textContent || 'PUC';
+                    const regNo = $('pv_regNo').textContent || '';
+                    const safeReg = (regNo || certNo).replace(/\s+/g,'').replace(/[^A-Z0-9\-]/gi,'');
+                    const blob = new Blob(['\ufeff', standaloneHtml], { type: 'text/html;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'PUC_Certificate_' + safeReg + '.htm';
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    try { a.click(); }
+                    catch (e) {
+                        try { window.open(url, '_blank'); }
+                        catch (e2) { showToast('Download blocked. Please try again.', 'danger'); }
+                    }
+                    setTimeout(() => {
+                        try { document.body.removeChild(a); } catch (e) {}
+                        try { URL.revokeObjectURL(url); } catch (e) {}
+                    }, 800);
+                    showToast('✅ Certificate saved (' + a.download + '). Open in browser → Print → Save as PDF.', 'success');
+                });
+
+                $('btnShare').addEventListener('click', async function() {
+                    if (!certGenerated) return;
+                    const shareData = {
+                        title: 'PUC Certificate - ' + $('pv_certNo').textContent,
+                        text: 'Pollution Under Control Certificate for Vehicle ' + $('pv_regNo').textContent,
+                        url: window.location.href
+                    };
+                    if (navigator.share) {
+                        try { await navigator.share(shareData); } catch(e) {}
+                    } else {
+                        try {
+                            await navigator.clipboard.writeText('PUC Certificate: ' + $('pv_certNo').textContent + ' | Vehicle: ' + $('pv_regNo').textContent + ' | Status: ' + $('certStatusText').textContent);
+                            showToast('Certificate details copied to clipboard!', 'success');
+                        } catch(e) {
+                            showToast('Share: Copy the certificate URL from address bar.', 'info');
+                        }
+                    }
+                });
+
+                $('btnEmail').addEventListener('click', function() {
+                    if (!certGenerated) return;
+                    const subject = encodeURIComponent('PUC Certificate - ' + $('pv_regNo').textContent + ' (' + $('pv_certNo').textContent + ')');
+                    const body = encodeURIComponent(
+                        'Dear Vehicle Owner,\n\n' +
+                        'Please find your PUC Certificate details below:\n\n' +
+                        'Certificate Number: ' + $('pv_certNo').textContent + '\n' +
+                        'Vehicle Number: ' + $('pv_regNo').textContent + '\n' +
+                        'Owner Name: ' + $('pv_owner').textContent + '\n' +
+                        'Issue Date: ' + $('pv_certDate').textContent + '\n' +
+                        'Valid Up To: ' + $('pv_validity').textContent + '\n' +
+                        'Status: ' + $('certStatusText').textContent + '\n\n' +
+                        'Regards,\n' + ($('pv_center').textContent || 'PUC Center')
+                    );
+                    window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+                });
+
+                function showToast(msg, type) {
+                    const t = document.createElement('div');
+                    t.style.cssText = 'position:fixed;top:92px;right:32px;max-width:440px;padding:13px 15px;background:#fff;border:1px solid #E2E8F0;border-left:4px solid #0B4F8A;display:flex;align-items:flex-start;gap:11px;z-index:9999;transform:translateX(500px);opacity:0;transition:all .3s cubic-bezier(.2,.8,.2,1);';
+                    if (type === 'success') t.style.borderLeftColor = '#059669';
+                    if (type === 'warning') t.style.borderLeftColor = '#D97706';
+                    if (type === 'danger')  t.style.borderLeftColor = '#B91C1C';
+                    const iconBg = type === 'success' ? '#059669' : type === 'warning' ? '#D97706' : type === 'danger' ? '#B91C1C' : '#0B4F8A';
+                    const iconChar = type === 'success' ? '✓' : type === 'warning' ? '!' : type === 'danger' ? '✕' : 'i';
+                    t.innerHTML = `
+                        <div style="width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;flex-shrink:0;margin-top:1px;background:${iconBg};font-weight:800;font-size:12px;">${iconChar}</div>
+                        <div style="flex:1;">
+                            <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:2px;">PUC Certificate</div>
+                            <div style="font-size:12px;color:#475569;line-height:1.45;">${msg}</div>
+                        </div>
+                        <button style="background:none;border:none;color:#94A3B8;font-size:18px;cursor:pointer;line-height:1;padding:2px 4px;" onclick="this.parentElement.remove()">×</button>
+                    `;
+                    document.body.appendChild(t);
+                    requestAnimationFrame(() => { t.style.transform = 'translateX(0)'; t.style.opacity = '1'; });
+                    setTimeout(() => { t.style.transform = 'translateX(500px)'; t.style.opacity = '0'; setTimeout(() => t.remove(), 320); }, 5200);
+                }
+
+                const now = new Date();
+                const dateStr = String(now.getDate()).padStart(2,'0') + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + now.getFullYear();
+                let hrs = now.getHours();
+                const mins = String(now.getMinutes()).padStart(2,'0');
+                const ampm = hrs >= 12 ? 'PM' : 'AM';
+                hrs = hrs % 12 || 12;
+                $('f_testDateTime').value = dateStr + ' ' + hrs + ':' + mins + ' ' + ampm;
+
+                if (auth && auth.user) {
+                    const role = auth.user.role || '';
+                    const centerSelect = $('f_centerId');
+                    const machineInput = $('f_machineId');
+                    if (role === 'PUC_CENTER') {
+                        let matched = false;
+                        const userCenterName = (auth.user.centerName || '').trim().toLowerCase();
+                        const userFullName = (auth.user.fullName || '').trim().toLowerCase();
+                        if (centerSelect.options.length > 1) {
+                            for (let i = 1; i < centerSelect.options.length; i++) {
+                                const optText = centerSelect.options[i].text.toLowerCase();
+                                if (userCenterName && optText.includes(userCenterName)) {
+                                    centerSelect.selectedIndex = i; matched = true; break;
+                                }
+                                if (!matched && userFullName) {
+                                    const firstWord = userFullName.split(' ')[0];
+                                    if (firstWord && optText.includes(firstWord)) {
+                                        centerSelect.selectedIndex = i; matched = true; break;
+                                    }
+                                }
+                            }
+                        }
+                        if (!matched && auth.user.centerName) {
+                            const newOpt = document.createElement('option');
+                            newOpt.value = auth.user.centerName;
+                            newOpt.textContent = auth.user.centerName;
+                            newOpt.selected = true;
+                            centerSelect.appendChild(newOpt);
+                        }
+                        if (auth.user.licenseNumber) {
+                            machineInput.value = auth.user.licenseNumber;
+                        } else if (auth.user.centerName) {
+                            const short = auth.user.centerName.replace(/[^A-Z0-9]/gi,'').toUpperCase().slice(0,8);
+                            machineInput.value = 'PUC-MACH-' + (short || '0001');
+                        } else {
+                            machineInput.value = 'PUC-MACH-0001';
+                        }
+                    }
+                    centerSelect.disabled = true;
+                    machineInput.disabled = true;
+                }
+
+                updateGenerateButton();
+            }
+        })();
+    </script>
+</body>
+</html>

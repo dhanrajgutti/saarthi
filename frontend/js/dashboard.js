@@ -26,11 +26,13 @@ const DashboardApp = (function() {
         overview: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
         verifyVehicle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
         issueChallan: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
-        suspiciousList: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-        todayDuty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+        challanHistory: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+        todayDuty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y1="10"/></svg>',
         newTest: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+        issuePuc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
         renewalReminders: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
         reports: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+        history: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/><path d="M3 12h2"/></svg>',
         newPolicy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>',
         issuePolicy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
         verifyPolicy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
@@ -44,23 +46,19 @@ const DashboardApp = (function() {
             { key: 'overview', label: 'Overview', icon: SIDEBAR_ICONS.overview, href: 'police-dashboard.html' },
             { key: 'verifyVehicle', label: 'Verify Vehicle', icon: SIDEBAR_ICONS.verifyVehicle, href: 'verify-vehicle.html' },
             { key: 'issueChallan', label: 'Issue Challan', icon: SIDEBAR_ICONS.issueChallan, href: 'issue-challan.html' },
-            { key: 'suspiciousList', label: 'Suspicious List', icon: SIDEBAR_ICONS.suspiciousList, href: 'suspicious-list.html' },
+            { key: 'challanHistory', label: 'Challan History', icon: SIDEBAR_ICONS.challanHistory, href: 'challan-history.html' },
             { key: 'todayDuty', label: 'Today Duty', icon: SIDEBAR_ICONS.todayDuty, href: 'police-dashboard.html' }
         ],
         PUC_CENTER: [
             { key: 'overview', label: 'Overview', icon: SIDEBAR_ICONS.overview, href: 'puc-dashboard.html' },
-            { key: 'newTest', label: 'New Test', icon: SIDEBAR_ICONS.newTest, href: 'new-puc-test.html' },
-            { key: 'renewalReminders', label: 'Renewal Reminders', icon: SIDEBAR_ICONS.renewalReminders, href: 'send-reminders.html' },
-            { key: 'reports', label: 'Reports', icon: SIDEBAR_ICONS.reports, href: 'puc-reports.html' }
+            { key: 'issuePuc', label: 'Issue PUC', icon: SIDEBAR_ICONS.issuePuc, href: 'issue-puc.html' },
+            { key: 'history', label: 'History', icon: SIDEBAR_ICONS.history, href: 'puc-history.html' },
+            { key: 'renewalReminders', label: 'Renewal Reminders', icon: SIDEBAR_ICONS.renewalReminders, href: 'send-reminders.html' }
         ],
         INSURANCE_AGENCY: [
             { key: 'overview', label: 'Overview', icon: SIDEBAR_ICONS.overview, href: 'insurance-dashboard.html' },
             { key: 'newPolicy', label: 'New Policy', icon: SIDEBAR_ICONS.newPolicy, href: 'new-policy.html' },
-            { key: 'issuePolicy', label: 'Issue Policy', icon: SIDEBAR_ICONS.issuePolicy, href: 'issue-policy.html' },
-            { key: 'verifyPolicy', label: 'Verify Policy', icon: SIDEBAR_ICONS.verifyPolicy, href: 'new-policy.html' },
-            { key: 'renewals', label: 'Renewals', icon: SIDEBAR_ICONS.renewals, href: 'insurance-dashboard.html' },
-            { key: 'claimsDesk', label: 'Claims Desk', icon: SIDEBAR_ICONS.claimsDesk, href: 'insurance-dashboard.html' },
-            { key: 'customers', label: 'Customers', icon: SIDEBAR_ICONS.customers, href: 'insurance-dashboard.html' }
+            { key: 'history', label: 'History', icon: SIDEBAR_ICONS.history, href: 'insurance-history.html' }
         ]
     };
 
@@ -364,7 +362,6 @@ const DashboardApp = (function() {
                     </a>
                 </div>
                 <div class="func-page-heading">
-                    ${iconHtml}
                     <div class="func-page-title-wrap">
                         <h2 class="func-page-title">${pageTitle}</h2>
                         ${descHtml}
@@ -442,7 +439,6 @@ const DashboardApp = (function() {
                     </a>
                 </div>
                 <div class="func-page-heading">
-                    ${iconHtml}
                     <div class="func-page-title-wrap">
                         <h2 class="func-page-title">${pageTitle}</h2>
                         ${descHtml}

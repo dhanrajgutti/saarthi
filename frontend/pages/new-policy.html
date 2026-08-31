@@ -3,257 +3,2193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Policy - Vehicle Verification Portal</title>
+    <title>Issue Insurance - Bharat RTO Portal</title>
     <link rel="stylesheet" href="../css/dashboard.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .func-page-layout {
+            background: #FFFFFF;
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .ins-page-wrap {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            align-items: start;
+            background: #F8FAFC;
+            min-height: calc(100vh - 140px);
+            width: 100%;
+            margin: 0;
+            padding: 14px 20px 24px;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .ins-page-wrap { padding: 12px 14px 20px; }
+        }
+
+        /* ====== Page Hero ====== */
+        .ins-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .ins-hero-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.2px;
+        }
+        .ins-hero-sub {
+            font-size: 14px;
+            color: #64748B;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .ins-breadcrumb {
+            font-size: 13px;
+            color: #64748B;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 6px;
+        }
+        .ins-breadcrumb .crumb-link {
+            color: #002B5C;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .ins-breadcrumb .crumb-sep {
+            color: #94A3B8;
+        }
+        .ins-breadcrumb .crumb-current {
+            color: #64748B;
+            font-weight: 500;
+        }
+
+        /* ====== Section Cards ====== */
+        .ins-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 22px 24px;
+            margin-bottom: 18px;
+        }
+
+        .ins-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .ins-card-icon {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            color: #002B5C;
+        }
+        .ins-card-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #002B5C;
+            letter-spacing: 0.2px;
+        }
+
+        /* ====== Search Row ====== */
+        .search-layout {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+        @media (max-width: 968px) {
+            .search-layout { grid-template-columns: 1fr; }
+        }
+
+        .search-form-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: end;
+        }
+        @media (max-width: 640px) {
+            .search-form-row { grid-template-columns: 1fr; }
+        }
+
+        .ins-form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+        .ins-form-label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            letter-spacing: 0.1px;
+        }
+        .ins-required { color: #DC2626; font-size: 14px; font-weight: 700; }
+
+        .ins-input,
+        .ins-select,
+        .ins-textarea {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            font-size: 15px;
+            color: #0F172A;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+            box-sizing: border-box;
+        }
+        .ins-textarea {
+            height: auto;
+            padding: 11px 13px;
+            resize: vertical;
+            min-height: 78px;
+            line-height: 1.5;
+        }
+        .ins-input::placeholder, .ins-textarea::placeholder { color: #94A3B8; }
+        .ins-input:focus, .ins-select:focus, .ins-textarea:focus {
+            border-color: #002B5C;
+            box-shadow: 0 0 0 3px rgba(0, 43, 92, 0.12);
+        }
+        .ins-input:disabled, .ins-select:disabled {
+            background: #F8FAFC;
+            color: #475569;
+            cursor: not-allowed;
+        }
+        .ins-input.has-error, .ins-select.has-error {
+            border-color: #DC2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+        }
+
+        /* Input with rupee prefix */
+        .ins-input-rupee {
+            position: relative;
+        }
+        .ins-input-rupee .rupee-prefix {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748B;
+            pointer-events: none;
+            background: #F1F5F9;
+            padding: 11px 12px;
+            border-right: 1px solid #CBD5E1;
+            border-radius: 6px 0 0 6px;
+            height: 48px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+        }
+        .ins-input-rupee .ins-input {
+            padding-left: 52px;
+        }
+
+        .ins-btn-fetch {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 24px;
+            height: 48px;
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: #002B5C;
+            color: #FFFFFF;
+            border-radius: 6px;
+            transition: all .15s;
+            white-space: nowrap;
+            letter-spacing: 0.2px;
+            font-family: 'Inter', sans-serif;
+        }
+        .ins-btn-fetch:hover { background: #001A3D; }
+        .ins-btn-fetch:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .ins-btn-fetch svg { width: 16px; height: 16px; }
+
+        /* Success toast */
+        .success-toast {
+            display: none;
+            background: #ECFDF5;
+            border: 1px solid #6EE7B7;
+            border-radius: 10px;
+            padding: 14px 18px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 360px;
+        }
+        .success-toast.visible {
+            display: flex;
+            animation: toastSlide .4s cubic-bezier(.2,.8,.2,1) both;
+        }
+        @keyframes toastSlide {
+            from { opacity: 0; transform: translateX(12px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        .toast-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast-icon-check {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #059669;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .toast-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #065F46;
+        }
+        .toast-sub {
+            font-size: 12.5px;
+            color: #047857;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .toast-icon-car {
+            width: 52px;
+            height: 52px;
+            color: #6EE7B7;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        /* ====== Autocomplete Dropdown ====== */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 4px;
+        }
+        .autocomplete-dropdown.visible {
+            display: block;
+        }
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #F1F5F9;
+            transition: background 0.2s;
+        }
+        .autocomplete-item:hover {
+            background: #F8FAFC;
+        }
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+        .autocomplete-item .reg-number {
+            font-weight: 700;
+            color: #0F172A;
+            font-size: 14px;
+        }
+        .autocomplete-item .owner-name {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 2px;
+        }
+        .autocomplete-item .fuel-type {
+            font-size: 11px;
+            color: #94A3B8;
+            margin-top: 2px;
+        }
+        .autocomplete-search-wrapper {
+            position: relative;
+        }
+
+        /* ====== Vehicle Details Grid ====== */
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px 20px;
+        }
+        @media (max-width: 1200px) {
+            .vehicle-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .vehicle-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .vehicle-grid { grid-template-columns: 1fr; }
+        }
+
+        .vehicle-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+        .vehicle-field-label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #475569;
+            letter-spacing: 0.1px;
+        }
+        .vehicle-field-value {
+            height: 46px;
+            padding: 0 13px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .vehicle-field-value.valid-green {
+            color: #059669;
+        }
+
+        /* ====== Insurance Details Grid ====== */
+        .insurance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px 24px;
+        }
+        @media (max-width: 968px) {
+            .insurance-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 520px) {
+            .insurance-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Info Note Banner */
+        .ins-info-note {
+            margin-top: 20px;
+            background: #EFF6FF;
+            border-radius: 8px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .ins-info-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #2563EB;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .ins-info-text {
+            font-size: 13.5px;
+            color: #1E40AF;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* Bottom action buttons */
+        .ins-actions-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .ins-btn-reset {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 22px;
+            height: 46px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #FFFFFF;
+            color: #1E293B;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            transition: all .15s;
+            font-family: 'Inter', sans-serif;
+        }
+        .ins-btn-reset:hover {
+            background: #F8FAFC;
+            border-color: #94A3B8;
+        }
+        .ins-btn-reset svg { width: 16px; height: 16px; }
+
+        .ins-btn-generate {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 0 26px;
+            height: 46px;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #002B5C;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            transition: all .15s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.2px;
+        }
+        .ins-btn-generate:hover { background: #001A3D; }
+        .ins-btn-generate:disabled {
+            background: #CBD5E1;
+            color: #94A3B8;
+            cursor: not-allowed;
+        }
+        .ins-btn-generate svg { width: 17px; height: 17px; }
+
+        /* =================================================================== */
+        /* RECEIPT PANEL                                                        */
+        /* =================================================================== */
+        .ins-receipt-panel {
+            display: none;
+            margin-top: 6px;
+            padding-top: 8px;
+            border-top: 2px solid #E2E8F0;
+        }
+        .ins-receipt-panel.visible {
+            display: block;
+            animation: receiptSlideUp .5s cubic-bezier(.2,.8,.2,1) both;
+        }
+        @keyframes receiptSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .ins-receipt-card {
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 18px 18px 20px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+        }
+        .ins-receipt-head-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .ins-receipt-head-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #002B5C;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ins-receipt-head-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #E8C07D;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .ins-receipt-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .receipt-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0 14px;
+            height: 38px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            color: #334155;
+            border-radius: 6px;
+            transition: all .15s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.1px;
+        }
+        .receipt-action-btn:hover {
+            background: #002B5C;
+            border-color: #002B5C;
+            color: #FFFFFF;
+        }
+        .receipt-action-btn svg { width: 14px; height: 14px; }
+
+        .receipt-scroll-wrap {
+            max-height: 82vh;
+            overflow: auto;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            background: #FAFBFC;
+            padding: 10px;
+        }
+
+        /* ---------- Actual Receipt (A4 portrait) ---------- */
+        .motor-receipt {
+            background: #FFFFFF;
+            width: 210mm;
+            min-height: 297mm;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 24px 28px 28px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #0F172A;
+            font-size: 12.5px;
+            line-height: 1.5;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+        }
+
+        /* ======== SmartSarthi Government Receipt Header ======== */
+        .mr-gov-header {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto auto;
+            gap: 0;
+            align-items: stretch;
+            padding: 10px 0;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            margin-bottom: 10px;
+        }
+        .mr-gov-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 6px 16px 6px 14px;
+            border-right: 1px solid #CBD5E1;
+        }
+        .mr-gov-logo-mark {
+            position: relative;
+            width: 78px;
+            height: 78px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+        }
+        .mr-gov-logo-mark svg.shield-outline {
+            position: absolute;
+            inset: 0;
+            width: 78px;
+            height: 78px;
+        }
+        .mr-gov-logo-mark svg.s-road {
+            position: absolute;
+            inset: 0;
+            width: 78px;
+            height: 78px;
+        }
+        .mr-gov-logo-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+        .mr-gov-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 0;
+            line-height: 1;
+        }
+        .mr-gov-brand .t-smart {
+            font-family: 'Inter', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: #0B2E6B;
+            letter-spacing: -0.5px;
+        }
+        .mr-gov-brand .t-s {
+            font-family: 'Inter', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: #1D4ED8;
+            letter-spacing: -0.5px;
+        }
+        .mr-gov-brand .t-arthi {
+            font-family: 'Inter', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            color: #1D4ED8;
+            letter-spacing: -0.5px;
+        }
+        .mr-gov-tagline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0B2E6B;
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+        .mr-gov-tagline .dash {
+            display: inline-block;
+            width: 32px;
+            height: 2.5px;
+            background: #1D4ED8;
+            border-radius: 2px;
+        }
+
+        .mr-gov-ministry {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            color: #0B2E6B;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+            text-align: center;
+            line-height: 1.2;
+            border-right: 1px solid #CBD5E1;
+        }
+
+        .mr-gov-contact {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-right: 1px solid #CBD5E1;
+            min-width: 170px;
+        }
+        .mr-gov-contact:last-of-type {
+            border-right: none;
+        }
+        .mr-gov-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            color: #1D4ED8;
+            flex-shrink: 0;
+        }
+        .mr-gov-icon svg { width: 24px; height: 24px; stroke-width: 1.8; }
+        .mr-gov-contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+        .mr-gov-contact-val {
+            color: #0B2E6B;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mr-gov-contact-sub {
+            color: #64748B;
+            font-family: 'Inter', sans-serif;
+            font-size: 11.5px;
+            font-weight: 500;
+        }
+
+        /* Receipt Header (after gov header) */
+        .mr-head {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            align-items: flex-start;
+            padding-bottom: 8px;
+        }
+        .mr-head-center {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            padding-top: 6px;
+        }
+        .mr-title-line {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 800;
+            color: #0B2F6B;
+            letter-spacing: 2.2px;
+            line-height: 1.18;
+        }
+        .mr-title-line.m1 { font-size: 30px; }
+   
+
+        .mr-head-right {
+            text-align: right;
+            padding-top: 8px;
+        }
+        .mr-company-name {
+            font-size: 15.5px;
+            font-weight: 800;
+            color: #0B2F6B;
+        }
+        .mr-company-addr {
+            font-size: 11.5px;
+            color: #334155;
+            margin-top: 6px;
+            line-height: 1.55;
+        }
+        .mr-company-addr a { color: inherit; text-decoration: none; font-weight: 500; }
+        .mr-company-regs {
+            font-size: 11px;
+            color: #475569;
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+
+        /* Gov header responsive */
+        @media (max-width: 900px) {
+            .mr-gov-header {
+                grid-template-columns: 1fr;
+            }
+            .mr-gov-logo,
+            .mr-gov-ministry,
+            .mr-gov-contact {
+                border-right: none;
+                border-bottom: 1px solid #CBD5E1;
+            }
+            .mr-gov-contact:last-child { border-bottom: none; }
+        }
+
+        .mr-divider-thick {
+            height: 2.5px;
+            background: #0B2F6B;
+            margin: 6px 0 14px;
+        }
+        .mr-divider-thin {
+            height: 1px;
+            background: #CBD5E1;
+            margin: 2px 0;
+        }
+
+        .mr-receipt-date-row {
+            text-align: right;
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: inline-flex;
+            justify-content: flex-end;
+            align-items: baseline;
+            gap: 6px;
+            width: 100%;
+        }
+        .mr-receipt-date-row .lbl {
+            color: #334155;
+            font-weight: 700;
+        }
+        .mr-receipt-date-row .sep {
+            color: #0F172A;
+            font-weight: 800;
+        }
+        .mr-receipt-date-row .val {
+            color: #0F172A;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+        }
+
+        /* 3-column Info Grid  (colon-separated rows like printed table) */
+        .mr-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border: 1px solid #0B2F6B;
+        }
+        .mr-info-col {
+            border-right: 1px solid #0B2F6B;
+            display: flex;
+            flex-direction: column;
+        }
+        .mr-info-col:last-child { border-right: none; }
+
+        .mr-row {
+            display: grid;
+            grid-template-columns: 112px 10px 1fr;
+            align-items: flex-start;
+            padding: 7px 10px;
+            border-bottom: 1px solid #CBD5E1;
+            min-height: 0;
+        }
+        .mr-row:last-child { border-bottom: none; }
+        .mr-row .lbl {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0F172A;
+            padding-top: 1px 0;
+        }
+        .mr-row .sep {
+            font-weight: 700;
+            color: #0F172A;
+            text-align: center;
+        }
+        .mr-row .val {
+            font-size: 12px;
+            color: #0F172A;
+            font-weight: 500;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        .mr-col-label-top {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0B2F6B;
+            padding: 7px 10px;
+            border-bottom: 1px solid #0B2F6B;
+            border-left: 1px solid #0B2F6B;
+            margin-left: -1px;
+        }
+        .mr-info-col:first-child .mr-col-label-top {
+            border-left: none;
+            margin-left: 0;
+        }
+
+        /* Section header band */
+        .mr-section-band {
+            background: #0B2F8B;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 7px 10px;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            font-family: 'Inter', sans-serif;
+            margin-top: 10px;
+            border-left: 1px solid #0B2F8B;
+            border-right: 1px solid #0B2F8B;
+        }
+
+        /* Vehicle table (8 col alternating label/value) */
+        .mr-vehicle-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #0B2F6B;
+        }
+        .mr-vehicle-table th {
+            background: #FFFFFF;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0B2F6B;
+            padding: 8px 11px;
+            border-right: 1px solid #CBD5E1;
+            border-bottom: 1px solid #CBD5E1;
+            vertical-align: middle;
+        }
+        .mr-vehicle-table td {
+            padding: 8px 11px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0F172A;
+            border-right: 1px solid #CBD5E1;
+            border-bottom: 1px solid #CBD5E1;
+            vertical-align: middle;
+        }
+        .mr-vehicle-table th.lbl-cell {
+            font-weight: 700;
+            color: #0B2F6B;
+            background: #FFFFFF;
+        }
+        .mr-vehicle-table td.val-cell {
+            font-weight: 600;
+            color: #0F172A;
+        }
+        .mr-vehicle-table tr:last-child th,
+        .mr-vehicle-table tr:last-child td { border-bottom: none; }
+        .mr-vehicle-table th:last-child,
+        .mr-vehicle-table td:last-child { border-right: none; }
+        .mr-vehicle-table th:nth-child(even),
+        .mr-vehicle-table td:nth-child(even) {
+            border-right: 1px solid #CBD5E1;
+        }
+
+        /* Premium breakdown */
+        .mr-premium-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #0B2F6B;
+        }
+        .mr-prem-head-od,
+        .mr-prem-head-tp {
+            background: #D6E4FF;
+            text-align: center;
+            padding: 7px 10px;
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #0B2F8B;
+            border: 1px solid #0B2F6B;
+            width: 50%;
+        }
+        .mr-prem-break {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-left: 1px solid #0B2F6B;
+            border-right: 1px solid #0B2F6B;
+            border-top: none;
+        }
+        .mr-prem-half {
+            border-right: 1px solid #0B2F6B;
+            display: table;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .mr-prem-half:last-child { border-right: none; }
+        .mr-prem-half tr {
+            display: table-row;
+        }
+        .mr-prem-half td {
+            display: table-cell;
+            padding: 6px 11px;
+            font-size: 12px;
+            color: #0F172A;
+            border-bottom: 1px solid #E2E8F0;
+            vertical-align: middle;
+        }
+        .mr-prem-half td.p-lbl {
+            font-weight: 500;
+            text-align: left;
+            border-right: 1px solid #E2E8F0;
+            width: 60%;
+        }
+        .mr-prem-half td.p-val {
+            font-weight: 700;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            width: 40%;
+        }
+        .mr-prem-half tr.p-net td.p-lbl,
+        .mr-prem-half tr.p-net td.p-val {
+            color: #0B2F6B;
+            font-weight: 800;
+            border-bottom: 1px solid #0B2F6B;
+        }
+        .mr-prem-half tr.p-tot td.p-lbl,
+        .mr-prem-half tr.p-tot td.p-val {
+            background: #F5F7FB;
+            color: #0B2F6B;
+            font-weight: 800;
+            border-bottom: none;
+        }
+        .mr-prem-half tr.p-row-neg td.p-val { color: #DC2626; }
+
+        /* Bottom totals table */
+        .mr-totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-left: 1px solid #0B2F6B;
+            border-right: 1px solid #0B2F6B;
+        }
+        .mr-totals-table td {
+            padding: 8px 14px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+        .mr-totals-table td.t-lbl {
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .mr-totals-table td.t-val {
+            font-weight: 800;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            border-bottom: 1px solid #E2E8F0;
+            width: 170px;
+        }
+        .mr-totals-table tr.t-net td {
+            background: #0B2F8B;
+            color: #fff;
+            font-size: 13.5px;
+            letter-spacing: 0.3px;
+            border-bottom: none;
+        }
+        .mr-totals-table tr.t-net td.t-val {
+            background: #0B2F8B;
+            border-left: 1px solid #fff;
+        }
+        .mr-totals-table tr.t-gst td.t-lbl {
+            color: #0F172A;
+            font-weight: 600;
+        }
+        .mr-totals-table tr.t-total td {
+            background: #0B2F8B;
+            color: #fff;
+            font-size: 13.5px;
+            letter-spacing: 0.3px;
+        }
+        .mr-totals-table tr.t-total td.t-val {
+            border-left: 1px solid #fff;
+        }
+        .mr-totals-table tr.t-ncb td.t-lbl { color: #0F172A; font-weight: 600; }
+        .mr-totals-table tr.t-ncb td.t-val { color: #DC2626; }
+        .mr-totals-table tr.t-paid td {
+            background: #0B2F8B;
+            color: #fff;
+            font-size: 13.5px;
+            letter-spacing: 0.3px;
+            border-bottom: none;
+        }
+        .mr-totals-table tr.t-paid td.t-val {
+            border-left: 1px solid #fff;
+        }
+
+        .mr-rupees-words {
+            border: 1px solid #0B2F6B;
+            padding: 10px 14px;
+            font-size: 12.5px;
+            color: #0B2F6B;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Nominee */
+        .mr-nominee-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #0B2F6B;
+        }
+        .mr-nominee-table th {
+            background: #0B2F8B;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: #FFFFFF;
+            padding: 8px 11px;
+            border-right: 1px solid #CBD5E1;
+            border-bottom: 1px solid #CBD5E1;
+        }
+        .mr-nominee-table td {
+            padding: 9px 11px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0F172A;
+            border-right: 1px solid #CBD5E1;
+        }
+        .mr-nominee-table th:last-child,
+        .mr-nominee-table td:last-child { border-right: none; }
+
+        .mr-claim-box {
+            margin-top: 10px;
+            border: 1px solid #CBD5E1;
+            padding: 9px 13px;
+            font-size: 12px;
+            color: #0F172A;
+            background: #F8FAFC;
+        }
+        .mr-claim-box a { color: #1D4ED8; font-weight: 800; text-decoration: none; }
+
+        .mr-payment-row {
+            border: 1px solid #CBD5E1;
+            border-top: none;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            font-size: 12.5px;
+            background: #FFFFFF;
+        }
+        .mr-payment-row .seg {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mr-payment-row .seg .lbl { font-weight: 800; color: #0B2F6B; }
+        .mr-payment-row .seg .val { font-weight: 800; color: #0F172A; }
+        .mr-payment-row .sep {
+            color: #94A3B8;
+            font-weight: 800;
+        }
+
+        .mr-footer {
+            margin-top: 16px;
+            text-align: center;
+            color: #0B2F6B;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .mr-footer .f-line1 { font-weight: 500; }
+        .mr-footer .f-line2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 600;
+            font-size: 12.5px;
+            margin-top: 4px;
+            color: #0B2F6B;
+        }
+
+        /* Loading */
+        @media (max-width: 900px) {
+            .mr-head { grid-template-columns: 1fr; }
+            .mr-head-right { text-align: left; }
+            .mr-info-grid { grid-template-columns: 1fr; }
+            .mr-info-col { border-right: none; border-bottom: 1px solid #0B2F6B; }
+            .mr-info-col:last-child { border-bottom: none; }
+            .motor-receipt { padding: 14px; }
+            .mr-title-line.m1,
+            .mr-title-line.m2,
+            .mr-title-line.m3 { font-size: 26px; letter-spacing: 1px; }
+            .mr-brand-logo { width: 52px; height: 52px; }
+            .mr-brand-title { font-size: 22px; }
+        }
+
+        /* ====== PRINT ====== */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 6mm;
+            }
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #FFFFFF !important;
+            }
+            .top-navbar,
+            .app-shell .sidebar-nav,
+            .app-shell .sidebar-overlay,
+            .footer-bar,
+            .ins-hero,
+            .func-breadcrumb,
+            .ins-card:not(.receipt-scroll-wrap ~ .ins-card),
+            .ins-receipt-head-actions,
+            .receipt-scroll-wrap {
+                display: none !important;
+            }
+            .app-shell {
+                display: block !important;
+                background: #FFFFFF !important;
+            }
+            .app-shell .main-content {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: visible !important;
+            }
+            .ins-page-wrap {
+                padding: 0 !important;
+                margin: 0 !important;
+                min-height: 0 !important;
+                background: #FFFFFF !important;
+                display: block !important;
+            }
+            .func-page-layout {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: none !important;
+                background: #FFFFFF !important;
+            }
+            .ins-receipt-panel {
+                display: block !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                animation: none !important;
+            }
+            .ins-receipt-card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #fff !important;
+            }
+            .motor-receipt {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="funcPageMount"></div>
 
     <main class="func-page-layout">
-        <div class="func-content-grid">
-            <div class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">New Policy Application Form</h3>
-                    <span class="info-chip navy">IRDAI Compliant</span>
+        <div class="ins-page-wrap">
+
+            <!-- ===== Page Hero ===== -->
+            <section class="ins-hero">
+                <div>
+                    <h1 class="ins-hero-title">Issue Insurance</h1>
+                    <p class="ins-hero-sub">Enter Vehicle Number to fetch details and issue insurance</p>
                 </div>
-                <div class="panel-body">
-                    <form class="func-inline-form">
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Full Name *</label>
-                                <input type="text" class="func-form-input" placeholder="e.g. Arjun Kapoor" required>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Mobile No. *</label>
-                                <input type="tel" class="func-form-input" placeholder="+91 98765 43210" required>
-                            </div>
-                        </div>
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Email Address</label>
-                                <input type="email" class="func-form-input" placeholder="customer@email.com">
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Aadhaar / PAN *</label>
-                                <input type="text" class="func-form-input" placeholder="XXXX-XXXX-XXXX" required>
-                            </div>
-                        </div>
-                        <div class="func-form-row">
-                            <div class="func-form-group full">
-                                <label class="func-form-label">Residential Address</label>
-                                <textarea class="func-form-textarea" placeholder="Plot No., Street, City, State, PIN"></textarea>
-                            </div>
-                        </div>
-                        <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Vehicle Registration No. *</label>
-                                <input type="text" class="func-form-input" placeholder="MH-04 KL-5521" required>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Chassis No. *</label>
-                                <input type="text" class="func-form-input" placeholder="MA3EK81SXXXXXXXX" required>
-                            </div>
-                        </div>
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Make / Model *</label>
-                                <input type="text" class="func-form-input" placeholder="Hyundai Creta SX" required>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Year of Manufacture</label>
-                                <input type="number" class="func-form-input" placeholder="2023" min="1990" max="2026">
-                            </div>
-                        </div>
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Fuel Type</label>
-                                <select class="func-form-select">
-                                    <option>Petrol</option>
-                                    <option>Diesel</option>
-                                    <option>Electric</option>
-                                    <option>CNG</option>
-                                    <option>Hybrid</option>
-                                </select>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Vehicle Class</label>
-                                <select class="func-form-select">
-                                    <option>Private Car</option>
-                                    <option>Two Wheeler</option>
-                                    <option>Commercial Vehicle</option>
-                                    <option>Three Wheeler</option>
-                                </select>
-                            </div>
-                        </div>
-                        <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Policy Type *</label>
-                                <select class="func-form-select" required>
-                                    <option value="comprehensive">Comprehensive Plus</option>
-                                    <option value="comprehensive-std">Comprehensive (Standard)</option>
-                                    <option value="zero-dep">Zero Depreciation Cover</option>
-                                    <option value="third-party">Third Party Only</option>
-                                    <option value="own-damage">Own Damage Only</option>
-                                </select>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Policy Tenure *</label>
-                                <select class="func-form-select" required>
-                                    <option>1 Year</option>
-                                    <option>2 Years</option>
-                                    <option>3 Years</option>
-                                    <option>5 Years (Long Term)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Insured Declared Value (IDV) ₹ *</label>
-                                <input type="number" class="func-form-input" placeholder="e.g. 1250000" required>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">Net Premium (₹) — Auto</label>
-                                <input type="number" class="func-form-input" placeholder="Auto-calculated" readonly>
-                            </div>
-                        </div>
-                        <div class="func-form-row">
-                            <div class="func-form-group">
-                                <label class="func-form-label">Add-on Covers</label>
-                                <select class="func-form-select" multiple size="3">
-                                    <option>Roadside Assistance</option>
-                                    <option>Engine &amp; Gearbox Protector</option>
-                                    <option>Key Replacement</option>
-                                    <option>Consumables Cover</option>
-                                    <option>Return to Invoice</option>
-                                </select>
-                            </div>
-                            <div class="func-form-group">
-                                <label class="func-form-label">No Claim Bonus (NCB) %</label>
-                                <select class="func-form-select">
-                                    <option>0% (Fresh)</option>
-                                    <option>20%</option>
-                                    <option>25%</option>
-                                    <option>35%</option>
-                                    <option>45%</option>
-                                    <option>50% (Max)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="panel-form-actions">
-                            <button type="reset" class="btn btn-outline">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                                Reset
-                            </button>
-                            <button type="button" class="btn btn-outline">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                                Save Draft
-                            </button>
-                            <a href="issue-policy.html" class="btn btn-gold">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                                Verify &amp; Issue
-                            </a>
-                        </div>
-                    </form>
+                <div class="ins-breadcrumb">
+                    <a class="crumb-link" id="crumbDashboard">Dashboard</a>
+                    <span class="crumb-sep">❯</span>
+                    <span class="crumb-current">Issue Insurance</span>
                 </div>
-            </div>
+            </section>
 
-            <div class="panel" style="align-self: start;">
-                <div class="panel-header">
-                    <h3 class="panel-title">Quick Quote Preview</h3>
-                    <span class="info-chip gold">Live Estimate</span>
+            <!-- ===== Search Vehicle Card ===== -->
+            <section class="ins-card">
+                <div class="ins-card-header">
+                    <div class="ins-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    <span class="ins-card-title">Search Vehicle</span>
                 </div>
-                <div class="panel-body">
-                    <div class="mini-stats-row" style="margin-top: 0; margin-bottom: 18px;">
-                        <div class="mini-stat" style="background: rgba(0, 43, 92, 0.05);">
-                            <div class="mini-stat-num" style="color: var(--navy-primary);">₹ 24,850</div>
-                            <div class="mini-stat-label">Base Premium</div>
-                        </div>
-                        <div class="mini-stat" style="background: rgba(232, 192, 125, 0.15);">
-                            <div class="mini-stat-num" style="color: var(--gold-dark);">₹ 12.5 L</div>
-                            <div class="mini-stat-label">IDV Suggested</div>
-                        </div>
-                    </div>
 
-                    <div class="progress-list" style="gap: 14px;">
-                        <div class="progress-item">
-                            <div class="progress-label-row">
-                                <span class="progress-name">Own Damage Cover</span>
-                                <span class="progress-value">₹ 16,200</span>
-                            </div>
-                            <div class="progress-track"><div class="progress-fill navy" style="width: 65%;"></div></div>
+                <div class="search-layout">
+                    <div class="search-form-row">
+                        <div class="ins-form-group autocomplete-search-wrapper">
+                            <label class="ins-form-label">Enter Vehicle Number <span class="ins-required">*</span></label>
+                            <input type="text" class="ins-input" id="f_vehicleNo" placeholder="Start typing to search vehicles..." value="" style="text-transform:uppercase;" autocomplete="off">
+                            <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
                         </div>
-                        <div class="progress-item">
-                            <div class="progress-label-row">
-                                <span class="progress-name">Third Party Liability</span>
-                                <span class="progress-value">₹ 6,150</span>
-                            </div>
-                            <div class="progress-track"><div class="progress-fill gold" style="width: 25%;"></div></div>
-                        </div>
-                        <div class="progress-item">
-                            <div class="progress-label-row">
-                                <span class="progress-name">Add-ons (Selected)</span>
-                                <span class="progress-value">₹ 2,500</span>
-                            </div>
-                            <div class="progress-track"><div class="progress-fill success" style="width: 10%;"></div></div>
-                        </div>
-                    </div>
-
-                    <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
-
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                            <span style="color: var(--text-muted);">Subtotal</span>
-                            <span style="font-weight: 600;">₹ 24,850</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                            <span style="color: var(--text-muted);">GST @ 18%</span>
-                            <span style="font-weight: 600;">₹ 4,473</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                            <span style="color: var(--text-muted);">NCB Discount</span>
-                            <span style="font-weight: 600; color: var(--success);">− ₹ 2,420</span>
-                        </div>
-                    </div>
-
-                    <hr style="border: none; border-top: 2px solid var(--gold-primary); margin: 18px 0;">
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-                        <div>
-                            <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Payable</div>
-                            <div style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--navy-primary); line-height: 1.1;">₹ 26,903</div>
-                        </div>
-                        <span class="info-chip success" style="font-size: 13px; padding: 6px 12px;">Savings ₹ 2,420</span>
-                    </div>
-
-                    <div class="panel-form-actions" style="margin-top: 0; justify-content: stretch;">
-                        <button class="btn btn-primary" style="flex: 1;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                            Pay Online
+                        <button type="button" class="ins-btn-fetch" id="btnFetchDetails">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Fetch Details
                         </button>
                     </div>
 
-                    <div style="margin-top: 18px; padding: 14px; border-radius: 10px; background: rgba(0, 43, 92, 0.04); border-left: 3px solid var(--gold-primary);">
-                        <div style="font-size: 12.5px; color: var(--navy-primary); font-weight: 700; margin-bottom: 4px;">💡 Eligibility Check</div>
-                        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">Vehicle is <strong style="color: var(--success);">RTO verified</strong>. Policy can be issued instantly. Documents will be e-mailed on successful payment.</div>
+                    <div class="success-toast" id="successToast">
+                        <div class="toast-left">
+                            <div class="toast-icon-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <div>
+                                <div class="toast-title">Vehicle Found!</div>
+                                <div class="toast-sub">Details fetched successfully</div>
+                            </div>
+                        </div>
+                        <svg class="toast-icon-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2M5 17l-1 3M19 17l1 3M7 13h.01M17 13h.01"/></svg>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- ===== Vehicle Details (Auto Fetched) ===== -->
+            <section class="ins-card">
+                <div class="ins-card-header">
+                    <div class="ins-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M5 17h14M5 17a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2M5 17l-1 3M19 17l1 3M7 13h.01M17 13h.01"/></svg>
+                    </div>
+                    <span class="ins-card-title">Vehicle Details (Auto Fetched)</span>
+                </div>
+
+                <div class="vehicle-grid">
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Vehicle Number</div>
+                        <div class="vehicle-field-value" id="pv_vehicleNo">MH12AB1234</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Owner Name</div>
+                        <div class="vehicle-field-value" id="pv_ownerName">Rohit Sharma</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Vehicle Type</div>
+                        <div class="vehicle-field-value" id="pv_vehicleType">PRIVATE CAR</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Fuel Type</div>
+                        <div class="vehicle-field-value" id="pv_fuelType">PETROL</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Registration Date</div>
+                        <div class="vehicle-field-value" id="pv_regDate">15-Feb-2022</div>
+                    </div>
+
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Make / Model</div>
+                        <div class="vehicle-field-value" id="pv_makeModel">Maruti Suzuki / Swift VXI</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Chassis Number</div>
+                        <div class="vehicle-field-value" id="pv_chassis">MA3EDE81S00123456</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Engine Number</div>
+                        <div class="vehicle-field-value" id="pv_engine">K12MN1234567</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">Seating Capacity</div>
+                        <div class="vehicle-field-value" id="pv_seating">5</div>
+                    </div>
+                    <div class="vehicle-field">
+                        <div class="vehicle-field-label">PUC Valid Upto</div>
+                        <div class="vehicle-field-value valid-green" id="pv_pucUpto">10-Jan-2026</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== Insurance Details ===== -->
+            <section class="ins-card">
+                <div class="ins-card-header">
+                    <div class="ins-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <span class="ins-card-title">Insurance Details</span>
+                </div>
+
+                <div class="insurance-grid">
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">Insurance Provider <span class="ins-required">*</span></label>
+                        <select class="ins-select" id="f_provider">
+                            <option>Bajaj Allianz General Insurance</option>
+                            <option>HDFC ERGO General Insurance</option>
+                            <option>ICICI Lombard General Insurance</option>
+                            <option>New India Assurance</option>
+                            <option>United India Insurance</option>
+                            <option>Oriental Insurance</option>
+                            <option>National Insurance</option>
+                            <option>TATA AIG General Insurance</option>
+                            <option>Reliance General Insurance</option>
+                            <option>Cholamandalam MS</option>
+                        </select>
+                    </div>
+
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">Policy Number <span class="ins-required">*</span></label>
+                        <input type="text" class="ins-input" id="f_policyNo" value="BAJ1234567890" placeholder="Enter Policy Number">
+                    </div>
+
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">IDV (Insured Declared Value) <span class="ins-required">*</span></label>
+                        <div class="ins-input-rupee">
+                            <span class="rupee-prefix">₹</span>
+                            <input type="number" class="ins-input" id="f_idv" value="450000" placeholder="e.g. 450000">
+                        </div>
+                    </div>
+
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">Policy Type <span class="ins-required">*</span></label>
+                        <select class="ins-select" id="f_policyType">
+                            <option>Comprehensive</option>
+                            <option>Comprehensive (Zero Dep)</option>
+                            <option>Third Party Only</option>
+                            <option>Own Damage Only</option>
+                            <option>Package Policy</option>
+                        </select>
+                    </div>
+
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">Policy End Date <span class="ins-required">*</span></label>
+                        <input type="date" class="ins-input" id="f_endDate" value="2026-05-07">
+                    </div>
+
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">Premium Amount (₹) <span class="ins-required">*</span></label>
+                        <div class="ins-input-rupee">
+                            <span class="rupee-prefix">₹</span>
+                            <input type="number" class="ins-input" id="f_premium" value="12678" placeholder="e.g. 12678">
+                        </div>
+                    </div>
+
+                    <div class="ins-form-group">
+                        <label class="ins-form-label">Policy Start Date <span class="ins-required">*</span></label>
+                        <input type="date" class="ins-input" id="f_startDate" value="2025-05-08">
+                    </div>
+                </div>
+
+                <div class="ins-info-note">
+                    <div class="ins-info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    </div>
+                    <div class="ins-info-text">Note: Please verify all details before generating the insurance receipt.</div>
+                </div>
+
+                <div class="ins-actions-row">
+                    <button type="button" class="ins-btn-reset" id="btnReset">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                        Reset
+                    </button>
+                    <button type="button" class="ins-btn-generate" id="btnGenerate">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                        Generate Insurance Receipt
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===== RECEIPT PANEL ===== -->
+            <section class="ins-receipt-panel" id="insReceiptPanel">
+                <div class="ins-receipt-card">
+                    <div class="ins-receipt-head-actions">
+                        <div class="ins-receipt-head-title">Motor Insurance Receipt — Generated</div>
+                        <div class="ins-receipt-actions">
+                            <button type="button" class="receipt-action-btn" id="btnPrintReceipt">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                Print Receipt
+                            </button>
+                            <button type="button" class="receipt-action-btn" id="btnDownloadPdf">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                Download PDF
+                            </button>
+                            <button type="button" class="receipt-action-btn" id="btnEmailReceipt">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                Email to Customer
+                            </button>
+                            <button type="button" class="receipt-action-btn" id="btnCloseReceipt">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="receipt-scroll-wrap">
+                        <div class="motor-receipt" id="motorReceipt">
+
+                            <!-- ====== HEADER ====== -->
+                            <div class="mr-head">
+                                <div class="mr-brand">
+                                    <div class="mr-brand-logo">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="36" height="36"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="mr-brand-title">SmartSarthi</div>
+                                        <div class="mr-brand-sub">Ministry of Road Transport & Highways</div>
+                                    </div>
+                                </div>
+                                <div class="mr-head-center">
+                                    <div class="mr-title-line m1">Motor Insurance Receipt</div>
+                                    
+                                </div>
+                                <div class="mr-head-right">
+                                    <div class="mr-company-name"></div>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="mr-divider-thick"></div>
+
+                            <div class="mr-receipt-date-row">
+                                <span class="lbl">Receipt Date</span>
+                                <span class="sep">:</span>
+                                <span class="val" id="mr_receiptDate">08/08/2026</span>
+                            </div>
+
+                            <!-- ====== INFO GRID (3 columns) ====== -->
+                            <div class="mr-info-grid">
+                                <!-- Col 1: Policy Holder -->
+                                <div class="mr-info-col">
+                                    <div class="mr-row">
+                                        <div class="lbl">Name of Policy Holder</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_holderName">MR. ARJUN KAPOOR</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Communication Address</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_holderAddr">123, GREEN PARK STREET,<br>SOLAPUR - 413001,<br>MAHARASHTRA</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Contact No.</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_holderPhone">+91 98765 43210</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Email ID</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_holderEmail">CUSTOMER@EMAIL.COM</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Hypothecation</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_hypo">HDFC BANK LTD.</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Hypothecation Type</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_hypoType">Own Damage</div>
+                                    </div>
+                                </div>
+
+                                <!-- Col 2: Intermediary -->
+                                <div class="mr-info-col">
+                                    <div class="mr-col-label-top">Intermediary Details :</div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Name</div>
+                                        <div class="sep">:</div>
+                                        <div class="val">DRONASYSTEMS INSURANCE</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Code</div>
+                                        <div class="sep">:</div>
+                                        <div class="val">DS1001</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Contact No.</div>
+                                        <div class="sep">:</div>
+                                        <div class="val">1800-123-4567</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Email ID</div>
+                                        <div class="sep">:</div>
+                                        <div class="val">SUPPORT@DRONASYSTEMS.IN</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Address</div>
+                                        <div class="sep">:</div>
+                                        <div class="val">123, GREEN PARK STREET,<br>SOLAPUR - 413001,<br>MAHARASHTRA</div>
+                                    </div>
+                                </div>
+
+                                <!-- Col 3: Policy -->
+                                <div class="mr-info-col">
+                                    <div class="mr-row">
+                                        <div class="lbl">Policy No.</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_policyNo">DRN250518000123</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Policy Type</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_policyType">Private Car - Comprehensive<br>Insurance Policy</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Total Premium</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_totalPremium">₹ 26,903</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Policy Start Date</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_startDate">18/05/2025 00:00 Hrs</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Policy End Date</div>
+                                        <div class="sep">:</div>
+                                        <div class="val" id="mr_endDate">17/05/2026 23:59 Hrs</div>
+                                    </div>
+                                    <div class="mr-row">
+                                        <div class="lbl">Previous Policy No.</div>
+                                        <div class="sep">:</div>
+                                        <div class="val">NA</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ====== VEHICLE DETAILS ====== -->
+                            <div class="mr-section-band">YOUR VEHICLE DETAILS</div>
+                            <table class="mr-vehicle-table">
+                                <tbody>
+                                    <tr>
+                                        <th class="lbl-cell" style="width:13%">Vehicle Reg. No.</th>
+                                        <td class="val-cell" style="width:12%" id="mr_regNo">MH-04 KL-5521</td>
+                                        <th class="lbl-cell" style="width:13%">Year of Manufacture</th>
+                                        <td class="val-cell" style="width:9%" id="mr_yrManf">2024</td>
+                                        <th class="lbl-cell" style="width:13%">Make / Model</th>
+                                        <td class="val-cell" style="width:18%" id="mr_makeModel2">MARUTI SUZUKI SWIFT VXI</td>
+                                        <th class="lbl-cell" style="width:10%">Fuel Type</th>
+                                        <td class="val-cell" style="width:12%" id="mr_fuel2">PETROL</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="lbl-cell">Chassis No.</th>
+                                        <td class="val-cell" id="mr_chassis2">MA3EK81SXXXXXXXX</td>
+                                        <th class="lbl-cell">Engine No.</th>
+                                        <td class="val-cell" id="mr_engine2">E81SXXXXXXXXXXXX</td>
+                                        <th class="lbl-cell">Body Type</th>
+                                        <td class="val-cell">HATCHBACK</td>
+                                        <th class="lbl-cell">Cubic Capacity</th>
+                                        <td class="val-cell">1197 CC</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="lbl-cell">Seating Capacity</th>
+                                        <td class="val-cell" id="mr_seatCap">5 (INCLUDING DRIVER)</td>
+                                        <th class="lbl-cell">Unladen Weight</th>
+                                        <td class="val-cell">965 KG</td>
+                                        <th class="lbl-cell">GVW</th>
+                                        <td class="val-cell">1,415 KG</td>
+                                        <th class="lbl-cell">NCB (%)</th>
+                                        <td class="val-cell" id="mr_ncbPct">20%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- ====== PREMIUM DETAILS ====== -->
+                            <div class="mr-section-band">YOUR PREMIUM DETAILS (IN ₹)</div>
+                            <table class="mr-premium-table">
+                                <thead>
+                                    <tr>
+                                        <th class="mr-prem-head-od" style="width:50%">OWN DAMAGE (A)</th>
+                                        <th class="mr-prem-head-tp" style="width:50%">THIRD PARTY (B)</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div class="mr-prem-break">
+                                <table class="mr-prem-half" id="mrPremOd">
+                                    <tbody>
+                                        <tr><td class="p-lbl">Basic Premium for Vehicle</td><td class="p-val">16,200</td></tr>
+                                        <tr><td class="p-lbl">Add-on Covers</td><td class="p-val">2,500</td></tr>
+                                        <tr><td class="p-lbl">Basic OD Premium</td><td class="p-val">18,700</td></tr>
+                                        <tr><td class="p-lbl">Voluntary Deductible</td><td class="p-val">2,000</td></tr>
+                                        <tr class="p-row-neg"><td class="p-lbl">Less : NCB Discount (20%)</td><td class="p-val">-3,740</td></tr>
+                                        <tr class="p-net"><td class="p-lbl">Net Own Damage Premium</td><td class="p-val">16,960</td></tr>
+                                        <tr class="p-tot"><td class="p-lbl">Total Own Damage Premium (A)</td><td class="p-val">16,960</td></tr>
+                                    </tbody>
+                                </table>
+                                <table class="mr-prem-half" id="mrPremTp">
+                                    <tbody>
+                                        <tr><td class="p-lbl">Basic Third Party Premium</td><td class="p-val">6,150</td></tr>
+                                        <tr><td class="p-lbl">PA to Owner Driver</td><td class="p-val">0</td></tr>
+                                        <tr><td class="p-lbl">Unnamed PA Cover to Passengers</td><td class="p-val">0</td></tr>
+                                        <tr><td class="p-lbl">Legal Liability to Paid Driver</td><td class="p-val">0</td></tr>
+                                        <tr><td class="p-lbl">Other Charges</td><td class="p-val">0</td></tr>
+                                        <tr class="p-net"><td class="p-lbl">Net Third Party Premium</td><td class="p-val">6,150</td></tr>
+                                        <tr class="p-tot"><td class="p-lbl">Total Third Party Premium (B)</td><td class="p-val">6,150</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <table class="mr-totals-table">
+                                <tbody>
+                                    <tr class="t-net">
+                                        <td class="t-lbl">Net Premium (A+B)</td>
+                                        <td class="t-val" id="mrNetPremium">23,110</td>
+                                    </tr>
+                                    <tr class="t-gst">
+                                        <td class="t-lbl">GST @ 18%</td>
+                                        <td class="t-val" id="mrGst">4,161</td>
+                                    </tr>
+                                    <tr class="t-total">
+                                        <td class="t-lbl">TOTAL PREMIUM OF YOUR VEHICLE (₹)</td>
+                                        <td class="t-val" id="mrTotalPremium">27,271</td>
+                                    </tr>
+                                    <tr class="t-ncb">
+                                        <td class="t-lbl">Less : NCB Discount</td>
+                                        <td class="t-val" id="mrNcbDiscount">-2,368</td>
+                                    </tr>
+                                    <tr class="t-paid">
+                                        <td class="t-lbl">TOTAL AMOUNT PAID (₹)</td>
+                                        <td class="t-val" id="mrTotalPaid">26,903</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mr-rupees-words" id="mr_rupeesWords">
+                                (Rupees Twenty Six Thousand Nine Hundred Three Only)
+                            </div>
+
+                            <!-- ====== NOMINEE ====== -->
+                            <table class="mr-nominee-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" style="text-align:center;background:#0B2F8B;color:#FFFFFF;font-weight:800;font-size:14px;letter-spacing:.4px;padding:8px 10px;border-bottom:1px solid #CBD5E1">YOUR NOMINEE DETAILS</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Nominee Name</th>
+                                        <th>Nominee Age</th>
+                                        <th>Insurer's Relationship</th>
+                                        <th>Appointee Name</th>
+                                        <th>Insurer's Relationship with Appointee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>VIKRAM KAPOOR</td>
+                                        <td>45</td>
+                                        <td>FATHER</td>
+                                        <td>VIKRAM KAPOOR</td>
+                                        <td>FATHER</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="mr-claim-box">
+                                In case of a claim, you may reach us at 1800-123-4567 or email us at
+                                <a href="mailto:claims@dronasystems.in">claims@dronasystems.in</a>
+                            </div>
+
+                            <div class="mr-payment-row">
+                                <div class="seg"><span class="lbl">Payment Mode :</span><span class="val">ONLINE PAYMENT</span></div>
+                                <span class="sep">|</span>
+                                <div class="seg"><span class="lbl">Transaction ID :</span><span class="val">TXN5182025123456</span></div>
+                                <span class="sep">|</span>
+                                <div class="seg"><span class="lbl">Payment Status :</span><span class="val" style="color:#059669">PAYMENT SUCCESSFUL</span></div>
+                            </div>
+
+                            <div class="mr-footer">
+                                <div class="f-line1">This is a computer generated receipt and does not require any signature.</div>
+                                <div class="f-line2">Thank you for choosing DronaSystems Insurance. Drive safely and insure a secure future.</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </main>
 
+    <script src="../js/data.js"></script>
     <script src="../js/dashboard.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             DashboardApp.renderFunctionPage({
                 allowedRoles: ['INSURANCE_AGENCY'],
                 dashboardLabel: 'Insurance Dashboard',
-                pageTitle: 'Create New Policy',
-                pageDescription: 'Issue a new motor insurance policy for a vehicle',
-                pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>',
+                pageTitle: 'Issue Insurance',
+                pageDescription: 'Enter Vehicle Number to fetch details and issue insurance',
+                pageIcon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
                 activeMenuKey: 'newPolicy'
+            });
+
+            // Show success toast on page load (simulating fetched vehicle)
+            setTimeout(function() {
+                document.getElementById('successToast').classList.add('visible');
+            }, 400);
+
+            function formatDateDDMMYYYY(dateStr) {
+                if (!dateStr) return '';
+                const d = new Date(dateStr);
+                if (isNaN(d)) return dateStr;
+                const dd = String(d.getDate()).padStart(2, '0');
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const yyyy = d.getFullYear();
+                return dd + '/' + mm + '/' + yyyy;
+            }
+
+            function numberToWordsIndian(num) {
+                num = Math.round(Number(num) || 0);
+                if (num === 0) return 'Rupees Zero Only';
+                const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+                              'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen',
+                              'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+                const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+                function twoDigit(n) {
+                    if (n < 20) return ones[n];
+                    const t = Math.floor(n / 10);
+                    const o = n % 10;
+                    return tens[t] + (o ? ' ' + ones[o] : '');
+                }
+                function threeDigit(n) {
+                    if (n === 0) return '';
+                    const h = Math.floor(n / 100);
+                    const rem = n % 100;
+                    let out = '';
+                    if (h) out += ones[h] + ' Hundred';
+                    if (h && rem) out += ' ';
+                    if (rem) out += twoDigit(rem);
+                    return out;
+                }
+                let output = '';
+                const crore = Math.floor(num / 10000000);
+                const lakh = Math.floor((num % 10000000) / 100000);
+                const thousand = Math.floor((num % 100000) / 1000);
+                const rest = num % 1000;
+                if (crore) output += twoDigit(crore) + ' Crore ';
+                if (lakh) output += twoDigit(lakh) + ' Lakh ';
+                if (thousand) output += twoDigit(thousand) + ' Thousand ';
+                const restStr = threeDigit(rest);
+                if (restStr) output += restStr;
+                output = output.trim().replace(/\s+/g, ' ');
+                return '(Rupees ' + output + ' Only)';
+            }
+
+            function getEl(id) { return document.getElementById(id); }
+
+            // Autocomplete functionality
+            const vehicleInput = getEl('f_vehicleNo');
+            const autocompleteDropdown = getEl('autocompleteDropdown');
+            let debounceTimer;
+
+            vehicleInput.addEventListener('input', function(e) {
+                const query = this.value.trim().toUpperCase();
+                clearTimeout(debounceTimer);
+                
+                if (query.length < 2) {
+                    autocompleteDropdown.classList.remove('visible');
+                    return;
+                }
+                
+                debounceTimer = setTimeout(() => {
+                    if (!window.VehicleData || !VehicleData.VEHICLES) {
+                        autocompleteDropdown.classList.remove('visible');
+                        return;
+                    }
+                    
+                    const matches = VehicleData.VEHICLES.filter(v => {
+                        const normReg = v.reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                        return normReg.includes(query.replace(/[^a-zA-Z0-9]/g, ''));
+                    }).slice(0, 10); // Show max 10 results
+                    
+                    if (matches.length > 0) {
+                        autocompleteDropdown.innerHTML = matches.map(v => `
+                            <div class="autocomplete-item" data-reg="${v.reg}">
+                                <div class="reg-number">${v.reg}</div>
+                                <div class="owner-name">${v.ownerName}</div>
+                                <div class="fuel-type">${v.fuelType} · ${v.vehicleType}</div>
+                            </div>
+                        `).join('');
+                        autocompleteDropdown.classList.add('visible');
+                    } else {
+                        autocompleteDropdown.classList.remove('visible');
+                    }
+                }, 300);
+            });
+
+            // Handle autocomplete selection
+            autocompleteDropdown.addEventListener('click', function(e) {
+                const item = e.target.closest('.autocomplete-item');
+                if (item) {
+                    const reg = item.dataset.reg;
+                    vehicleInput.value = reg;
+                    autocompleteDropdown.classList.remove('visible');
+                    
+                    // Directly populate vehicle data
+                    if (window.VehicleData && VehicleData.VEHICLES) {
+                        const normReg = reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                        for (let i = 0; i < VehicleData.VEHICLES.length; i++) {
+                            const v = VehicleData.VEHICLES[i];
+                            const vnNorm = (v.reg || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                            if (vnNorm === normReg) {
+                                // Populate vehicle details
+                                getEl('pv_vehicleNo').textContent = v.reg || '';
+                                getEl('pv_ownerName').textContent = v.ownerName || '';
+                                getEl('pv_regDate').textContent = v.registrationDateDMY || '';
+                                getEl('pv_fuelType').textContent = v.fuelType || '';
+                                getEl('pv_vehicleType').textContent = v.vehicleType || '';
+                                getEl('pv_engine').textContent = v.engineNo || '';
+                                getEl('pv_chassis').textContent = v.chassisNo || '';
+                                getEl('pv_makeModel').textContent = (v.vehicleModel || 'N/A');
+                                getEl('pv_seating').textContent = '5'; // Default seating as it's not in data
+                                
+                                console.log('Vehicle details populated:', v.reg);
+                                
+                                // Check for pending challans
+                                const hasPendingChallans = window.VehicleData && window.VehicleData.hasPendingChallans ? window.VehicleData.hasPendingChallans(normReg) : false;
+                                if (hasPendingChallans) {
+                                    const pendingCount = window.VehicleData && window.VehicleData.getPendingChallanCount ? window.VehicleData.getPendingChallanCount(normReg) : 0;
+                                    alert('⚠️ This vehicle has ' + pendingCount + ' pending challan(s). Insurance cannot be issued until all challans are cleared.');
+                                    return;
+                                }
+                                
+                                // Show success toast
+                                var toast = getEl('successToast');
+                                toast.classList.remove('visible');
+                                setTimeout(function() { toast.classList.add('visible'); }, 250);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.autocomplete-search-wrapper')) {
+                    autocompleteDropdown.classList.remove('visible');
+                }
+            });
+
+            // Fetch Details button
+            getEl('btnFetchDetails').addEventListener('click', function() {
+                const vin = getEl('f_vehicleNo').value.trim();
+                if (!vin) {
+                    alert('Please enter Vehicle Number');
+                    return;
+                }
+                
+                // Check if VehicleData is loaded
+                if (!window.VehicleData || !VehicleData.VEHICLES) {
+                    alert('Vehicle database not loaded. Please ensure data.js is included.');
+                    console.error('VehicleData not available:', window.VehicleData);
+                    return;
+                }
+                
+                // Normalize vehicle number for consistent matching
+                const normVin = vin.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                console.log('Insurance check for vehicle:', vin, '-> Normalized:', normVin);
+                console.log('Total vehicles in database:', VehicleData.VEHICLES.length);
+                
+                // First, try to find vehicle in demo data
+                let vehicleFound = false;
+                for (let i = 0; i < VehicleData.VEHICLES.length; i++) {
+                    const v = VehicleData.VEHICLES[i];
+                    const vnNorm = (v.reg || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    if (vnNorm === normVin) {
+                        // Found vehicle - populate fields
+                        getEl('pv_ownerName').textContent = v.ownerName || '';
+                        getEl('pv_regDate').textContent = v.registrationDateDMY || '';
+                        getEl('pv_fuelType').textContent = v.fuelType || '';
+                        getEl('pv_vehicleType').textContent = v.vehicleType || '';
+                        getEl('pv_engine').textContent = v.engineNo || '';
+                        getEl('pv_chassis').textContent = v.chassisNo || '';
+                        vehicleFound = true;
+                        console.log('Vehicle found:', v.reg, 'Owner:', v.ownerName);
+                        break;
+                    }
+                }
+                
+                if (!vehicleFound) {
+                    console.log('Available vehicles (first 5):', VehicleData.VEHICLES.slice(0, 5).map(v => v.reg));
+                    alert('Vehicle not found in database. Please check the vehicle number and try again.\n\nTip: Open demo-data.html to see available vehicle numbers.');
+                    return;
+                }
+                
+                // Check for pending challans
+                const hasPendingChallans = window.VehicleData && window.VehicleData.hasPendingChallans ? window.VehicleData.hasPendingChallans(normVin) : false;
+                if (hasPendingChallans) {
+                    const pendingCount = window.VehicleData && window.VehicleData.getPendingChallanCount ? window.VehicleData.getPendingChallanCount(normVin) : 0;
+                    alert('⚠️ This vehicle has ' + pendingCount + ' pending challan(s). Insurance cannot be issued until all challans are cleared.');
+                    return;
+                }
+                
+                var toast = getEl('successToast');
+                toast.classList.remove('visible');
+                setTimeout(function() { toast.classList.add('visible'); }, 250);
+            });
+
+            // Reset button
+            getEl('btnReset').addEventListener('click', function() {
+                getEl('f_vehicleNo').value = '';
+                getEl('f_policyNo').value = '';
+                getEl('f_idv').value = '';
+                getEl('f_premium').value = '';
+                getEl('f_startDate').value = '';
+                getEl('f_endDate').value = '';
+                getEl('f_provider').selectedIndex = 0;
+                getEl('f_policyType').selectedIndex = 0;
+                getEl('successToast').classList.remove('visible');
+                getEl('insReceiptPanel').classList.remove('visible');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Close receipt button
+            getEl('btnCloseReceipt').addEventListener('click', function() {
+                getEl('insReceiptPanel').classList.remove('visible');
+            });
+
+            // Print button
+            getEl('btnPrintReceipt').addEventListener('click', function() {
+                window.print();
+            });
+
+            // Download PDF (browser -> opens print dialog that user can save as PDF)
+            getEl('btnDownloadPdf').addEventListener('click', function() {
+                alert('Tip: In the Print dialog that opens, choose "Save as PDF" in the destination list to download the receipt.');
+                setTimeout(function() { window.print(); }, 300);
+            });
+
+            // Email button
+            getEl('btnEmailReceipt').addEventListener('click', function() {
+                const policyNo = getEl('mr_policyNo').textContent;
+                const holder = getEl('mr_holderName').textContent;
+                const subject = encodeURIComponent('Motor Insurance Receipt - ' + policyNo);
+                const body = encodeURIComponent(
+                    'Dear ' + holder + ',\n\n' +
+                    'Greetings from DronaSystems Insurance!\n\n' +
+                    'Please find attached your Motor Insurance Receipt for policy number ' + policyNo + '.\n\n' +
+                    'Thank you for choosing DronaSystems Insurance.\n\n' +
+                    'Regards,\nDronaSystems Insurance Team'
+                );
+                window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+            });
+
+            // Generate button
+            getEl('btnGenerate').addEventListener('click', function() {
+                const requiredFields = [
+                    { id: 'f_vehicleNo', name: 'Vehicle Number' },
+                    { id: 'f_policyNo', name: 'Policy Number' },
+                    { id: 'f_idv', name: 'IDV' },
+                    { id: 'f_premium', name: 'Premium Amount' },
+                    { id: 'f_startDate', name: 'Policy Start Date' },
+                    { id: 'f_endDate', name: 'Policy End Date' }
+                ];
+                for (const f of requiredFields) {
+                    const el = getEl(f.id);
+                    if (!el.value || String(el.value).trim() === '') {
+                        alert('Please fill ' + f.name);
+                        el.focus();
+                        el.classList.add('has-error');
+                        setTimeout(() => el.classList.remove('has-error'), 2500);
+                        return;
+                    }
+                }
+
+                // ===== Populate Receipt data =====
+                // Today = 18/05/2025 as per reference
+                getEl('mr_receiptDate').textContent = '18/05/2025';
+
+                // Owner details
+                const ownerName = (getEl('pv_ownerName').textContent || 'ARJUN KAPOOR').toUpperCase();
+                getEl('mr_holderName').textContent = 'MR. ' + ownerName;
+
+                // Vehicle
+                const vNo = getEl('pv_vehicleNo').textContent || 'MH12AB1234';
+                // Format vehicle no as MH-04 KL-5521 style (state-number space alpha-number)
+                let formattedVNo = vNo.toUpperCase().replace(/\s+/g,'');
+                if (/^[A-Z]{2}\d{2}[A-Z]{1,2}\d{3,4}$/.test(formattedVNo)) {
+                    const m1 = formattedVNo.slice(0,2);
+                    const m2 = formattedVNo.slice(2,4);
+                    const rest = formattedVNo.slice(4);
+                    const alphaPart = rest.match(/^[A-Z]+/);
+                    const numPart = rest.match(/\d+$/);
+                    if (alphaPart && numPart) {
+                        formattedVNo = m1 + '-' + m2 + ' ' + alphaPart[0] + '-' + numPart[0];
+                    }
+                }
+                getEl('mr_regNo').textContent = formattedVNo;
+                getEl('mr_makeModel2').textContent = (getEl('pv_makeModel').textContent || 'MARUTI SUZUKI SWIFT VXI').toUpperCase();
+                getEl('mr_fuel2').textContent = (getEl('pv_fuelType').textContent || 'PETROL').toUpperCase();
+                getEl('mr_chassis2').textContent = getEl('pv_chassis').textContent || 'MA3EK81SXXXXXXXX';
+                getEl('mr_engine2').textContent = getEl('pv_engine').textContent || 'E81SXXXXXXXXXXXX';
+                const seating = (getEl('pv_seating').textContent || '5');
+                getEl('mr_seatCap').textContent = seating + ' (INCLUDING DRIVER)';
+                const regDate = getEl('pv_regDate').textContent || '';
+                const yrMatch = regDate.match(/(19|20)\d{2}/);
+                getEl('mr_yrManf').textContent = yrMatch ? yrMatch[0] : '2024';
+
+                // Policy info
+                getEl('mr_policyNo').textContent = getEl('f_policyNo').value || 'DRN250518000123';
+                const pt = getEl('f_policyType').value || 'Comprehensive';
+                getEl('mr_policyType').innerHTML = 'Private Car - ' + pt + '<br>Insurance Policy';
+
+                // Dates — single line with "00:00 Hrs" / "23:59 Hrs" suffix as per reference
+                const sDate = getEl('f_startDate').value;
+                const eDate = getEl('f_endDate').value;
+                getEl('mr_startDate').textContent = formatDateDDMMYYYY(sDate) + ' 00:00 Hrs';
+                getEl('mr_endDate').textContent = formatDateDDMMYYYY(eDate) + ' 23:59 Hrs';
+
+                // Premium calculation
+                const userPremium = Number(getEl('f_premium').value) || 12678;
+                const idvVal = Number(getEl('f_idv').value) || 450000;
+
+                const ncbPct = 20;
+                const SAMPLE_USER = 12678;
+                const SAMPLE_OD_BASIC = 16200, SAMPLE_ADDON = 2500;
+                const SAMPLE_DEDUCTIBLE = 2000, SAMPLE_NCB = 3740;
+                const SAMPLE_OD_NET = 16960, SAMPLE_TP = 6150;
+                const SAMPLE_NET = 23110, SAMPLE_GST = 4161;
+                const SAMPLE_TOTAL_PRE = 27271, SAMPLE_NCB_DISCOUNT = 2368;
+                const SAMPLE_TOTAL_PAID = 26903;
+
+                const ratio = userPremium / SAMPLE_USER;
+                const rnd = function(x) { return Math.round(x); };
+
+                const odBasic = rnd(SAMPLE_OD_BASIC * ratio);
+                const addon = rnd(SAMPLE_ADDON * ratio);
+                const odBasicBefore = odBasic + addon;
+                const deductible = rnd(SAMPLE_DEDUCTIBLE * ratio);
+                const ncbAmt = rnd(SAMPLE_NCB * ratio);
+                const odNet = rnd(SAMPLE_OD_NET * ratio);
+                const tp = rnd(SAMPLE_TP * ratio);
+                const netPremium = rnd(SAMPLE_NET * ratio);
+                const gst = rnd(SAMPLE_GST * ratio);
+                const totalPre = rnd(SAMPLE_TOTAL_PRE * ratio);
+                const ncbDiscount = rnd(SAMPLE_NCB_DISCOUNT * ratio);
+                const totalPaid = rnd(SAMPLE_TOTAL_PAID * ratio);
+
+                const fmtINR = new Intl.NumberFormat('en-IN').format;
+                const fmtVal = function(v, negSign) {
+                    const abs = Math.abs(v);
+                    return (negSign ? '-' : '') + fmtINR(abs);
+                };
+
+                getEl('mr_totalPremium').textContent = '₹ ' + fmtINR(totalPaid);
+
+                // Rebuild OD / TP tables using the new <table class="mr-prem-half"> structure
+                const odData = [
+                    ['Basic Premium for Vehicle', odBasic],
+                    ['Add-on Covers', addon],
+                    ['Basic OD Premium', odBasicBefore],
+                    ['Voluntary Deductible', deductible],
+                    ['Less : NCB Discount (' + ncbPct + '%)', -ncbAmt, true],
+                    ['Net Own Damage Premium', odNet, false, 'p-net'],
+                    ['Total Own Damage Premium (A)', odNet, false, 'p-tot'],
+                ];
+                const tpData = [
+                    ['Basic Third Party Premium', tp],
+                    ['PA to Owner Driver', 0],
+                    ['Unnamed PA Cover to Passengers', 0],
+                    ['Legal Liability to Paid Driver', 0],
+                    ['Other Charges', 0],
+                    ['Net Third Party Premium', tp, false, 'p-net'],
+                    ['Total Third Party Premium (B)', tp, false, 'p-tot'],
+                ];
+
+                function buildHalfTable(rows) {
+                    let html = '<tbody>';
+                    rows.forEach(r => {
+                        const isNeg = r[2] === true;
+                        const cls = r[3] ? ' class="' + r[3] + (isNeg ? ' p-row-neg' : '') + '"' : (isNeg ? ' class="p-row-neg"' : '');
+                        const style = isNeg && !r[3] ? ' style="color:#DC2626"' : '';
+                        const vStr = isNeg ? fmtVal(r[1], true) : fmtINR(r[1]);
+                        html +=
+                            '<tr' + cls + '>' +
+                            '<td class="p-lbl">' + r[0] + '</td>' +
+                            '<td class="p-val"' + style + '>' + vStr + '</td>' +
+                            '</tr>';
+                    });
+                    html += '</tbody>';
+                    return html;
+                }
+
+                getEl('mrPremOd').innerHTML = buildHalfTable(odData);
+                getEl('mrPremTp').innerHTML = buildHalfTable(tpData);
+
+                // Update totals table cells
+                getEl('mrNetPremium').textContent = fmtINR(netPremium);
+                getEl('mrGst').textContent = fmtINR(gst);
+                getEl('mrTotalPremium').textContent = fmtINR(totalPre);
+                getEl('mrNcbDiscount').textContent = '-' + fmtINR(ncbDiscount);
+                getEl('mrTotalPaid').textContent = fmtINR(totalPaid);
+
+                getEl('mr_ncbPct').textContent = ncbPct + '%';
+
+                getEl('mr_rupeesWords').textContent = numberToWordsIndian(totalPaid);
+
+                // Show receipt and scroll
+                const panel = getEl('insReceiptPanel');
+                panel.classList.add('visible');
+                setTimeout(function() {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            });
+
+            // Dashboard breadcrumb link
+            getEl('crumbDashboard').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'insurance-dashboard.html';
             });
         });
     </script>

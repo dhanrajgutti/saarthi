@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/roles", "/error").permitAll()
                         .requestMatchers("/officer/login", "/scan-plate", "/violations", "/challan/*/pdf").permitAll()
+                        .requestMatchers("/puc/issue", "/puc/cert/**", "/puc/vehicle/**", "/puc/center/**", "/puc/search-vehicle/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider());
