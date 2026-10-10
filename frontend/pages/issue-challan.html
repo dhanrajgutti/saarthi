@@ -1240,7 +1240,7 @@
         const DS = window.DSChallan || {};
 
         /* ---------- API client with 3s timeout + offline fallback (like login.js pattern) ---------- */
-        const API_BASE = 'http://localhost:8080/api';
+        const API_BASE = 'http://localhost:8081/api';
         function apiCall(method, path, payload, timeoutMs) {
             return new Promise((resolve, reject) => {
                 const controller = new AbortController();
@@ -2230,7 +2230,8 @@
             }
 
             try { sessionStorage.setItem('ds-challan-dedup', dupeKey); } catch(e) {}
-            try { localStorage.setItem('ds-last-challan', JSON.stringify(result)); } catch(e) {}
+            // Note: Last challan should be saved to database via API instead of localStorage
+            // try { localStorage.setItem('ds-last-challan', JSON.stringify(result)); } catch(e) {}
 
             DS.openSuccess({
                 challanId: result.challanId,
@@ -2255,8 +2256,9 @@
 
         document.getElementById('dsBtnSaveDraft').addEventListener('click', () => {
             const p = buildChallanPayload();
-            try { localStorage.setItem('ds-draft-challan', JSON.stringify(p)); } catch(e) {}
-            DS.showToast('success','Draft Saved','Challan draft saved locally. You can resume editing any time.');
+            // Note: Draft should be saved to database via API instead of localStorage
+            // try { localStorage.setItem('ds-draft-challan', JSON.stringify(p)); } catch(e) {}
+            DS.showToast('success','Draft Saved','Challan draft will be saved to database. (API integration pending)');
         });
 
         document.getElementById('dsBtnPrint').addEventListener('click', () => {

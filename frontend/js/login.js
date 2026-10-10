@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const API_BASE_URL = 'http://localhost:8080/api';
+    const API_BASE_URL = 'http://localhost:8081/api';
     const STORAGE_KEY = 'vehical_auth_data';
 
     const CONFIG = {
@@ -180,7 +180,7 @@
         let timedOut = false;
         const abortCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
         const timeoutId = abortCtrl
-            ? setTimeout(() => { timedOut = true; abortCtrl.abort(); }, 3000)
+            ? setTimeout(() => { timedOut = true; abortCtrl.abort(); }, 5000)
             : null;
 
         try {
@@ -215,6 +215,7 @@
 
             if (responseData && typeof responseData === 'object') {
                 if (responseData.success === false && responseData.message) {
+                    console.log('Backend returned error:', responseData.message);
                     if (username && password) return runFallback();
                     return responseData;
                 }
@@ -224,6 +225,7 @@
             return { success: false, message: responseData ? (responseData.message || 'Login failed') : 'Login failed' };
         } catch (networkError) {
             if (timeoutId) clearTimeout(timeoutId);
+            console.log('Network error:', networkError);
             if (username && password) return runFallback();
             if (timedOut) {
                 return { success: false, message: 'Server timed out. Try demo credentials below.' };

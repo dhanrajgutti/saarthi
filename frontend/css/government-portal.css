@@ -1,0 +1,1107 @@
+/* =============================================================================
+   GOVERNMENT PORTAL STYLES - SmartSarthi
+   Authentic Indian Government Portal Design
+   ============================================================================= */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #0a3d62;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* =============================================================================
+   GOVERNMENT UTILITY BAR
+   ============================================================================= */
+.gov-utility-bar {
+    background: #1a365d;
+    color: #fff;
+    font-size: 12px;
+    border-bottom: 1px solid #0a2540;
+    margin: 0;
+}
+
+.utility-inner {
+    max-width: 100%;
+    margin: 0;
+    padding: 4px 5px 4px 5px;
+    padding-right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.utility-left {
+    display: flex;
+    align-items: center;
+}
+
+.utility-text {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.utility-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.utility-link {
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.utility-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+.utility-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+}
+
+.utility-sep {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10px;
+}
+
+.font-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.font-btn {
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.font-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+/* =============================================================================
+   MAIN HEADER
+   ============================================================================= */
+.gov-header {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 0;
+}
+
+.header-inner {
+    max-width: 100%;
+    margin: 0;
+    padding: 15px 5px 15px 5px;
+    padding-right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 80px;
+    height: 90px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.emblem-container {
+    width: 75px;
+    height: 75px;
+    flex-shrink: 0;
+}
+
+.ashoka-emblem-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.ashoka-emblem {
+    width: 100%;
+    height: 100%;
+}
+
+.ministry-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.ministry-hindi {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a365d;
+}
+
+.ministry-english {
+    font-size: 11px;
+    font-weight: 500;
+    color: #333;
+}
+
+.gov-text {
+    font-size: 10px;
+    color: #666;
+    font-weight: 500;
+}
+
+.header-center {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+.portal-branding {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.portal-logo {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portal-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.portal-logo-fallback {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.portal-logo-fallback svg {
+    width: 100%;
+    height: 100%;
+}
+
+.portal-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.portal-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0a3d62;
+    letter-spacing: -0.5px;
+}
+
+.portal-sub {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1a365d;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.portal-tagline {
+    font-size: 9px;
+    color: #666;
+    font-weight: 500;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.digital-india {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.digital-india-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.digital-india-fallback {
+    width: 100%;
+    height: 100%;
+}
+
+/* =============================================================================
+   NAVIGATION BAR
+   ============================================================================= */
+.gov-navigation {
+    background: #1a365d;
+    border-bottom: 3px solid #ff9933;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-inner {
+    max-width: 100%;
+    margin: 0;
+    padding: 0 5px 0 5px;
+    padding-right: 0;
+    display: flex;
+    gap: 0;
+    height: 40px;
+}
+
+.nav-item {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0 18px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.2s;
+    text-decoration: none;
+    position: relative;
+}
+
+.nav-item.dropdown {
+    position: relative;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.dropdown-arrow {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+.nav-item.dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0a2540;
+    min-width: 220px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 4px 4px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    max-height: 500px;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 12px 18px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding-left: 22px;
+}
+
+.nav-item:hover {
+    background: #0a2540;
+    text-decoration: none;
+}
+
+.nav-item.active {
+    background: #0d4f8c;
+    font-weight: 600;
+}
+
+.nav-item:last-child {
+    border-right: none;
+}
+
+/* =============================================================================
+   MAIN CONTENT
+   ============================================================================= */
+.main-content {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    min-height: calc(100vh - 280px);
+}
+
+/* =============================================================================
+   HERO SECTION
+   ============================================================================= */
+.hero-section {
+    background: linear-gradient(135deg, #0a3d62 0%, #1a365d 100%);
+    padding: 0px 4px 0px 4px;
+    padding-right: 0;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none"><path d="M0 50 Q25 30 50 50 T100 50" stroke="rgba(255,255,255,0.05)" stroke-width="2"/><path d="M0 60 Q25 40 50 60 T100 60" stroke="rgba(255,255,255,0.05)" stroke-width="2"/><path d="M0 70 Q25 50 50 70 T100 70" stroke="rgba(255,255,255,0.05)" stroke-width="2"/></svg>');
+    background-size: 200px;
+    opacity: 0.3;
+}
+
+.hero-inner {
+    max-width: 100%;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+    align-items: center;
+}
+
+.hero-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.hero-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+    display: block;
+}
+
+.hero-text {
+    color: #fff;
+}
+
+.hero-welcome {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.hero-subtitle {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+    opacity: 0.9;
+    max-width: 600px;
+}
+
+.hero-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Login Panel */
+.hero-login-panel {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.login-panel-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 20px;
+}
+
+.login-panel-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a365d;
+    margin: 0;
+}
+
+.login-panel-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.login-btn.primary {
+    background: #0a3d62;
+    color: #fff;
+    border-color: #0a3d62;
+    cursor: pointer;
+}
+
+.login-btn.primary:hover {
+    background: #0d4f8c;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(10, 61, 98, 0.2);
+}
+
+.login-btn.secondary {
+    background: #fff;
+    color: #0a3d62;
+    cursor: pointer;
+}
+
+.login-btn.secondary:hover {
+    background: #f8f9fa;
+    border-color: #0a3d62;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(10, 61, 98, 0.1);
+}
+
+.btn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    position: relative;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.login-divider span {
+    padding: 0 15px;
+}
+
+.login-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.login-link {
+    font-size: 12px;
+    color: #0a3d62;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+    color: #0d4f8c;
+}
+
+/* =============================================================================
+   SERVICES SECTION
+   ============================================================================= */
+.services-section {
+    margin: 0;
+    padding: 30px 15px 30px 15px;
+    padding-right: 15px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.section-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-icon {
+    width: 24px;
+    height: 24px;
+    color: #0a3d62;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a365d;
+    margin: 0;
+}
+
+.view-all-link {
+    font-size: 13px;
+    color: #0a3d62;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 20px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    min-height: 200px;
+    justify-content: space-between;
+}
+
+.service-card:hover {
+    border-color: #0a3d62;
+    box-shadow: 0 6px 16px rgba(10, 61, 98, 0.25);
+    text-decoration: none;
+    transform: translateY(-4px);
+}
+
+.service-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+    color: #0a3d62;
+}
+
+.service-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.service-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a365d;
+    margin: 0;
+}
+
+.service-desc {
+    font-size: 11px;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.service-arrow {
+    width: 16px;
+    height: 16px;
+    color: #0a3d62;
+    margin-top: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.service-card:hover .service-arrow {
+    opacity: 1;
+}
+
+/* =============================================================================
+   INFORMATION PANELS
+   ============================================================================= */
+.info-panels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 0;
+    padding: 20px 5px 20px 5px;
+    padding-right: 0;
+}
+
+.info-panel {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.panel-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a365d;
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* News Panel */
+.news-list {
+    list-style: none;
+}
+
+.news-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.news-item:last-child {
+    border-bottom: none;
+}
+
+.news-date {
+    font-size: 11px;
+    color: #666;
+    font-weight: 500;
+    min-width: 85px;
+    flex-shrink: 0;
+}
+
+.news-text {
+    font-size: 12px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* Links Panels */
+.links-list {
+    list-style: none;
+}
+
+.links-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.links-list li:last-child {
+    border-bottom: none;
+}
+
+.links-list a {
+    font-size: 12px;
+    color: #0a3d62;
+    text-decoration: none;
+    display: block;
+    padding: 2px 0;
+}
+
+.links-list a:hover {
+    text-decoration: underline;
+    padding-left: 5px;
+    transition: padding-left 0.2s;
+}
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+.gov-footer {
+    background: #1a365d;
+    color: #fff;
+    border-top: 3px solid #ff9933;
+    margin: 0;
+}
+
+.footer-inner {
+    max-width: 100%;
+    margin: 0;
+    padding: 20px 5px 20px 5px;
+    padding-right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.footer-emblem {
+    width: 80px;
+    height: 96px;
+    flex-shrink: 0;
+}
+
+.ashoka-emblem-small-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.ashoka-emblem-small {
+    width: 100%;
+    height: 100%;
+}
+
+.footer-ministry {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.footer-ministry-text {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.footer-gov-text {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.footer-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.footer-nav a {
+    font-size: 12px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-nav a:hover {
+    text-decoration: underline;
+}
+
+.footer-sep {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10px;
+}
+
+.footer-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.social-label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    transition: opacity 0.2s;
+}
+
+.social-icon:hover {
+    opacity: 0.8;
+}
+
+.footer-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: right;
+}
+
+.footer-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.stat-label {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.stat-value {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================= */
+@media (max-width: 1200px) {
+    .services-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .hero-content {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .hero-login-panel {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .nav-item.dropdown .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        max-height: 0;
+        overflow: hidden;
+        background: rgba(10, 37, 64, 0.95);
+    }
+
+    .nav-item.dropdown.active .dropdown-menu {
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 992px) {
+    .header-inner {
+        flex-direction: column;
+        gap: 15px;
+        min-height: auto;
+    }
+    
+    .header-left,
+    .header-center,
+    .header-right {
+        flex: none;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-inner {
+        flex-wrap: wrap;
+    }
+    
+    .nav-item {
+        flex: 1;
+        text-align: center;
+        min-width: 100px;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .info-panels {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-right {
+        align-items: center;
+    }
+    
+    .footer-stat {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .utility-inner {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .utility-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero-title {
+        font-size: 32px;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .nav-inner {
+        overflow-x: auto;
+    }
+    
+    .nav-item {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-section {
+        padding: 30px 15px;
+    }
+    
+    .hero-title {
+        font-size: 28px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

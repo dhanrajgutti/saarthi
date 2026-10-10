@@ -3,364 +3,451 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartSarthi</title>
-    <meta name="description" content="SmartSarthi Bharat RTO Portal - One Stop Solution for Vehicle, Licence & RTO Services (Police / PUC / Insurance)">
+    <title>SmartSarthi - Parivahan Sarathi | Vehicle Registration & Driving License e-Services</title>
+    <meta name="description" content="SmartSarthi - Online Services for Vehicle Registration, Driving License, Permit and other RTO related services. Government of India Ministry of Road Transport & Highways">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <style>
-        /* ---- SmartSarthi home: brand color split + 2-col hero with logo on right ---- */
-        .brand-smart {
-            color: #0F172A;
-            font-weight: 800;
-        }
-        .brand-sarthi {
-            color: #0B66E3;
-            font-weight: 800;
-        }
-        .hero-panel {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 36px;
-            align-items: center;
-            max-width: 1380px;
-            width: 100%;
-            padding: 28px 30px 14px;
-        }
-        .hero-right-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            min-height: 420px;
-        }
-        .hero-right-logo img.ss-logo {
-            width: 100%;
-            max-width: 440px;
-            height: auto;
-            filter: drop-shadow(0 18px 40px rgba(10, 43, 110, 0.14));
-        }
-        .hero-right-logo .ss-logo-fallback {
-            text-align: center;
-            display: none;
-        }
-        .hero-right-logo img.ss-logo.err + .ss-logo-fallback { display: block; }
-        .hero-right-logo .shield-svg {
-            width: 180px; height: 180px; margin: 0 auto 4px;
-        }
-        .hero-right-logo .wordmark {
-            font-family: 'Playfair Display', serif;
-            font-weight: 800;
-            font-size: 44px;
-            line-height: 1;
-        }
-        .hero-right-logo .tagline {
-            font-size: 12.5px; font-weight: 700;
-            letter-spacing: 3.2px;
-            color: #475569;
-            margin-top: 6px;
-            display: inline-flex; align-items: center; gap: 10px;
-        }
-        .hero-right-logo .tagline::before,
-        .hero-right-logo .tagline::after {
-            content: ""; width: 36px; height: 1.5px; background: #475569;
-        }
-        @media (max-width: 1080px) {
-            .hero-panel {
-                grid-template-columns: 1fr;
-                padding: 20px 18px 12px;
-            }
-            .hero-right-logo { min-height: 300px; }
-            .hero-right-logo img.ss-logo { max-width: 320px; }
-        }
-    </style>
+    <link rel="stylesheet" href="css/government-portal.css">
+    <script src="js/i18n.js"></script>
 </head>
-<body class="login-page">
+<body>
 
-    <!-- ============================================
-         HEADER — Fixed White Top Bar
-    ============================================= -->
-    <header class="site-header" id="siteHeader">
-        <div class="header-inner">
-            <!-- Left: Branding -->
-            <div class="header-brand">
-                <div class="header-emblem">
-                    <img src="../logo.png" alt="SmartSarthi Logo" class="header-emblem-img" onerror="this.style.display='none';">
-                </div>
-                <div class="brand-text">
-                    
-                    <span class="brand-project"><span class="brand-smart">Smart</span><span class="brand-sarthi">Sarthi</span></span>
-                    <span class="brand-ministry">Ministry of Road Transport &amp; Highways</span>
-                   
-                </div>
+    <!-- Government Utility Bar -->
+    <div class="gov-utility-bar">
+        <div class="utility-inner">
+            <div class="utility-left">
+                <span class="utility-text" data-i18n="govUtility">GOVERNMENT OF INDIA | MINISTRY OF ROAD TRANSPORT & HIGHWAYS</span>
             </div>
-            <!-- Right: Controls -->
-            <div class="header-controls">
-                <div class="header-lang-row">
-                    <div class="lang-select-wrap">
-                        <select class="lang-select" id="langSelect" aria-label="Language">
-                            <option value="en">English</option>
-                            <option value="hi">हिंदी</option>
-                            <option value="mr">मराठी</option>
-                        </select>
-                    </div>
-                    <a href="#" class="lang-link">हिंदी</a>
-                    <span class="lang-sep">|</span>
-                    <a href="#" class="lang-link">मराठी</a>
-                    <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
-                    </button>
-                    <a href="login.html" class="header-login-btn">Login</a>
-                </div>
-                <div class="header-datetime">
-                    <div class="dt-calendar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#0A3D7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                    </div>
-                    <div class="dt-text">
-                        <span class="dt-date" id="liveDate">26 July 2026</span>
-                        <span class="dt-time" id="liveTime">Sunday, 2:00 PM</span>
-                    </div>
-                </div>
+            <div class="utility-right">
+                <a href="#main-content" class="utility-link" data-i18n="skipMain">Skip to main content</a>
+                <span class="utility-sep">|</span>
+                <a href="#navigation" class="utility-link" data-i18n="skipNav">Skip to navigation</a>
+                <span class="utility-sep">|</span>
+                <a href="#" class="utility-link" data-i18n="screenReader">Screen Reader</a>
+                <span class="utility-sep">|</span>
+                <span class="font-size-controls">
+                    <a href="#" class="font-btn" data-size="increase">A+</a>
+                    <a href="#" class="font-btn" data-size="normal">A</a>
+                    <a href="#" class="font-btn" data-size="decrease">A-</a>
+                </span>
+                <span class="utility-sep">|</span>
+                <a href="#" class="utility-link" data-lang="en">English</a>
+                <span class="utility-sep">|</span>
+                <a href="#" class="utility-link" data-lang="mr">मराठी</a>
             </div>
         </div>
-        <!-- Tricolor Strip -->
-        <div class="tricolor-strip">
-            <span class="tri-saffron"></span>
-            <span class="tri-white"></span>
-            <span class="tri-green"></span>
+    </div>
+
+    <!-- Main Header -->
+    <header class="gov-header">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="emblem-container">
+                    <img src="../image.png" alt="Government of India Emblem - Ashoka Pillar" class="ashoka-emblem-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="ashoka-emblem" style="display: none;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="30" r="20" fill="none" stroke="#1a365d" stroke-width="2"/>
+                        <circle cx="50" cy="30" r="15" fill="none" stroke="#1a365d" stroke-width="1.5"/>
+                        <circle cx="50" cy="30" r="10" fill="none" stroke="#1a365d" stroke-width="1"/>
+                        <path d="M50 10 L50 50 M30 30 L70 30" stroke="#1a365d" stroke-width="1.5"/>
+                        <circle cx="50" cy="30" r="3" fill="#1a365d"/>
+                        <text x="50" y="75" text-anchor="middle" font-size="8" fill="#1a365d" font-weight="bold">सत्यमेव</text>
+                        <text x="50" y="85" text-anchor="middle" font-size="6" fill="#1a365d">जयते</text>
+                        <path d="M20 95 L50 65 L80 95" stroke="#1a365d" stroke-width="1.5" fill="none"/>
+                        <circle cx="20" cy="95" r="4" fill="none" stroke="#1a365d" stroke-width="1"/>
+                        <circle cx="50" cy="95" r="4" fill="none" stroke="#1a365d" stroke-width="1"/>
+                        <circle cx="80" cy="95" r="4" fill="none" stroke="#1a365d" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="ministry-text">
+                    <div class="ministry-hindi">सड़क परिवहन और राजमार्ग मंत्रालय</div>
+                    <div class="ministry-english">Ministry of Road Transport & Highways</div>
+                    <div class="gov-text">Government of India</div>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="portal-branding">
+                    <div class="portal-logo">
+                        <img src="../logo.png" alt="SmartSarthi Logo" class="portal-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="portal-logo-fallback" style="display: none;">
+                            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="40" cy="40" r="35" fill="#0a3d62" stroke="#1a365d" stroke-width="2"/>
+                                <path d="M25 40 L35 50 L55 30" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="40" cy="40" r="28" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="5,3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="portal-text">
+                        <div class="portal-name">SmartSarthi</div>
+                        <div class="portal-sub">PARIVAHAN SARATHI</div>
+                        <div class="portal-tagline">Vehicle Registration & Driving License e-Services</div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="digital-india">
+                    <img src="../digital.png" alt="Digital India Logo" class="digital-india-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="digital-india-fallback" style="display: none;" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="5" y="5" width="50" height="50" rx="5" fill="#1a365d"/>
+                        <text x="30" y="25" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold">DIGITAL</text>
+                        <text x="30" y="38" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">INDIA</text>
+                        <path d="M60 15 L75 15 L75 45 L60 45 Z" fill="#ff9933"/>
+                        <path d="M75 15 L90 15 L90 45 L75 45 Z" fill="#ffffff"/>
+                        <path d="M90 15 L105 15 L105 45 L90 45 Z" fill="#138808"/>
+                    </svg>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- ============================================
-         MAIN CONTENT — Background
-    ============================================= -->
-    <main class="main-stage">
-
-        <section class="hero-panel fade-in-up">
-            <div class="hero-copy">
-                <span class="hero-eyebrow">Welcome to</span>
-                <h1 class="hero-title">Bharat RTO Portal</h1>
-                <p class="hero-description">Your One-Stop Solution for All Vehicle Related Services</p>
-
-                <div class="hero-features">
-                    <article class="hero-feature">
-                        <div class="feature-icon-box">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <path d="M9 12l2 2 4-4"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Secure</h3>
-                            <p>Advanced security for your data protection.</p>
-                        </div>
-                    </article>
-                    <article class="hero-feature">
-                        <div class="feature-icon-box">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                                <line x1="16" y1="13" x2="8" y2="13"/>
-                                <line x1="16" y1="17" x2="8" y2="17"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Reliable</h3>
-                            <p>Trusted by millions of citizens across India.</p>
-                        </div>
-                    </article>
-                    <article class="hero-feature">
-                        <div class="feature-icon-box">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
-                                <path d="M9 11l3 3 5-5"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3>Transparent</h3>
-                            <p>Ensuring transparency in all RTO services.</p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="hero-actions">
-                    <a href="login.html" class="btn btn-primary">Login to Portal</a>
-                    <a href="#services" class="btn btn-secondary">Explore Services</a>
+    <!-- Navigation Bar -->
+    <nav class="gov-navigation" id="navigation">
+        <div class="nav-inner">
+            <a href="#" class="nav-item active">🏠 Home</a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">ℹ️ About Us <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">About Smart Saarthi</a>
+                    <a href="#" class="dropdown-item">Our Mission</a>
+                    <a href="#" class="dropdown-item">Our Vision</a>
+                    <a href="#" class="dropdown-item">Contact Information</a>
                 </div>
             </div>
-            <div class="hero-right-logo">
-                <img class="ss-logo" src="../logo.png" alt="SmartSarthi Logo"
-                     onerror="this.style.display='none';">
-            </div>
-
-        </section>
-
-        <section class="stats-banner fade-in-up">
-            <div class="stat-card">
-                <span class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 13l4-4 3 3 4-4 5 5"/>
-                        <path d="M12 19v-6"/>
-                    </svg>
-                </span>
-                <div>
-                    <p class="stat-value">1.2 Crore+</p>
-                    <p class="stat-label">Registered Vehicles</p>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">🪪 Licensing <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Apply for Driving Licence</a>
+                    <a href="#" class="dropdown-item">Learner Licence</a>
+                    <a href="#" class="dropdown-item">Driving Licence Renewal</a>
+                    <a href="#" class="dropdown-item">Duplicate Driving Licence</a>
+                    <a href="#" class="dropdown-item">Licence Status</a>
                 </div>
             </div>
-            <div class="stat-card">
-                <span class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 3h8a2 2 0 0 1 2 2v14l-6-3-6 3V5a2 2 0 0 1 2-2z"/>
-                        <path d="M9 9h6"/>
-                    </svg>
-                </span>
-                <div>
-                    <p class="stat-value">45 Lakh+</p>
-                    <p class="stat-label">Driving Licenses Issued</p>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">🚗 Registration <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">New Vehicle Registration</a>
+                    <a href="#" class="dropdown-item">Vehicle Registration Renewal</a>
+                    <a href="#" class="dropdown-item">Transfer of Ownership</a>
+                    <a href="#" class="dropdown-item">Duplicate RC</a>
+                    <a href="#" class="dropdown-item">RC Status</a>
                 </div>
             </div>
-            <div class="stat-card">
-                <span class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 7h16M4 12h16M4 17h16"/>
-                    </svg>
-                </span>
-                <div>
-                    <p class="stat-value">1500+</p>
-                    <p class="stat-label">RTO Offices</p>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">🎫 Permit <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Apply for Permit</a>
+                    <a href="#" class="dropdown-item">Permit Renewal</a>
+                    <a href="#" class="dropdown-item">Permit Status</a>
+                    <a href="#" class="dropdown-item">Permit Types</a>
                 </div>
             </div>
-            <div class="stat-card">
-                <span class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12l5 5L20 7"/>
-                    </svg>
-                </span>
-                <div>
-                    <p class="stat-value">99.9%</p>
-                    <p class="stat-label">System Uptime</p>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">💳 Challan <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Check Challan</a>
+                    <a href="#" class="dropdown-item">Pay Challan</a>
+                    <a href="#" class="dropdown-item">Challan Status</a>
                 </div>
             </div>
-        </section>
-
-        <section class="popular-services fade-in-up" id="services">
-            <h2 class="section-heading">Popular Services</h2>
-            <div class="services-grid">
-                <a href="#" class="service-card">
-                    <span class="service-icon">🚗</span>
-                    <p>Vehicle Registration</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">📄</span>
-                    <p>Driving License</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">🔁</span>
-                    <p>RC Transfer</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">💳</span>
-                    <p>E-Challan Payment</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">🍃</span>
-                    <p>PUC Verification</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">🛡️</span>
-                    <p>Insurance Status</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">📜</span>
-                    <p>Permit Services</p>
-                </a>
-                <a href="#" class="service-card">
-                    <span class="service-icon">🔎</span>
-                    <p>Vehicle Owner Search</p>
-                </a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">🏢 RTO <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Find RTO Office</a>
+                    <a href="#" class="dropdown-item">RTO Services</a>
+                    <a href="#" class="dropdown-item">RTO Contact Details</a>
+                    <a href="#" class="dropdown-item">RTO Office Information</a>
+                </div>
             </div>
-        </section>
-
-        <div class="help-bar fade-in-up">
-            <a href="#" class="help-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#0A3D7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-                    <path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/>
-                </svg>
-                Need Help?
-            </a>
-            <span class="help-sep">|</span>
-            <a href="tel:18001234567" class="help-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#0A3D7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 1 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-                1800-1234-567
-            </a>
-            <span class="help-sep">|</span>
-            <a href="mailto:support@bharatrto.gov.in" class="help-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#0A3D7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
-                </svg>
-                support@bharatrto.gov.in
-            </a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link">⚙️ Others <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">PUC Certificate</a>
+                    <a href="#" class="dropdown-item">Vehicle Information</a>
+                    <a href="#" class="dropdown-item">Insurance Information</a>
+                    <a href="#" class="dropdown-item">Important Documents</a>
+                    <a href="#" class="dropdown-item">FAQs</a>
+                </div>
+            </div>
+            <a href="#" class="nav-item">📞 Contact Us</a>
         </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="hero-image">
+                        <img src="../hero.png" alt="SmartSarthi Hero Image" class="hero-img">
+                    </div>
+                    <div class="hero-login-panel">
+                        <div class="login-panel-header">
+                            <h3>Login to Your Account</h3>
+                        </div>
+                        <div class="login-panel-body">
+                            <button class="login-btn primary" onclick="window.location.href='login.html'">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                                Login with Digital Seva
+                            </button>
+                            <div class="login-divider">
+                                <span>or</span>
+                            </div>
+                            <button class="login-btn secondary" onclick="window.location.href='login.html'">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Login with SmartSarthi e-Services
+                            </button>
+                            <div class="login-links">
+                                <a href="pages/vehicle-registration.html" class="login-link">🚗 Register Vehicle</a>
+                                <a href="login.html" class="login-link">New User? Register Here</a>
+                                <a href="login.html" class="login-link">Forgot Password?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Online Services Section -->
+        <section class="services-section">
+            <div class="section-header">
+                <div class="section-title-row">
+                    <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <h2 class="section-title">Online Services</h2>
+                </div>
+                <a href="#" class="view-all-link">View All Services →</a>
+            </div>
+            <div class="services-grid">
+                <a href="pages/vehicle-registration.html" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">🚗</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Vehicle Registration</h3>
+                        <p class="service-desc">Book new registration / Transfer of ownership</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                <a href="pages/issue-puc.html" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">🪪</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">PUC Certificate</h3>
+                        <p class="service-desc">Issue Pollution Under Control certificate</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                <a href="#" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">🎫</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Conductor License</h3>
+                        <p class="service-desc">Apply for conductor license</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                <a href="#" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">📄</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Permit</h3>
+                        <p class="service-desc">Apply for vehicle permit</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                <a href="pages/pay-challan.html" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">💳</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Challan Payment</h3>
+                        <p class="service-desc">Pay traffic challan online</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                <a href="#" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">📅</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">RTO Appointment</h3>
+                        <p class="service-desc">Book RTO service slot</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+                <a href="#" class="service-card">
+                    <div class="service-icon">
+                        <span class="service-emoji">⚙️</span>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Other Services</h3>
+                        <p class="service-desc">Duplicate, Reprint, Surrender etc.</p>
+                    </div>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Information Panels -->
+        <section class="info-panels">
+            <div class="info-panel news-panel">
+                <h3 class="panel-title">Latest News / Updates</h3>
+                <ul class="news-list">
+                    <li class="news-item">
+                        <span class="news-date">16 Sep 2025</span>
+                        <span class="news-text">New Driving License Rules 2025 notified by MoRTH</span>
+                    </li>
+                    <li class="news-item">
+                        <span class="news-date">12 Sep 2025</span>
+                        <span class="news-text">Vehicle Registration Fee Updated for Some States</span>
+                    </li>
+                    <li class="news-item">
+                        <span class="news-date">08 Sep 2025</span>
+                        <span class="news-text">Online Permit Service Now Available for More States</span>
+                    </li>
+                    <li class="news-item">
+                        <span class="news-date">05 Sep 2025</span>
+                        <span class="news-text">Challan Payment Gateway Maintenance</span>
+                    </li>
+                    <li class="news-item">
+                        <span class="news-date">28 Aug 2025</span>
+                        <span class="news-text">RTO Office Timings Revised in Selected States</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="info-panel quick-links-panel">
+                <h3 class="panel-title">Quick Links</h3>
+                <ul class="links-list">
+                    <li><a href="pages/vehicle-registration.html">🚗 Register New Vehicle</a></li>
+                    <li><a href="pages/issue-puc.html">🎫 Issue PUC Certificate</a></li>
+                    <li><a href="pages/pay-challan.html">💳 Pay Challan</a></li>
+                    <li><a href="#">Check Vehicle Registration Status</a></li>
+                    <li><a href="#">Check Driving License Status</a></li>
+                    <li><a href="#">Verify RC / DL</a></li>
+                    <li><a href="#">Find RTO Office</a></li>
+                    <li><a href="#">User Manual</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="info-panel important-info-panel">
+                <h3 class="panel-title">Important Information</h3>
+                <ul class="links-list">
+                    <li><a href="#">Driving License Rules</a></li>
+                    <li><a href="#">Vehicle Registration Procedure</a></li>
+                    <li><a href="#">Permit Guidelines</a></li>
+                    <li><a href="#">RTO Office Details</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Helpline Numbers</a></li>
+                </ul>
+            </div>
+        </section>
+
     </main>
 
-    <!-- ============================================
-         FOOTER — Dark Blue Bottom Bar
-    ============================================= -->
-    <footer class="site-footer">
+    <!-- Footer -->
+    <footer class="gov-footer">
         <div class="footer-inner">
-            <div class="footer-brand">
+            <div class="footer-left">
                 <div class="footer-emblem">
-                    <img src="../image.png" alt="Emblem of India" class="footer-emblem-img" onerror="this.style.display='none';">
+                    <img src="../image.png" alt="Government of India Emblem" class="ashoka-emblem-small-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="ashoka-emblem-small" style="display: none;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="30" r="20" fill="none" stroke="#ffffff" stroke-width="2"/>
+                        <circle cx="50" cy="30" r="15" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+                        <circle cx="50" cy="30" r="10" fill="none" stroke="#ffffff" stroke-width="1"/>
+                        <path d="M50 10 L50 50 M30 30 L70 30" stroke="#ffffff" stroke-width="1.5"/>
+                        <circle cx="50" cy="30" r="3" fill="#ffffff"/>
+                        <text x="50" y="75" text-anchor="middle" font-size="8" fill="#ffffff" font-weight="bold">सत्यमेव</text>
+                        <text x="50" y="85" text-anchor="middle" font-size="6" fill="#ffffff">जयते</text>
+                        <path d="M20 95 L50 65 L80 95" stroke="#ffffff" stroke-width="1.5" fill="none"/>
+                        <circle cx="20" cy="95" r="4" fill="none" stroke="#ffffff" stroke-width="1"/>
+                        <circle cx="50" cy="95" r="4" fill="none" stroke="#ffffff" stroke-width="1"/>
+                        <circle cx="80" cy="95" r="4" fill="none" stroke="#ffffff" stroke-width="1"/>
+                    </svg>
                 </div>
-                <span class="footer-copy">&copy; 2026 All Rights Reserved.</span>
+                <div class="footer-ministry">
+                    <div class="footer-ministry-text">Ministry of Road Transport & Highways</div>
+                    <div class="footer-gov-text">Government of India</div>
+                </div>
             </div>
-            <nav class="footer-links">
-                <a href="#">About Portal</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Citizen Services</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Important Links</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Help Desk</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Contact</a>
-                <span class="footer-sep">|</span>
-                <a href="#">FAQ</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Privacy Policy</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Terms</a>
-                <span class="footer-sep">|</span>
-                <a href="#">Accessibility</a>
-            </nav>
-            <div class="footer-version">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <path d="M9 12l2 2 4-4"/>
-                </svg>
-                Version 2.0
+            <div class="footer-center">
+                <nav class="footer-nav">
+                    <a href="#">Terms & Conditions</a>
+                    <span class="footer-sep">|</span>
+                    <a href="#">Privacy Policy</a>
+                    <span class="footer-sep">|</span>
+                    <a href="#">Hyperlink Policy</a>
+                    <span class="footer-sep">|</span>
+                    <a href="#">Accessibility Statement</a>
+                    <span class="footer-sep">|</span>
+                    <a href="#">Help</a>
+                </nav>
+            </div>
+            <div class="footer-right">
+                <div class="footer-social">
+                    <span class="social-label">Follow Us</span>
+                    <a href="#" class="social-icon" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#fff"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <span class="stat-label">Last Updated:</span>
+                        <span class="stat-value">17 Sep 2025</span>
+                    </div>
+                    <div class="footer-stat">
+                        <span class="stat-label">Total Visitors:</span>
+                        <span class="stat-value">3,24,56,789</span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="js/clock.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/login.js"></script>
+    <script src="js/government-portal.js"></script>
 </body>
 </html>

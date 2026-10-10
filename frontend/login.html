@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <script src="js/i18n.js"></script>
     <style>
         body {
             min-height: 100vh;
@@ -124,7 +125,7 @@
             transition: border-color 0.15s ease, box-shadow 0.15s ease;
         }
         .simple-form-row input:focus {
-            border-color: #5eb9b1;
+            border-color: #DC2626;
             box-shadow: 0 0 0 2px rgba(94, 185, 177, 0.18);
         }
 
@@ -222,7 +223,7 @@
             width: 100%;
         }
         .simple-captcha-controls input:focus {
-            border-color: #5eb9b1;
+            border-color: #DC2626;
             box-shadow: 0 0 0 2px rgba(94, 185, 177, 0.18);
         }
 
@@ -245,7 +246,7 @@
         .simple-login-btn {
             min-width: 150px;
             padding: 8px 18px;
-            background: #5eb9b1;
+            background: #DC2626;
             color: #fff;
             border: none;
             border-radius: 2px;
@@ -283,7 +284,7 @@
             color: #1E293B;
         }
         .back-home-link a {
-            color: #0F4C81;
+            color: #DC2626;
             text-decoration: none;
             font-weight: 700;
             display: inline-flex;
@@ -360,17 +361,17 @@
             border-radius: 3px;
             border: 1px solid #cbd5e1;
             background: #ffffff;
-            color: #0F4C81;
+            color: #DC2626;
             cursor: pointer;
             transition: all 0.15s ease;
         }
         .role-quick-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(15,76,129,0.10); }
         .role-quick-btn.rq-police:active,
-        .role-quick-btn.rq-police.active { background: #0F4C81; color: #fff; border-color: #0F4C81; }
+        .role-quick-btn.rq-police.active { background: #DC2626; color: #fff; border-color: #DC2626; }
         .role-quick-btn.rq-puc:active,
-        .role-quick-btn.rq-puc.active    { background: #065f46; color: #fff; border-color: #065f46; }
+        .role-quick-btn.rq-puc.active    { background: #B91C1C; color: #fff; border-color: #B91C1C; }
         .role-quick-btn.rq-insurance:active,
-        .role-quick-btn.rq-insurance.active { background: #7C2D12; color: #fff; border-color: #7C2D12; }
+        .role-quick-btn.rq-insurance.active { background: #991B1B; color: #fff; border-color: #991B1B; }
         .role-quick-btn.rq-citizen:active,
         .role-quick-btn.rq-citizen.active  { background: #7c3aed; color: #fff; border-color: #7c3aed; }
         .role-quick-hint {
@@ -381,7 +382,7 @@
             color: #64748b;
             margin: 2px 0 2px;
         }
-        .role-quick-hint strong { color: #0F4C81; }
+        .role-quick-hint strong { color: #DC2626; }
         
         .simple-form-row input[placeholder*="MH"] {
             text-transform: uppercase;
@@ -413,19 +414,18 @@
                     <div class="lang-select-wrap">
                         <select class="lang-select" id="langSelect" aria-label="Language">
                             <option value="en">English</option>
-                            <option value="hi">हिंदी</option>
                             <option value="mr">मराठी</option>
                         </select>
                     </div>
-                    <a href="#" class="lang-link">हिंदी</a>
+                    <a href="#" class="lang-link" data-lang="en">English</a>
                     <span class="lang-sep">|</span>
-                    <a href="#" class="lang-link">मराठी</a>
+                    <a href="#" class="lang-link" data-lang="mr">मराठी</a>
                     <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                         </svg>
                     </button>
-                    <a href="index.html" class="header-login-btn">Home</a>
+                    <a href="index.html" class="header-login-btn" data-i18n="home">Home</a>
                 </div>
                 <div class="header-datetime">
                     <div class="dt-calendar">
@@ -457,14 +457,14 @@
 
         <div class="simple-login-card fade-in-up">
             <div class="role-quick-buttons">
-                <button type="button" class="role-quick-btn rq-police" data-quick-role="POLICE">Police</button>
-                <button type="button" class="role-quick-btn rq-puc" data-quick-role="PUC_CENTER">PUC</button>
-                <button type="button" class="role-quick-btn rq-insurance" data-quick-role="INSURANCE_AGENCY">Insurance</button>
+                <button type="button" class="role-quick-btn rq-police" data-quick-role="POLICE" data-i18n="police">Police</button>
+                <button type="button" class="role-quick-btn rq-puc" data-quick-role="PUC_CENTER" data-i18n="pucCenter">PUC</button>
+                <button type="button" class="role-quick-btn rq-insurance" data-quick-role="INSURANCE_AGENCY" data-i18n="insurance">Insurance</button>
                 <button type="button" class="role-quick-btn rq-citizen" data-quick-role="CITIZEN">Citizen</button>
                 <div class="role-quick-hint">Click a role above to autofill login credentials <strong>(Citizen: Copy vehicle and mobile from demo-data.html table)</strong></div>
             </div>
             <div class="simple-card-header">
-                <h2>Sign in</h2>
+                <h2 data-i18n="loginCardTitle">Sign in</h2>
                 <div class="lock-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
                         <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
@@ -479,11 +479,11 @@
                     <!-- Standard login fields (username/password) -->
                     <div id="standardLoginFields">
                         <div class="simple-form-row">
-                            <label for="username">Username:</label>
+                            <label for="username" data-i18n="username">Username:</label>
                             <input id="username" name="username" type="text" placeholder="Username" autocomplete="username">
                         </div>
                         <div class="simple-form-row">
-                            <label for="password">Password:</label>
+                            <label for="password" data-i18n="password">Password:</label>
                             <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password">
                         </div>
                     </div>
@@ -519,7 +519,7 @@
                         <a class="simple-forgot" id="forgotLink" href="javascript:void(0)">
                             Forgot your password<span class="info-icon">?</span>
                         </a>
-                        <button type="submit" class="simple-login-btn" id="loginButton">LOGIN</button>
+                        <button type="submit" class="simple-login-btn" id="loginButton" data-i18n="loginBtn">LOGIN</button>
                     </div>
                 </div>
                 <div class="simple-card-footer">
@@ -585,7 +585,7 @@
         (function() {
             'use strict';
 
-            const API_BASE_URL = 'http://localhost:8080/api';
+            const API_BASE_URL = 'http://localhost:8081/api';
             const STORAGE_KEY = 'vehical_auth_data';
 
             const CONFIG = {

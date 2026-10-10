@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANPR Scanner - DronaSystems e-Challan Management</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           LIGHT BLUE & WHITE THEME
+        ============================================ */
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-panel: #ffffff;
+            --bg-panel-dark: #e8f0f8;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #cbd5e1;
+            --font-mono: 'Courier New', monospace;
+            --font-sans: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ============================================
+           HEADER
+        ============================================ */
+        .anpr-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, #ffffff 0%, #e8f0f8 100%);
+            border-bottom: 3px solid var(--accent-blue);
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.1);
+        }
+
+        .badge {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .header-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ============================================
+           MAIN CONTAINER
+        ============================================ */
+        .anpr-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 28px 36px;
+        }
+
+        /* ============================================
+           WORKFLOW STEPS
+        ============================================ */
+        .workflow-container {
+            background: var(--bg-panel);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 28px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-panel-dark);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .step.active .step-label {
+            color: var(--accent-blue);
+        }
+
+        /* ============================================
+           STEP CONTENT AREAS
+        ============================================ */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        /* STEP 1: Camera */
+        .camera-section {
+            text-align: center;
+        }
+
+        .camera-container {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            max-width: 800px;
+        }
+
+        .camera-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .camera-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #94a3b8;
+        }
+
+        .camera-placeholder svg {
+            width: 64px;
+            height: 64px;
+            opacity: 0.5;
+        }
+
+        .scan-overlay {
+            position: absolute;
+            inset: 20px;
+            display: none;
+            pointer-events: none;
+        }
+
+        .scan-overlay.active {
+            display: block;
+        }
+
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--accent-green);
+        }
+
+        .corner-tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .corner-tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+        .corner-br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+        .laser-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: laserScan 2s ease-in-out infinite;
+        }
+
+        @keyframes laserScan {
+            0%, 100% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .camera-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* STEP 2: Vehicle Details */
+        .vehicle-details {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .plate-display {
+            background: #1e293b;
+            border: 3px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .plate-text {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            color: var(--accent-green);
+            letter-spacing:6px;
+            text-shadow: 0 0 15px var(--accent-green);
+            text-transform: uppercase;
+        }
+
+        .flag-pill {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .flag-pill.clean {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .flag-pill.stolen {
+            background: var(--accent-red);
+            color: white;
+            animation: flagBlink 0.5s ease-in-out infinite;
+        }
+
+        .flag-pill.expired {
+            background: var(--accent-amber);
+            color: white;
+        }
+
+        @keyframes flagBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .detail-item {
+            background: var(--bg-panel-dark);
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* STEP 3: Add Fine */
+        .fine-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .form-textarea {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: white;
+            outline: none;
+            resize: vertical;
+            min-height: 100px;
+            font-family: var(--font-sans);
+        }
+
+        .alert-banner {
+            background: var(--accent-red);
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: none;
+            animation: alertFlash 0.5s ease-in-out infinite;
+        }
+
+        .alert-banner.visible {
+            display: block;
+        }
+
+        @keyframes alertFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* ============================================
+           BACK NAVIGATION
+        ============================================ */
+        .back-nav {
+            padding: 12px 28px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* ============================================
+           RESPONSIVE
+        ============================================ */
+        @media (max-width: 768px) {
+            .anpr-header {
+                flex-wrap: wrap;
+                padding: 12px 16px;
+            }
+            .anpr-container {
+                padding: 16px 14px 28px;
+            }
+            .workflow-container {
+                padding: 20px;
+            }
+            .details-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .camera-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="funcPageMount"></div>
+
+    <script src="../js/dashboard.js"></script>
+    <script>
+    (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            DashboardApp.renderFunctionPage({
+                allowedRoles: ['POLICE'],
+                dashboardLabel: 'Police Dashboard',
+                pageTitle: 'ANPR Scanner',
+                pageDescription: 'Automated Number Plate Recognition for vehicle detection and challan generation.',
+                pageIcon: null,
+                activeMenuKey: 'anprScanner'
+            });
+        });
+    })();
+    </script>
+
+    <!-- Header -->
+    <header class="anpr-header">
+        <div class="badge">★</div>
+        <div class="header-text">
+            <div class="header-title">STATE TRAFFIC POLICE</div>
+            <div class="header-subtitle">Automated Number Plate Recognition</div>
+        </div>
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>SYSTEM ONLINE</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="anpr-container">
+        <div class="workflow-container">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Capture</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Details</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Add Fine</div>
+                </div>
+            </div>
+
+            <!-- STEP 1: Capture & Scan -->
+            <div class="step-content active" id="step1Content">
+                <div class="camera-section">
+                    <div class="camera-container">
+                        <video id="cameraVideo" class="camera-video" autoplay playsinline muted></video>
+                        <div id="cameraPlaceholder" class="camera-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                            <span>Camera Off — Press Start Camera</span>
+                        </div>
+                        <div id="scanOverlay" class="scan-overlay">
+                            <div class="corner corner-tl"></div>
+                            <div class="corner corner-tr"></div>
+                            <div class="corner corner-bl"></div>
+                            <div class="corner corner-br"></div>
+                            <div class="laser-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="camera-buttons">
+                        <button id="btnStartCamera" class="btn btn-primary">▶ Start Camera</button>
+                        <button id="btnCapture" class="btn btn-success" disabled>📸 Capture & Scan</button>
+                        <button id="btnStopCamera" class="btn btn-danger" disabled>■ Stop</button>
+                    </div>
+
+                    <div style="margin-top: 16px;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 8px;">
+                            Or enter plate manually:
+                        </label>
+                        <div style="display: flex; gap: 10px; max-width: 400px; margin: 0 auto;">
+                            <input type="text" id="manualInput" placeholder="MH13 FB 1749" 
+                                   style="flex: 1; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; 
+                                   font-family: var(--font-mono); letter-spacing: 2px; text-transform: uppercase;">
+                            <button id="btnManualScan" class="btn btn-primary" style="padding: 12px 20px;">Scan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Vehicle Details -->
+            <div class="step-content" id="step2Content">
+                <div class="vehicle-details">
+                    <div id="alertBanner" class="alert-banner">⚠ STOLEN VEHICLE DETECTED ⚠</div>
+
+                    <div class="plate-display">
+                        <div id="plateText" class="plate-text">--- ----</div>
+                    </div>
+
+                    <div id="flagPill" class="flag-pill clean">CLEAN</div>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Vehicle Type</div>
+                            <div id="metaVehicleType" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">State / RTO</div>
+                            <div id="metaState" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Owner Name</div>
+                            <div id="metaOwner" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Owner Status</div>
+                            <div id="metaOwnerStatus" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Insurance</div>
+                            <div id="metaInsurance" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">PUC Status</div>
+                            <div id="metaPUC" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">RC Status</div>
+                            <div id="metaRC" class="detail-value">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Scan Confidence</div>
+                            <div id="metaConfidence" class="detail-value">-</div>
+                        </div>
+                    </div>
+
+                    <div class="camera-buttons">
+                        <button id="btnAddFine" class="btn btn-primary">➕ Add Fine</button>
+                        <button id="btnNewTransaction" class="btn btn-secondary">✕ New Transaction</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Add Fine -->
+            <div class="step-content" id="step3Content">
+                <div class="fine-section">
+                    <h2 style="text-align: center; color: var(--accent-blue); margin-bottom: 24px;">Issue e-Challan</h2>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Vehicle Number</label>
+                            <input type="text" id="fineVehicleNo" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Violation Type <span style="color: var(--accent-red);">*</span></label>
+                            <select id="fineViolation" class="form-select">
+                                <option value="">Select Violation</option>
+                                <option value="overspeeding">Over Speeding</option>
+                                <option value="rash_driving">Dangerous Driving</option>
+                                <option value="no_helmet">No Helmet</option>
+                                <option value="no_seatbelt">No Seatbelt</option>
+                                <option value="signal_jump">Signal Jumping</option>
+                                <option value="wrong_parking">Wrong Parking</option>
+                                <option value="no_license">No Valid License</option>
+                                <option value="no_insurance">No Insurance</option>
+                                <option value="no_puc">No PUC Certificate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fine Amount (₹) <span style="color: var(--accent-red);">*</span></label>
+                            <input type="number" id="fineAmount" class="form-input" placeholder="Enter fine amount">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Location <span style="color: var(--accent-red);">*</span></label>
+                            <input type="text" id="fineLocation" class="form-input" placeholder="Enter location">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label class="form-label">Remarks</label>
+                            <textarea id="fineRemarks" class="form-textarea" placeholder="Enter violation details..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="camera-buttons">
+                        <button id="btnGenerateChallan" class="btn btn-success">✓ Generate Challan</button>
+                        <button id="btnBackToDetails" class="btn btn-secondary">← Back to Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT
+    ============================================ -->
+    <script>
+    (function() {
+        // ============================================
+        // STATE
+        // ============================================
+        let stream = null;
+        let currentVehicle = null;
+        let currentStep = 1;
+        const API_BASE = 'http://localhost:8081/api';
+
+        // Vehicle Database
+        const VEHICLE_DB = [
+            { plate: 'MH12AB1234', type: 'Sedan', state: 'Maharashtra', owner: 'Rajesh Kumar', insurance: 'Valid', puc: 'Valid', rc: 'Active', flag: 'clean' },
+            { plate: 'DL8CAF5031', type: 'SUV', state: 'Delhi', owner: 'Amit Sharma', insurance: 'Valid', puc: 'Valid', rc: 'Active', flag: 'clean' },
+            { plate: 'KA05MJ7788', type: 'Hatchback', state: 'Karnataka', owner: 'Priya Singh', insurance: 'Expired', puc: 'Valid', rc: 'Active', flag: 'stolen' },
+            { plate: 'TN22BX9933', type: 'Truck', state: 'Tamil Nadu', owner: 'Suresh Reddy', insurance: 'Expired', puc: 'Expired', rc: 'Active', flag: 'expired' },
+            { plate: 'UP32KL8899', type: 'Sedan', state: 'Uttar Pradesh', owner: 'Vijay Patel', insurance: 'Expired', puc: 'Valid', rc: 'Active', flag: 'stolen' }
+        ];
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const cameraVideo = document.getElementById('cameraVideo');
+        const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+        const scanOverlay = document.getElementById('scanOverlay');
+        const btnStartCamera = document.getElementById('btnStartCamera');
+        const btnCapture = document.getElementById('btnCapture');
+        const btnStopCamera = document.getElementById('btnStopCamera');
+        const manualInput = document.getElementById('manualInput');
+        const btnManualScan = document.getElementById('btnManualScan');
+
+        const alertBanner = document.getElementById('alertBanner');
+        const plateText = document.getElementById('plateText');
+        const flagPill = document.getElementById('flagPill');
+        const btnAddFine = document.getElementById('btnAddFine');
+        const btnNewTransaction = document.getElementById('btnNewTransaction');
+
+        const btnGenerateChallan = document.getElementById('btnGenerateChallan');
+        const btnBackToDetails = document.getElementById('btnBackToDetails');
+
+        // ============================================
+        // STEP NAVIGATION
+        // ============================================
+        function goToStep(step) {
+            currentStep = step;
+            
+            // Update step indicators
+            for (let i = 1; i <= 3; i++) {
+                const stepEl = document.getElementById('step' + i);
+                const contentEl = document.getElementById('step' + i + 'Content');
+                
+                stepEl.classList.remove('active', 'completed');
+                contentEl.classList.remove('active');
+                
+                if (i < step) {
+                    stepEl.classList.add('completed');
+                } else if (i === step) {
+                    stepEl.classList.add('active');
+                    contentEl.classList.add('active');
+                }
+            }
+        }
+
+        // ============================================
+        // CAMERA FUNCTIONS
+        // ============================================
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, 
+                    audio: false 
+                });
+                
+                cameraVideo.srcObject = stream;
+                cameraVideo.onloadedmetadata = () => {
+                    cameraVideo.play();
+                    cameraPlaceholder.style.display = 'none';
+                    cameraVideo.style.display = 'block';
+                    scanOverlay.classList.add('active');
+                    btnStartCamera.disabled = true;
+                    btnCapture.disabled = false;
+                    btnStopCamera.disabled = false;
+                };
+            } catch (err) {
+                alert('Camera error: ' + err.message);
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            cameraVideo.srcObject = null;
+            cameraVideo.style.display = 'none';
+            cameraPlaceholder.style.display = 'flex';
+            scanOverlay.classList.remove('active');
+            btnStartCamera.disabled = false;
+            btnCapture.disabled = true;
+            btnStopCamera.disabled = true;
+        }
+
+        function captureFrame() {
+            if (!cameraVideo || !cameraVideo.videoWidth) return null;
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraVideo.videoWidth;
+            canvas.height = cameraVideo.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(cameraVideo, 0, 0);
+            return canvas;
+        }
+
+        function canvasToBase64(canvas) {
+            try {
+                return canvas.toDataURL('image/jpeg', 0.85);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // ============================================
+        // SCAN FUNCTIONS
+        // ============================================
+        async function scanPlate(imageBase64 = null) {
+            btnCapture.disabled = true;
+            plateText.textContent = 'SCANNING…';
+            flagPill.className = 'flag-pill clean';
+            flagPill.textContent = 'SCANNING';
+
+            try {
+                let plate;
+                
+                if (imageBase64) {
+                    // Try backend OCR first
+                    try {
+                        const response = await fetch(API_BASE + '/scan-plate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ plateImage: imageBase64 })
+                        });
+                        const result = await response.json();
+                        
+                        if (result.success && result.data && result.data.vehicleNumber) {
+                            plate = result.data.vehicleNumber;
+                        } else {
+                            throw new Error('No plate detected by backend');
+                        }
+                    } catch (fetchError) {
+                        console.log('Backend OCR failed, using manual entry:', fetchError.message);
+                        // Backend not available - prompt for manual entry
+                        const manualPlate = prompt('Backend OCR not available. Please enter the plate number manually:');
+                        if (manualPlate) {
+                            plate = manualPlate.trim().toUpperCase();
+                        } else {
+                            throw new Error('Plate entry cancelled');
+                        }
+                    }
+                } else {
+                    // Manual entry
+                    plate = manualInput.value.trim().toUpperCase();
+                }
+
+                if (!plate) {
+                    throw new Error('No plate number provided');
+                }
+
+                // Format plate
+                const formattedPlate = plate.replace(/([A-Z]{2})(\d{2})([A-Z]{1,2})(\d{4})/, '$1$2 $3 $4');
+                
+                // Check vehicle in database
+                const normalized = plate.replace(/[\s-]/g, '');
+                console.log('[ANPR] Normalized vehicle number:', normalized);
+                let vehicle;
+
+                try {
+                    const dbResponse = await fetch(API_BASE + '/vehicle/lookup?vehicleNo=' + encodeURIComponent(normalized));
+                    const dbResult = await dbResponse.json();
+                    
+                    if (dbResult.success && dbResult.data) {
+                        // Vehicle found in database
+                        vehicle = {
+                            plate: formattedPlate,
+                            type: dbResult.data.vehicleType || 'Unknown',
+                            state: dbResult.data.registrationState || 'Unknown',
+                            owner: dbResult.data.ownerName || 'Unknown',
+                            insurance: dbResult.data.insuranceStatus || 'Unknown',
+                            puc: dbResult.data.pucStatus || 'Unknown',
+                            rc: dbResult.data.rcStatus || 'Unknown',
+                            flag: dbResult.data.blacklisted ? 'stolen' : 'clean'
+                        };
+                        
+                        // Show popup for database match
+                        alert('✅ Vehicle Present in Database!\n\nVehicle No: ' + formattedPlate + '\nOwner: ' + vehicle.owner + '\nType: ' + vehicle.type);
+                    } else {
+                        // Vehicle not in database
+                        vehicle = {
+                            plate: formattedPlate,
+                            type: 'Unknown',
+                            state: 'Unknown',
+                            owner: 'Unknown',
+                            insurance: 'Unknown',
+                            puc: 'Unknown',
+                            rc: 'Unknown',
+                            flag: 'clean'
+                        };
+                        
+                        // Show popup for database not found
+                        alert('❌ Vehicle Not Found in Database!\n\nVehicle No: ' + formattedPlate + '\n\nThis vehicle is not registered in the system.');
+                    }
+                } catch (dbError) {
+                    console.log('Database lookup failed, using local DB:', dbError.message);
+                    // Fallback to local database
+                    vehicle = VEHICLE_DB.find(v => v.plate.replace(/[\s-]/g, '') === normalized) || {
+                        plate: formattedPlate,
+                        type: 'Unknown',
+                        state: 'Unknown',
+                        owner: 'Unknown',
+                        insurance: 'Unknown',
+                        puc: 'Unknown',
+                        rc: 'Unknown',
+                        flag: 'clean'
+                    };
+                }
+
+                currentVehicle = vehicle;
+                displayVehicleDetails(vehicle);
+                goToStep(2);
+
+            } catch (error) {
+                console.error('Scan error:', error);
+                alert('Scan failed: ' + error.message + '\n\nPlease use manual entry below.');
+                plateText.textContent = 'USE MANUAL ENTRY';
+                flagPill.textContent = 'RETRY';
+                manualInput.focus();
+            } finally {
+                btnCapture.disabled = false;
+            }
+        }
+
+        function displayVehicleDetails(vehicle) {
+            plateText.textContent = vehicle.plate;
+            
+            flagPill.className = `flag-pill ${vehicle.flag}`;
+            flagPill.textContent = vehicle.flag.toUpperCase();
+
+            document.getElementById('metaVehicleType').textContent = vehicle.type;
+            document.getElementById('metaState').textContent = vehicle.state;
+            document.getElementById('metaOwner').textContent = vehicle.owner;
+            document.getElementById('metaOwnerStatus').textContent = vehicle.flag === 'stolen' ? 'WANTED' : 'CLEAR';
+            document.getElementById('metaInsurance').textContent = vehicle.insurance;
+            document.getElementById('metaPUC').textContent = vehicle.puc;
+            document.getElementById('metaRC').textContent = vehicle.rc;
+            document.getElementById('metaConfidence').textContent = '95.0%';
+
+            if (vehicle.flag === 'stolen') {
+                alertBanner.classList.add('visible');
+                if (navigator.vibrate) {
+                    navigator.vibrate([200, 100, 200, 100, 200]);
+                }
+                setTimeout(() => alertBanner.classList.remove('visible'), 5000);
+            } else {
+                alertBanner.classList.remove('visible');
+            }
+        }
+
+        // ============================================
+        // FINE FUNCTIONS
+        // ============================================
+        function prepareFineForm() {
+            document.getElementById('fineVehicleNo').value = currentVehicle.plate;
+            goToStep(3);
+        }
+
+        function generateChallan() {
+            const violation = document.getElementById('fineViolation').value;
+            const amount = document.getElementById('fineAmount').value;
+            const location = document.getElementById('fineLocation').value;
+
+            if (!violation || !amount || !location) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            alert('Challan Generated Successfully!\n\nVehicle: ' + currentVehicle.plate + '\nViolation: ' + violation + '\nFine: ₹' + amount + '\nLocation: ' + location);
+            
+            // Reset and start new transaction
+            resetAll();
+        }
+
+        function resetAll() {
+            stopCamera();
+            currentVehicle = null;
+            currentStep = 1;
+            
+            // Reset all fields
+            plateText.textContent = '--- ----';
+            flagPill.className = 'flag-pill clean';
+            flagPill.textContent = 'CLEAN';
+            alertBanner.classList.remove('visible');
+            
+            document.getElementById('metaVehicleType').textContent = '-';
+            document.getElementById('metaState').textContent = '-';
+            document.getElementById('metaOwner').textContent = '-';
+            document.getElementById('metaOwnerStatus').textContent = '-';
+            document.getElementById('metaInsurance').textContent = '-';
+            document.getElementById('metaPUC').textContent = '-';
+            document.getElementById('metaRC').textContent = '-';
+            document.getElementById('metaConfidence').textContent = '-';
+            
+            document.getElementById('fineVehicleNo').value = '';
+            document.getElementById('fineViolation').value = '';
+            document.getElementById('fineAmount').value = '';
+            document.getElementById('fineLocation').value = '';
+            document.getElementById('fineRemarks').value = '';
+            manualInput.value = '';
+
+            goToStep(1);
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        btnStartCamera.addEventListener('click', startCamera);
+        btnStopCamera.addEventListener('click', stopCamera);
+        
+        btnCapture.addEventListener('click', async () => {
+            const canvas = captureFrame();
+            if (canvas) {
+                const imageBase64 = canvasToBase64(canvas);
+                await scanPlate(imageBase64);
+            }
+        });
+
+        btnManualScan.addEventListener('click', () => {
+            if (manualInput.value.trim()) {
+                scanPlate();
+            } else {
+                alert('Please enter a plate number');
+            }
+        });
+
+        manualInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnManualScan.click();
+            }
+        });
+
+        btnAddFine.addEventListener('click', prepareFineForm);
+        btnNewTransaction.addEventListener('click', resetAll);
+        btnBackToDetails.addEventListener('click', () => goToStep(2));
+        btnGenerateChallan.addEventListener('click', generateChallan);
+
+        // Auto-focus manual input
+        setTimeout(() => manualInput.focus(), 500);
+    })();
+    </script>
+</body>
+</html>

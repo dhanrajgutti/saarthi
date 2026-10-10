@@ -2,34 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
     <title>Citizen Dashboard - Vehicle Verification Portal</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ====================================================
+           CITIZEN PORTAL — FULL RED THEME (Parivahan Sewa)
+           ==================================================== */
+        :root {
+            --cz-deep:      #7F1D1D;
+            --cz-primary:   #B91C1C;
+            --cz-main:      #DC2626;
+            --cz-bright:    #EF4444;
+            --cz-soft:      #F87171;
+            --cz-pale:      #FECACA;
+            --cz-ghost:     #FEE2E2;
+            --cz-tint:      #FFF1F1;
+            --cz-surface:   #FFF5F5;
+        }
+        html, body { background: var(--cz-tint) !important; }
+
         .citizen-layout {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background: var(--cz-tint);
         }
-        
+
         .top-navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
         }
-        
+
+        /* ===== Top Navbar — Deep Red ===== */
+        .citizen-layout > .top-navbar {
+            background: linear-gradient(135deg, var(--cz-deep) 0%, var(--cz-primary) 55%, var(--cz-main) 100%) !important;
+            box-shadow: 0 3px 14px rgba(127, 29, 29, 0.35), inset 0 -4px 0 0 var(--cz-bright);
+            border-bottom: none !important;
+        }
+        .citizen-layout > .top-navbar .navbar-content { height: 70px; }
+        .citizen-layout > .top-navbar .navbar-brand {
+            color: #FFFFFF !important;
+            text-shadow: 0 1px 0 rgba(127,29,29,0.6);
+        }
+        .citizen-layout > .top-navbar .navbar-brand svg {
+            color: var(--cz-soft) !important;
+            filter: drop-shadow(0 1px 0 rgba(127,29,29,0.6));
+        }
+        .citizen-layout > .top-navbar .brand-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 0.4px;
+        }
+        .citizen-layout > .top-navbar .nav-item {
+            color: var(--cz-ghost) !important;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(254, 202, 202, 0.35);
+        }
+        .citizen-layout > .top-navbar .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(254, 202, 202, 0.55) !important;
+            border-radius: 6px;
+            color: #FFFFFF !important;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .citizen-layout > .top-navbar .logout-btn:hover {
+            background: #FFFFFF !important;
+            color: var(--cz-primary) !important;
+            border-color: #FFFFFF !important;
+            transform: translateY(-1px);
+        }
+
         .layout-body {
             display: flex;
             flex: 1;
-            margin-top: 70px; /* Space for fixed header */
+            margin-top: 70px;
         }
-        
+
+        /* ===== Sidebar — Deep Red Night ===== */
         .citizen-sidebar {
-            background: #0F172A;
-            padding: 20px 0;
+            background: linear-gradient(180deg, #7F1D1D 0%, #991B1B 55%, #B91C1C 100%) !important;
+            padding: 20px 0 12px;
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -39,13 +106,14 @@
             width: 240px;
             overflow-y: auto;
             z-index: 900;
+            border-right: 1px solid rgba(254, 202, 202, 0.25);
         }
         @media (max-width: 1024px) {
             .citizen-sidebar { display: none; }
         }
-        
+
         .citizen-main {
-            background: #F8FAFC;
+            background: linear-gradient(180deg, var(--cz-tint) 0%, var(--cz-surface) 100%) !important;
             padding: 0;
             overflow-y: auto;
             flex: 1;
@@ -54,47 +122,52 @@
         @media (max-width: 1024px) {
             .citizen-main { margin-left: 0; }
         }
-        
+
         .sidebar-header {
             padding: 0 20px 20px;
-            border-bottom: 1px solid #1E293B;
+            border-bottom: 1px solid rgba(254, 202, 202, 0.35) !important;
+            margin-bottom: 6px;
         }
         .sidebar-title {
             font-family: 'Playfair Display', serif;
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 700;
-            color: #FFFFFF;
+            color: #FFFFFF !important;
             margin-bottom: 4px;
+            letter-spacing: 0.3px;
         }
         .sidebar-subtitle {
             font-size: 12px;
-            color: #94A3B8;
+            color: var(--cz-ghost) !important;
+            letter-spacing: 0.4px;
         }
-        
+
         .sidebar-menu {
             flex: 1;
-            padding: 20px 0;
+            padding: 14px 0 20px;
             overflow-y: auto;
         }
-        
+
+        .menu-section {
+            padding: 16px 20px 6px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--cz-pale) !important;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
         .menu-item {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 12px 20px;
-            color: #94A3B8;
+            color: var(--cz-ghost) !important;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.18s ease;
             border-left: 3px solid transparent;
-        }
-        .menu-item:hover {
-            background: #1E293B;
-            color: #FFFFFF;
-        }
-        .menu-item.active {
-            background: #1E293B;
-            color: #FFFFFF;
-            border-left-color: #7C3AED;
+            margin: 2px 6px;
+            border-radius: 0 8px 8px 0;
         }
         .menu-item svg {
             width: 18px;
@@ -107,47 +180,428 @@
             font-size: 14px;
             font-weight: 500;
         }
-        
-        .menu-section {
-            padding: 12px 20px 8px;
-            font-size: 11px;
+        .menu-item:hover {
+            background: rgba(255,255,255,0.10) !important;
+            color: #FFFFFF !important;
+            border-left-color: var(--cz-soft) !important;
+        }
+        .menu-item.active {
+            background: linear-gradient(90deg, #FFFFFF 0%, rgba(255,255,255,0.96) 100%) !important;
+            color: var(--cz-primary) !important;
+            border-left-color: var(--cz-bright) !important;
+            font-weight: 700 !important;
+            box-shadow: 2px 2px 8px rgba(127, 29, 29, 0.25);
+        }
+        .menu-item.active svg {
+            color: var(--cz-main) !important;
+            filter: drop-shadow(0 1px 0 rgba(220,38,38,0.2));
+        }
+
+        .content-wrapper { padding: 24px; }
+
+        /* =========================================================
+           Dashboard citizen pages — override dashboard.css classes
+           ========================================================= */
+        .citizen-main .panel-title { color: var(--cz-deep) !important; }
+        .citizen-main .panel-title::after { background: var(--cz-main) !important; }
+
+        /* -------- Stat Cards (red-tinted palette) -------- */
+        .citizen-main .stat-card {
+            border-top: 4px solid var(--cz-main) !important;
+            box-shadow: 0 1px 3px rgba(127,29,29,0.08), 0 8px 24px -10px rgba(127, 29, 29, 0.18);
+            overflow: hidden;
+        }
+        .citizen-main .stat-card::after { opacity: 0.08 !important; }
+        .citizen-main .stat-card.police::after,
+        .citizen-main .stat-card.success::after,
+        .citizen-main .stat-card.warning::after,
+        .citizen-main .stat-card.danger::after  { background: var(--cz-main) !important; }
+
+        .citizen-main .stat-card .stat-value { color: var(--cz-deep) !important; }
+        .citizen-main .stat-card .stat-label { color: var(--cz-primary) !important; letter-spacing: 0.4px; }
+        .citizen-main .stat-card .stat-trend { color: #991B1B !important; opacity: 0.85; }
+
+        .citizen-main .stat-icon.police,
+        .citizen-main .stat-icon.success,
+        .citizen-main .stat-icon.warning,
+        .citizen-main .stat-icon.danger {
+            background: rgba(220, 38, 38, 0.12) !important;
+            color: var(--cz-main) !important;
+        }
+
+        /* -------- Info chips / status chips -------- */
+        .citizen-main .info-chip.success {
+            background: rgba(220, 38, 38, 0.10) !important;
+            border: 1px solid rgba(220, 38, 38, 0.3) !important;
+            color: var(--cz-primary) !important;
             font-weight: 700;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        
-        .citizen-main {
-            background: #F8FAFC;
-            padding: 0;
-            overflow-y: auto;
+        .citizen-main .info-chip::before {
+            content: "";
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--cz-main) !important;
+            display: inline-block;
         }
-        
-        .content-wrapper {
-            padding: 20px;
+
+        /* -------- Data tables -------- */
+        .citizen-main .data-table thead th {
+            background: linear-gradient(180deg, var(--cz-ghost) 0%, var(--cz-pale) 100%) !important;
+            color: var(--cz-deep) !important;
+            border-bottom: 2px solid var(--cz-main) !important;
+            letter-spacing: 0.6px;
         }
-        
-        /* Ensure navbar is visible */
-        .top-navbar {
-            display: block !important;
+        .citizen-main .data-table tr:hover td { background: var(--cz-tint) !important; }
+
+        /* -------- Status badges (Valid -> red-valid) -------- */
+        .citizen-main .status-badge.valid {
+            background: rgba(220, 38, 38, 0.12) !important;
+            color: var(--cz-primary) !important;
+            border: 1px solid rgba(220, 38, 38, 0.3) !important;
         }
-        
-        .logout-btn {
-            display: flex;
+        .citizen-main .status-badge.pending {
+            background: #FFF7ED !important;
+            color: #C2410C !important;
+            border: 1px solid #FDBA74 !important;
+        }
+        .citizen-main .status-badge.expired,
+        .citizen-main .status-badge.warning {
+            background: var(--cz-ghost) !important;
+            color: var(--cz-primary) !important;
+            border: 1px solid var(--cz-pale) !important;
+        }
+
+        /* -------- Quick Services links -------- */
+        .citizen-main .quick-link {
+            background: var(--cz-tint) !important;
+            border: 1px solid var(--cz-pale) !important;
+            color: var(--cz-primary) !important;
+            font-weight: 600;
+            border-radius: 10px;
+        }
+        .citizen-main .quick-link:hover {
+            background: linear-gradient(90deg, var(--cz-primary), var(--cz-main)) !important;
+            color: #FFFFFF !important;
+            border-color: var(--cz-primary) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -8px rgba(191, 25, 25, 0.45);
+        }
+        .citizen-main .quick-link svg {
+            color: var(--cz-main) !important;
+        }
+        .citizen-main .quick-link:hover svg { color: #FFFFFF !important; }
+
+        /* -------- Compliance progress bars (green -> red) -------- */
+        .citizen-main .progress-fill.success,
+        .citizen-main .progress-fill.navy,
+        .citizen-main .progress-fill.gold {
+            background: linear-gradient(90deg, var(--cz-primary) 0%, var(--cz-main) 55%, var(--cz-soft) 100%) !important;
+            box-shadow: inset 0 -1px 0 rgba(255,255,255,0.35);
+        }
+        .citizen-main .progress-fill.warning {
+            background: linear-gradient(90deg, #FB923C 0%, #F97316 100%) !important;
+        }
+        .citizen-main .progress-fill.danger {
+            background: linear-gradient(90deg, var(--cz-deep) 0%, var(--cz-primary) 100%) !important;
+        }
+        .citizen-main .progress-track {
+            background: var(--cz-ghost) !important;
+            border: 1px solid var(--cz-pale) !important;
+        }
+        .citizen-main .progress-name { color: var(--cz-deep) !important; font-weight: 600; }
+        .citizen-main .progress-value { color: var(--cz-primary) !important; font-weight: 700; }
+
+        /* -------- Activity -------- */
+        .citizen-main .activity-dot.police,
+        .citizen-main .activity-dot.success,
+        .citizen-main .activity-dot.warning,
+        .citizen-main .activity-dot.danger { background: var(--cz-main) !important; }
+        .citizen-main .activity-text { color: var(--cz-deep) !important; font-weight: 500; }
+
+        /* -------- Panel subtle red border line -------- */
+        .citizen-main .panel {
+            border-top: 2px solid rgba(220, 38, 38, 0.55) !important;
+            box-shadow: 0 1px 3px rgba(127,29,29,0.06), 0 8px 24px -14px rgba(127, 29, 29, 0.25);
+        }
+
+        /* -------- Footer tint red -------- */
+        body > .footer-bar {
+            background: #FFFFFF !important;
+            border-top: 3px solid var(--cz-main) !important;
+            color: var(--cz-deep) !important;
+        }
+        body > .footer-bar .copyright-text,
+        body > .footer-bar .version-info { color: var(--cz-primary) !important; }
+
+        /* -------- Inputs focus red ring -------- */
+        .citizen-main input:focus,
+        .citizen-main select:focus,
+        .citizen-main textarea:focus {
+            outline: none !important;
+            border-color: var(--cz-main) !important;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.15) !important;
+        }
+
+        /* -------- Buttons primary red -------- */
+        .citizen-main button.primary,
+        .citizen-main .btn-primary {
+            background: var(--cz-main) !important;
+            border-color: var(--cz-primary) !important;
+            color: #FFFFFF !important;
+        }
+        .citizen-main button.primary:hover,
+        .citizen-main .btn-primary:hover {
+            background: var(--cz-primary) !important;
+            border-color: var(--cz-deep) !important;
+        }
+
+        /* =========================================================
+           MOBILE MENU DRAWER + HAMBURGER
+           ========================================================= */
+        .mobile-menu-btn {
+            display: none;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 6px;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            margin-right: 6px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(254, 202, 202, 0.35);
             color: #FFFFFF;
-            font-size: 14px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background .2s;
         }
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.2);
+        .mobile-menu-btn:hover { background: rgba(255,255,255,0.18); }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(2px);
+            z-index: 899;
+            opacity: 0;
+            transition: opacity .22s ease;
+        }
+        .sidebar-overlay.is-open { display: block; opacity: 1; }
+
+        .sidebar-close-wrap {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px 10px;
+            border-bottom: 1px solid rgba(254, 202, 202, 0.3);
+            margin-bottom: 6px;
+        }
+        .sidebar-close-title {
+            color: #FFFFFF;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            letter-spacing: .3px;
+        }
+        .sidebar-close-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(254, 202, 202, 0.35);
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        .sidebar-close-btn:hover { background: rgba(255,255,255,0.18); }
+
+        .d-none-mobile { display: block; } /* shown at laptop/desktop by default */
+
+        /* =========================================================
+           RESPONSIVE BREAKPOINTS
+             < 640px  : Phone (portrait)
+             < 1024px : Tablet (and landscape phones)
+             >=1280px : Laptop / Desktop
+           ========================================================= */
+
+        /* ---- TABLET (≤ 1024px) ---- */
+        @media (max-width: 1024px) {
+            .citizen-layout > .top-navbar .brand-text { font-size: 17px; }
+            .citizen-main { padding-top: 2px; }
+            .content-wrapper { padding: 18px !important; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .content-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+            body > .footer-bar { margin-left: 0 !important; padding: 12px 18px !important; }
+            .page-title { font-size: 22px !important; }
+            .stat-card .stat-value { font-size: 24px !important; }
+            .history-panel-head h3, .panel-title { font-size: 16px !important; }
+        }
+
+        /* ---- PHONE (≤ 640px) ---- */
+        @media (max-width: 640px) {
+            html, body { -webkit-text-size-adjust: 100%; }
+            .citizen-layout > .top-navbar {
+                padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+            }
+            .citizen-layout > .top-navbar .navbar-content {
+                height: 64px !important;
+                padding: 0 14px !important;
+                gap: 6px;
+            }
+            .mobile-menu-btn { display: inline-flex; }
+
+            .brand-text { font-size: 15px !important; letter-spacing: -0.1px; }
+            .navbar-brand svg { width: 24px !important; height: 24px !important; }
+            .navbar-menu { gap: 8px !important; }
+            .d-none-mobile { display: none !important; }
+            .logout-btn { padding: 8px 10px !important; }
+            .logout-btn span { display: inline; }
+
+            .layout-body { margin-top: 64px !important; }
+            .citizen-main {
+                margin-left: 0 !important;
+                padding-top: 0;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .content-wrapper { padding: 14px !important; }
+
+            /* Sidebar becomes a left-side drawer on phone */
+            .citizen-sidebar {
+                top: 0 !important;
+                width: 84% !important;
+                max-width: 320px;
+                transform: translateX(-105%);
+                transition: transform .26s cubic-bezier(.2,.7,.2,1), visibility .26s;
+                visibility: hidden;
+                z-index: 950;
+                box-shadow: 4px 0 24px rgba(0,0,0,.45);
+                padding: 0 0 12px !important;
+            }
+            .citizen-sidebar.is-open {
+                transform: translateX(0);
+                visibility: visible;
+            }
+            .sidebar-close-wrap { display: flex; }
+
+            /* Stats -> single column on phone */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+                margin-bottom: 14px !important;
+            }
+            .stat-card {
+                padding: 14px !important;
+                border-radius: 12px !important;
+            }
+            .stat-card::after { width: 56px !important; height: 56px !important; }
+            .stat-icon { width: 40px !important; height: 40px !important; }
+            .stat-icon svg { width: 18px !important; height: 18px !important; }
+            .stat-header { margin-bottom: 8px !important; }
+            .stat-value { font-size: 22px !important; }
+            .stat-label { font-size: 11.5px !important; letter-spacing: .3px; }
+            .stat-trend { font-size: 11px !important; }
+
+            /* Panels */
+            .panel { border-radius: 12px !important; margin-bottom: 14px !important; }
+            .panel-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+                padding: 14px 14px 10px !important;
+            }
+            .panel-body { padding: 12px 10px 14px !important; }
+            .panel-title,
+            .history-panel-head h3 { font-size: 15.5px !important; }
+
+            /* Tables -> scrollable horizontally */
+            .data-table {
+                font-size: 12.5px !important;
+                min-width: 560px;
+            }
+            .data-table thead th {
+                font-size: 11px !important;
+                padding: 10px 12px !important;
+                white-space: nowrap;
+            }
+            .data-table td {
+                padding: 10px 12px !important;
+                white-space: nowrap;
+            }
+            .table-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 10px;
+            }
+
+            /* Quick services 1-col on tiny phones */
+            .quick-links { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+            .quick-link { padding: 12px !important; font-size: 13px !important; border-radius: 10px !important; }
+
+            /* Progress compliance */
+            .progress-list { gap: 16px !important; }
+            .progress-item { padding: 0 !important; }
+            .progress-name { font-size: 13px !important; }
+
+            /* Activity */
+            .activity-item { padding: 12px 0 !important; }
+
+            /* Footer */
+            body > .footer-bar {
+                padding: 14px 16px calc(14px + env(safe-area-inset-bottom)) !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                text-align: left !important;
+                gap: 6px !important;
+            }
+            body > .footer-bar .copyright-text,
+            body > .footer-bar .version-info { font-size: 11px !important; line-height: 1.5; }
+
+            /* Touch targets 44+ px */
+            .menu-item {
+                padding-top: 14px !important;
+                padding-bottom: 14px !important;
+                min-height: 48px;
+            }
+            .page-btn { min-height: 40px !important; min-width: 40px !important; }
+            .filter-group input,
+            .filter-group select { min-height: 46px !important; font-size: 16px !important; }
+            /* Prevent iOS zoom: inputs with <16px font auto zoom focus */
+            input, select, textarea { font-size: 16px !important; }
+            .btn { min-height: 46px !important; font-size: 14px !important; }
+        }
+
+        /* ---- SMALLEST PHONES (≤ 390px) ---- */
+        @media (max-width: 390px) {
+            .stats-grid { grid-template-columns: 1fr !important; }
+            .brand-text { font-size: 14px !important; }
+            .quick-links { grid-template-columns: 1fr !important; }
+            .info-chip { font-size: 11px !important; padding: 5px 10px !important; }
+        }
+
+        /* ---- LAPTOP / DESKTOP (≥ 1280px) ---- */
+        @media (min-width: 1280px) {
+            .citizen-main { padding-top: 0; }
+            .content-wrapper { padding: 28px 32px !important; max-width: 1680px; margin: 0 auto; }
+            .stats-grid { grid-template-columns: repeat(4, minmax(0,1fr)) !important; gap: 20px !important; }
+            .content-grid { gap: 20px !important; }
+            .stat-card { padding: 24px !important; }
+            .stat-value { font-size: 32px !important; }
+            .panel-title, .history-panel-head h3 { font-size: 18.5px !important; }
+            .citizen-layout > .top-navbar .navbar-content { max-width: 1720px; }
+            .brand-text { font-size: 22px !important; }
+        }
+
+        /* ---- LARGE DESKTOP (≥ 1600px) ---- */
+        @media (min-width: 1600px) {
+            .content-wrapper { padding: 32px 44px !important; }
+            .panel-body { padding: 22px 26px !important; }
+        }
+
+        /* ---- LANDSCAPE PHONE (≤ 820px height) ---- */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .citizen-sidebar { top: 0 !important; }
+            .mobile-menu-btn { display: inline-flex; }
         }
     </style>
 </head>
@@ -157,22 +611,33 @@
         <nav class="top-navbar" style="grid-column: 1 / -1;">
             <div class="navbar-content">
                 <div class="navbar-brand">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17H2"/></svg>
+                    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open navigation menu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="22" height="22"><line x1="3" y1="6"  x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17H2"/></svg>
                     <span class="brand-text">Parivahan Sewa</span>
                 </div>
                 <div class="navbar-menu">
-                    <div class="nav-item">Citizen Portal</div>
+                    <div class="nav-item d-none-mobile">Citizen Portal</div>
                     <button class="logout-btn" id="logoutBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 20 21 4 21"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
-                        Logout
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 20 21 4 21"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+                        <span class="d-none-mobile">Logout</span>
                     </button>
                 </div>
             </div>
         </nav>
-        
+
         <div class="layout-body">
+        <!-- Sidebar overlay backdrop (mobile drawer) -->
+        <div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true"></div>
         <!-- Sidebar -->
-        <aside class="citizen-sidebar">
+        <aside class="citizen-sidebar" id="citizenSidebar">
+            <div class="sidebar-close-wrap">
+                <span class="sidebar-close-title">Menu</span>
+                <button id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="Close navigation menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
             <div class="sidebar-header">
                 <div class="sidebar-title">Citizen Portal</div>
                 <div class="sidebar-subtitle">Parivahan Sewa</div>
@@ -189,6 +654,10 @@
                 <a href="pay-challan.html" class="menu-item">
                     <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                     <span>Pay Challan</span>
+                </a>
+                <a href="citizen-challan-history.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    <span>Challan History</span>
                 </a>
             </div>
         </aside>
@@ -275,6 +744,10 @@
                         <a href="pay-challan.html" class="quick-link" id="payChallanLink">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                             Pay Challan
+                        </a>
+                        <a href="citizen-challan-history.html" class="quick-link" id="challanHistoryLink">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            Challan History
                         </a>
                     </div>
                 </div>
@@ -394,7 +867,7 @@
                     return;
                 }
                 
-                // Get authenticated user's vehicle
+                // Get authenticated user's vehicle from API
                 const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
                 const userVehicleNumber = auth.user?.vehicleNumber || auth.user?.username;
                 console.log('User vehicle number from auth (vehicleNumber or username):', userVehicleNumber);
@@ -444,10 +917,10 @@
                     console.log('Sample challan:', challanData[0]);
                 }
                 
-                // Load paid challans from localStorage
-                const paidChallansKey = 'paid_challans_' + normUserVehicle;
-                const paidChallans = JSON.parse(localStorage.getItem(paidChallansKey) || '[]');
-                console.log('Paid challans from localStorage:', paidChallans);
+                // Load paid challans from database API
+                // Note: This should be fetched from the backend API instead of localStorage
+                const paidChallans = []; // Will be populated from API
+                console.log('Paid challans from database API:', paidChallans);
                 
                 const pendingChallans = challanData.filter(c => {
                     const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();

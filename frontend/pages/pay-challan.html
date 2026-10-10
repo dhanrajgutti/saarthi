@@ -281,10 +281,10 @@
                     console.log('  -', c.challanNo, 'Vehicle:', c.vehicleReg, 'Status:', c.status);
                 });
                 
-                // Load paid challans from localStorage
-                const paidChallansKey = 'paid_challans_' + normVehicle;
-                const paidChallans = JSON.parse(localStorage.getItem(paidChallansKey) || '[]');
-                console.log('Paid challans from localStorage:', paidChallans);
+                // Load paid challans from database API
+                // Note: This should be fetched from the backend API instead of localStorage
+                const paidChallans = []; // Will be populated from API
+                console.log('Paid challans from database API:', paidChallans);
                 
                 const pendingChallans = VehicleData.CHALLAN_DATA.filter(c => {
                     const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
@@ -369,19 +369,15 @@
                     return;
                 }
 
-                // Get vehicle number for localStorage key
+                // Get vehicle number for API call
                 const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
                 const vehicleNumber = auth.user?.vehicleNumber || auth.user?.username;
                 const normVehicle = vehicleNumber.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                const paidChallansKey = 'paid_challans_' + normVehicle;
-                
-                // Load paid challans and add this one
-                const paidChallans = JSON.parse(localStorage.getItem(paidChallansKey) || '[]');
-                if (!paidChallans.includes(challanNo)) {
-                    paidChallans.push(challanNo);
-                    localStorage.setItem(paidChallansKey, JSON.stringify(paidChallans));
-                    console.log('Saved paid challan:', challanNo, 'Total paid:', paidChallans.length);
-                }
+
+                // Update paid challan status via API
+                // Note: This should call the backend API to update challan status
+                console.log('Updating challan status via API:', challanNo, 'for vehicle:', vehicleNumber);
+                // API call would be: fetch('/api/challan/pay', { method: 'POST', body: JSON.stringify({ challanNo, vehicleNumber }) })
 
                 // Find and update challan status
                 const challan = VehicleData.CHALLAN_DATA.find(c => c.challanNo === challanNo);

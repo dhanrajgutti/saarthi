@@ -823,6 +823,24 @@ input, select {
     color: var(--gold-primary);
 }
 
+/* =============================================================================
+   LANGUAGE SWITCHER
+   ============================================================================= */
+.utility-link[data-lang] {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.utility-link[data-lang]:hover {
+    color: var(--navy-primary) !important;
+}
+
+.utility-link[data-lang].active {
+    font-weight: 700;
+    color: var(--navy-primary) !important;
+    text-decoration: underline;
+}
+
 
 /* =============================================================================
    LOGIN CARD — Premium Two-Column Government Portal Design

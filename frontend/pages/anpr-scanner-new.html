@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSaarthi - ANPR Scanner</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2563EB;
+            --primary-light: #EFF6FF;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --dark-bg: #1E293B;
+            --bg-gray: #F8FAFC;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border-color: #E2E8F0;
+        }
+
+        /* ANPR Scanner Specific Styles */
+        .anpr-scanner-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .anpr-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1E40AF 100%);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .anpr-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .anpr-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .anpr-status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .anpr-content {
+            padding: 24px;
+        }
+
+        /* Step Indicator */
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            background: var(--primary-blue);
+            width: 30px;
+            border-radius: 15px;
+        }
+
+        .step.completed {
+            background: var(--accent-green);
+        }
+
+        /* Screen Sections */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Title */
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Option Cards */
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .option-card {
+            background: var(--primary-light);
+            border: 2px dashed var(--primary-blue);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-card:hover {
+            background: var(--white);
+            border-style: solid;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .option-card svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .option-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .option-card-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Camera Preview */
+        .camera-preview {
+            background: var(--dark-bg);
+            height: 300px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .camera-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .camera-preview.active video {
+            display: block;
+        }
+
+        .camera-preview.active span {
+            display: none;
+        }
+
+        /* Input Group */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .input-field {
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-blue);
+        }
+
+        /* Plate Display */
+        .plate-display {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border: 3px solid #000;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #000;
+            margin: 16px 0;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-badge.success {
+            background: #DCFCE7;
+            color: var(--accent-green);
+        }
+
+        .status-badge.warning {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .status-badge.danger {
+            background: #FEE2E2;
+            color: var(--accent-red);
+        }
+
+        /* Detail Rows */
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: right;
+        }
+
+        /* Loading */
+        .loader {
+            border: 4px solid #F3F4F6;
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+        }
+
+        .loading-steps {
+            margin-top: 32px;
+        }
+
+        .loading-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .loading-step.completed {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .loading-step svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        /* Success Icon */
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: #DCFCE7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: var(--accent-green);
+        }
+
+        /* Card */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        /* ============================================
+           RESPONSIVE BREAKPOINTS FOR ANPR
+           ============================================ */
+
+        /* Tablet */
+        @media (max-width: 991px) {
+            .anpr-scanner-container {
+                margin: 0 16px;
+            }
+            
+            .anpr-content {
+                padding: 20px;
+            }
+            
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .camera-preview {
+                height: 250px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 767px) {
+            .anpr-scanner-container {
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            
+            .anpr-header {
+                padding: 16px 20px;
+            }
+            
+            .anpr-header h2 {
+                font-size: 18px;
+            }
+            
+            .anpr-content {
+                padding: 16px;
+            }
+            
+            .page-title {
+                font-size: 18px;
+            }
+            
+            .page-subtitle {
+                font-size: 13px;
+            }
+            
+            .option-card {
+                padding: 20px;
+            }
+            
+            .camera-preview {
+                height: 200px;
+            }
+            
+            .plate-display {
+                font-size: 20px;
+                padding: 16px;
+                letter-spacing: 2px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 479px) {
+            .anpr-header {
+                padding: 14px 16px;
+            }
+            
+            .anpr-header h2 {
+                font-size: 16px;
+            }
+            
+            .anpr-content {
+                padding: 14px;
+            }
+            
+            .camera-preview {
+                height: 180px;
+            }
+            
+            .plate-display {
+                font-size: 18px;
+                padding: 14px;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .detail-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="anpr-scanner-container">
+        <div class="anpr-content">
+            <!-- Step Indicator -->
+            <div class="steps">
+                <div class="step active" id="step1"></div>
+                <div class="step" id="step2"></div>
+                <div class="step" id="step3"></div>
+                <div class="step" id="step4"></div>
+            </div>
+
+            <!-- SCREEN 1: Evidence Capture -->
+            <div id="screen-1" class="screen active">
+                <h2 class="page-title">Capture Evidence</h2>
+                <p class="page-subtitle">Choose how you want to capture the vehicle evidence</p>
+                
+                <div class="option-grid">
+                    <div class="option-card" onclick="startCamera()">
+                        <svg viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4z"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                        <div class="option-card-title">Take Photo</div>
+                        <div class="option-card-desc">Use device camera</div>
+                    </div>
+                    
+                    <div class="option-card" onclick="showVideoOption()">
+                        <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                        <div class="option-card-title">Record Video</div>
+                        <div class="option-card-desc">Capture video evidence</div>
+                    </div>
+                    
+                    <div class="option-card" onclick="showUploadOption()">
+                        <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+                        <div class="option-card-title">Upload from Gallery</div>
+                        <div class="option-card-desc">Select from device</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 2: Camera Active -->
+            <div id="screen-2" class="screen">
+                <h2 class="page-title">Camera Scan</h2>
+                <p class="page-subtitle">Position the vehicle number plate in the frame</p>
+                
+                <div class="camera-preview" id="cameraPreview">
+                    <video id="cameraVideo" autoplay playsinline></video>
+                    <span>[ Camera Preview ]</span>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="stopCamera(); navigateTo(1)">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" onclick="capturePhoto()">
+                        Capture Photo
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 3: Photo Captured -->
+            <div id="screen-3" class="screen">
+                <h2 class="page-title">Evidence Captured</h2>
+                <p class="page-subtitle">Review the captured photo</p>
+                
+                <div class="camera-preview" id="capturedPreview" style="background: var(--dark-bg);">
+                    <img id="capturedImage" src="" alt="Captured" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    <span>[ Captured Photo ]</span>
+                </div>
+                
+                <div class="card" style="text-align: center;">
+                    <span class="status-badge success">Photo captured successfully</span>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="retakePhoto()">
+                        Retake
+                    </button>
+                    <button class="btn btn-primary" onclick="usePhoto()">
+                        Use Photo
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 4: Enter Number Plate -->
+            <div id="screen-4" class="screen">
+                <h2 class="page-title">Vehicle Search</h2>
+                <p class="page-subtitle">Enter the vehicle number to fetch details from database</p>
+                
+                <div class="input-group">
+                    <label>Enter Vehicle Number *</label>
+                    <input type="text" id="manualInput" class="input-field" placeholder="MH13AB1234">
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="fetchVehicleData()">
+                        Fetch Vehicle Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 5: Loading -->
+            <div id="screen-5" class="screen">
+                <h2 class="page-title">Fetching Vehicle Data</h2>
+                <p class="page-subtitle">Please wait while we retrieve vehicle information</p>
+                
+                <div class="loader"></div>
+                <div class="loading-text">Searching database...</div>
+                
+                <div class="loading-steps">
+                    <div class="loading-step completed">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Fetching vehicle details...
+                    </div>
+                    <div class="loading-step completed">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Searching vehicle record...
+                    </div>
+                    <div class="loading-step completed">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Fetching owner details...
+                    </div>
+                    <div class="loading-step">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        Checking violation history...
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 6: Vehicle Details -->
+            <div id="screen-6" class="screen">
+                <h2 class="page-title">Vehicle Details</h2>
+                <p class="page-subtitle">Vehicle information fetched successfully</p>
+                
+                <div class="card" style="text-align: center; margin-bottom: 20px;">
+                    <span class="status-badge success">Data Fetched Successfully</span>
+                </div>
+                
+                <div class="plate-display" id="plateText">MH13AB1234</div>
+                
+                <div class="card">
+                    <h3>Owner Details</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Owner Name</span>
+                        <span class="detail-value" id="detailOwner">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Mobile No</span>
+                        <span class="detail-value" id="detailMobile">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Address</span>
+                        <span class="detail-value" id="detailAddress">-</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Vehicle Details</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Vehicle Type</span>
+                        <span class="detail-value" id="detailType">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Model</span>
+                        <span class="detail-value" id="detailModel">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Color</span>
+                        <span class="detail-value" id="detailColor">-</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="navigateTo(4)">
+                        Back
+                    </button>
+                    <button class="btn btn-primary" onclick="navigateTo(7)">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 7: Violation Details -->
+            <div id="screen-7" class="screen">
+                <h2 class="page-title">Violation Details</h2>
+                <p class="page-subtitle">Select the violation type and enter details</p>
+                
+                <div class="input-group">
+                    <label>Select Violation *</label>
+                    <select class="input-field" id="violationSelect">
+                        <option value="">Select violation type</option>
+                        <option value="V001">No Parking</option>
+                        <option value="V002">Red Light Jump</option>
+                        <option value="V003">Over Speeding</option>
+                        <option value="V004">Wrong Side Driving</option>
+                        <option value="V005">No Helmet</option>
+                        <option value="V006">No Seat Belt</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Violation Code</label>
+                    <input type="text" class="input-field" id="violationCode" value="V001" readonly>
+                </div>
+                
+                <div class="input-group">
+                    <label>Fine Amount (₹)</label>
+                    <input type="text" class="input-field" id="fineAmount" value="1,000" readonly>
+                </div>
+                
+                <div class="input-group">
+                    <label>Violation Location *</label>
+                    <input type="text" class="input-field" id="violationLocation" placeholder="Enter location">
+                </div>
+                
+                <div class="input-group">
+                    <label>Remarks (Optional)</label>
+                    <textarea class="input-field" id="remarks" placeholder="Add any additional notes" style="min-height: 100px; resize: vertical;"></textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="navigateTo(6)">
+                        Back
+                    </button>
+                    <button class="btn btn-primary" onclick="navigateTo(8)">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 8: Review & Confirm -->
+            <div id="screen-8" class="screen">
+                <h2 class="page-title">Review & Confirm</h2>
+                <p class="page-subtitle">Review all details before issuing challan</p>
+                
+                <div class="card">
+                    <h3>Evidence</h3>
+                    <div class="camera-preview" style="height: 200px;">
+                        <img id="reviewImage" src="" alt="Evidence" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <span style="font-size: 12px;">[ Evidence Photo ]</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Number Plate</h3>
+                    <div class="plate-display" style="font-size: 20px; padding: 12px;" id="reviewPlate">MH13AB1234</div>
+                </div>
+                
+                <div class="card">
+                    <h3>Vehicle & Owner</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Owner</span>
+                        <span class="detail-value" id="reviewOwner">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Vehicle</span>
+                        <span class="detail-value" id="reviewVehicle">-</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Violation</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Type</span>
+                        <span class="detail-value" id="reviewViolation">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fine</span>
+                        <span class="detail-value" id="reviewFine">-</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="navigateTo(7)">
+                        Back
+                    </button>
+                    <button class="btn btn-danger" onclick="issueChallan()">
+                        Issue Challan
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCREEN 9: Challan Issued -->
+            <div id="screen-9" class="screen">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <h2 class="page-title" style="text-align: center;">Challan Issued Successfully!</h2>
+                <p class="page-subtitle" style="text-align: center;">Challan No: <span id="challanNo">CH-2026-000001</span></p>
+                
+                <div class="card">
+                    <div class="detail-row">
+                        <span class="detail-label">Vehicle No</span>
+                        <span class="detail-value" id="finalPlate">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Owner Name</span>
+                        <span class="detail-value" id="finalOwner">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Violation</span>
+                        <span class="detail-value" id="finalViolation">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fine Amount</span>
+                        <span class="detail-value" id="finalFine">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value" id="finalDateTime">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Officer</span>
+                        <span class="detail-value">Officer Sharma</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Officer ID</span>
+                        <span class="detail-value">POL-001</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline" onclick="downloadPDF()">
+                        Download PDF
+                    </button>
+                    <button class="btn btn-outline" onclick="shareChallan()">
+                        Share
+                    </button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.location.href='police-dashboard.html'" style="width: 100%;">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+        let capturedPhoto = null;
+        let vehicleData = null;
+
+        function navigateTo(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + screenNum).classList.add('active');
+            
+            // Update step indicator
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById('step' + i);
+                if (step) {
+                    step.classList.remove('active', 'completed');
+                    if (i < screenNum) {
+                        step.classList.add('completed');
+                    } else if (i === screenNum) {
+                        step.classList.add('active');
+                    }
+                }
+            }
+        }
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                const video = document.getElementById('cameraVideo');
+                video.srcObject = stream;
+                document.getElementById('cameraPreview').classList.add('active');
+                navigateTo(2);
+            } catch (err) {
+                alert('Camera access denied. Please allow camera permissions.');
+                console.error('Camera error:', err);
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            document.getElementById('cameraPreview').classList.remove('active');
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            capturedPhoto = canvas.toDataURL('image/jpeg');
+            
+            document.getElementById('capturedImage').src = capturedPhoto;
+            document.getElementById('capturedImage').style.display = 'block';
+            stopCamera();
+            navigateTo(3);
+        }
+
+        function retakePhoto() {
+            capturedPhoto = null;
+            startCamera();
+        }
+
+        function usePhoto() {
+            document.getElementById('reviewImage').src = capturedPhoto;
+            document.getElementById('reviewImage').style.display = 'block';
+            
+            // Prompt user to enter plate number
+            const plate = prompt('Enter the vehicle number from the photo:');
+            if (plate && plate.trim().length >= 4) {
+                document.getElementById('manualInput').value = plate.trim().toUpperCase();
+                fetchVehicleData();
+            } else {
+                navigateTo(4);
+            }
+        }
+
+        function showVideoOption() {
+            alert('Video recording feature coming soon!');
+        }
+
+        function showUploadOption() {
+            alert('Gallery upload feature coming soon!');
+        }
+
+        async function fetchVehicleData() {
+            const plate = document.getElementById('manualInput').value.trim().toUpperCase();
+            if (plate.length < 4) {
+                alert('Please enter a valid vehicle number');
+                return;
+            }
+            
+            document.getElementById('plateText').textContent = plate;
+            document.getElementById('reviewPlate').textContent = plate;
+            document.getElementById('finalPlate').textContent = plate;
+            
+            navigateTo(5);
+            
+            try {
+                // Call the real API
+                const response = await fetch(`/api/vehicle/lookup?vehicleNo=${encodeURIComponent(plate)}`);
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Vehicle found - populate data
+                    const data = result.vehicle;
+                    vehicleData = data;
+                    
+                    document.getElementById('detailOwner').textContent = data.ownerName || '-';
+                    document.getElementById('detailMobile').textContent = data.ownerMobile || '-';
+                    document.getElementById('detailAddress').textContent = 'India';
+                    document.getElementById('detailType').textContent = data.vehicleType || '-';
+                    document.getElementById('detailModel').textContent = `${data.make || ''} ${data.model || ''}`.trim() || '-';
+                    document.getElementById('detailColor').textContent = '-';
+                    
+                    document.getElementById('reviewOwner').textContent = data.ownerName || '-';
+                    document.getElementById('reviewVehicle').textContent = `${data.make || ''} ${data.model || ''}`.trim() || '-';
+                    document.getElementById('finalOwner').textContent = data.ownerName || '-';
+                    
+                    navigateTo(6);
+                } else {
+                    // Vehicle not found
+                    alert('Vehicle not found in database');
+                    navigateTo(4);
+                }
+            } catch (error) {
+                console.error('Error fetching vehicle data:', error);
+                alert('Error fetching vehicle data. Please try again.');
+                navigateTo(4);
+            }
+        }
+
+        // Violation select handler
+        document.getElementById('violationSelect').addEventListener('change', function() {
+            const violations = {
+                'V001': { name: 'No Parking', fine: '1,000' },
+                'V002': { name: 'Red Light Jump', fine: '1,500' },
+                'V003': { name: 'Over Speeding', fine: '2,000' },
+                'V004': { name: 'Wrong Side Driving', fine: '1,500' },
+                'V005': { name: 'No Helmet', fine: '500' },
+                'V006': { name: 'No Seat Belt', fine: '500' }
+            };
+            
+            const selected = this.value;
+            if (violations[selected]) {
+                document.getElementById('violationCode').value = selected;
+                document.getElementById('fineAmount').value = violations[selected].fine;
+            }
+        });
+
+        function issueChallan() {
+            const violation = document.getElementById('violationSelect').value;
+            if (!violation) {
+                alert('Please select a violation type');
+                return;
+            }
+            
+            const location = document.getElementById('violationLocation').value;
+            if (!location) {
+                alert('Please enter violation location');
+                return;
+            }
+            
+            // Update review data
+            const violationName = document.getElementById('violationSelect').options[document.getElementById('violationSelect').selectedIndex].text;
+            document.getElementById('reviewViolation').textContent = violationName;
+            document.getElementById('reviewFine').textContent = '₹ ' + document.getElementById('fineAmount').value;
+            document.getElementById('finalViolation').textContent = violationName;
+            document.getElementById('finalFine').textContent = '₹ ' + document.getElementById('fineAmount').value;
+            
+            // Generate challan number
+            const challanNo = 'CH-2026-' + String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+            document.getElementById('challanNo').textContent = challanNo;
+            
+            // Set date time
+            const now = new Date();
+            const dateTimeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + 
+                              now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('finalDateTime').textContent = dateTimeStr;
+            
+            navigateTo(9);
+        }
+
+        function downloadPDF() {
+            alert('PDF download feature coming soon!');
+        }
+
+        function shareChallan() {
+            alert('Share feature coming soon!');
+        }
+    </script>
+</body>
+</html>
